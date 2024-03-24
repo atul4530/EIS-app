@@ -19,6 +19,7 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
       child: Scaffold(body: Container(
         decoration: bgDecoration(),
         child: SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(),
           child: Column(
             children: [
               SizedBox(
@@ -80,14 +81,14 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
                           const Color(0xFF9F9AAF).withOpacity(0.7),
                           const Color(0xFFFFFFFF),
                         ],
-          
+
                         begin:  const FractionalOffset(0.0, 0.0),
                         end:  const FractionalOffset(0.0, 0.9),
                         stops: const [0.0, 0.35,],
                         tileMode: TileMode.clamp),
                     borderRadius: const BorderRadius.only(topLeft: Radius.circular(20),topRight:  Radius.circular(20))
                 ),
-                height: MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/9,
+                height: MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/8,
                 width: MediaQuery.of(context).size.width,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -142,6 +143,7 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
                         ),
                       Expanded(
                         child: GridView.builder(
+                         // physics: NeverScrollableScrollPhysics(),
                           gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount:  2,
                             mainAxisSpacing: userMobile(context)? 2:10,
@@ -160,7 +162,7 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
                   ),
                 ),
               )
-          
+
             ],
           ),
         ),
@@ -226,7 +228,7 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
             ),
              GestureDetector(
                onTap: (){
-
+                 openDigitalCatelog(context);
                },
                child: Padding(
                 padding: EdgeInsets.all(8.0),
@@ -238,6 +240,110 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
       ),
     );
   }
+
+  openDigitalCatelog(BuildContext context){
+    showDialog<void>(
+        context: context,
+        builder: (context) => Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          child: Container(
+            height: 70.h,
+            width: 98.w,
+
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Digital Catelog",style: TextStyle(color: Color(0xff6a208f),fontSize: 22.sp,fontWeight: FontWeight.w400),),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 20,vertical: 4),
+                              decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Text("SAVE",style: TextStyle(color: Colors.white,fontSize: 16.sp),),
+                            )
+                          ],
+                        ),
+                      ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                          margin: EdgeInsets.symmetric(horizontal: 12),
+                          child: Text("Catelog Name*",style: TextStyle(color: Colors.black.withOpacity(0.5),fontSize: 13.sp),textAlign: TextAlign.start,)),
+                      Container(
+                        height: 30.sp,
+                        margin: EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black.withOpacity(0.5),width: 0.5),
+                          borderRadius: BorderRadius.circular(10)
+                        ),
+                        child: const TextField(
+                            decoration: InputDecoration(
+                              border: InputBorder.none
+                            ),
+                        ),
+                      )
+
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                          margin: EdgeInsets.symmetric(horizontal: 12),
+                          child: Text("Remarks",style: TextStyle(color: Colors.black.withOpacity(0.5),fontSize: 13.sp),textAlign: TextAlign.start,)),
+                      Container(
+                        height: 30.sp,
+                        margin: EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black.withOpacity(0.5),width: 0.5),
+                          borderRadius: BorderRadius.circular(10)
+                        ),
+                        child: const TextField(
+                            decoration: InputDecoration(
+                              border: InputBorder.none
+                            ),
+                        ),
+                      )
+
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Container(
+                   height: 30.sp,
+                   width: 100.w,
+                   margin: EdgeInsets.symmetric(horizontal: 12),
+                   decoration: BoxDecoration(
+                     border: Border.all(color: Colors.black.withOpacity(0.5),width: 0.5),
+                     borderRadius: BorderRadius.circular(10)
+                   ),
+                   alignment: Alignment.centerLeft,
+                   child:  Padding(
+                     padding: const EdgeInsets.only(left: 8.0),
+                     child: Text("Select Columns Required*",style: TextStyle(fontSize: 15.sp,color: Colors.black.withOpacity(0.5)),),
+                   ),
+                                        ),
+                ),
+                  ],
+            ),
+          ),
+        ));
+  }
+
+
 
   Widget detailedWidget(String name){
      return Row(
