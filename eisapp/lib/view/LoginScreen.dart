@@ -2,6 +2,7 @@ import 'package:eisapp/view/DashboardScreen.dart';
 import 'package:eisapp/view/design_consts/DecorationMixin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sizer/flutter_sizer.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -14,6 +15,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> with BackgroundDecoration{
   @override
   Widget build(BuildContext context) {
+    var shortestSide = MediaQuery.of(context).size.shortestSide;
+    final bool useMobileLayout = shortestSide < 600;
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -45,12 +48,14 @@ class _LoginScreenState extends State<LoginScreen> with BackgroundDecoration{
                             style: TextStyle(
                               color: Colors.black.withOpacity(0.5),
                               fontStyle: FontStyle.normal,
+                              fontSize: useMobileLayout?15.sp:17.sp,
                             ),
                             decoration: InputDecoration(
                               contentPadding: const EdgeInsets.only(left: 6),
                               hintText: "Username*",
                               hintStyle: TextStyle(
                                 color: Colors.black.withOpacity(0.5),
+                                fontSize: useMobileLayout?15.sp:17.sp,
                                 fontStyle: FontStyle.normal,
                               ),
                             ),
@@ -63,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> with BackgroundDecoration{
                           child: TextField(
                             style: TextStyle(
                               color: Colors.black.withOpacity(0.5),
-                              fontStyle: FontStyle.normal,
+                              fontStyle: FontStyle.normal,  fontSize: useMobileLayout?15.sp:17.sp,
                             ),
                             decoration: InputDecoration(
                               hintText: "Password*",
@@ -71,6 +76,7 @@ class _LoginScreenState extends State<LoginScreen> with BackgroundDecoration{
                               hintStyle: TextStyle(
                                 color: Colors.black.withOpacity(0.5),
                                 fontStyle: FontStyle.normal,
+                                fontSize: useMobileLayout?15.sp:17.sp,
                               ),
                             ),
                           ),
@@ -95,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> with BackgroundDecoration{
                                 stops: [0.0, 1.0],
                                 tileMode: TileMode.clamp),
                           ),
-                          child: const Text("Login",style: TextStyle(color: Colors.white,fontSize: 16),),
+                          child:  Text("Login",style: TextStyle(color: Colors.white,  fontSize: useMobileLayout?17.sp:20.sp,),),
                         ),
                       )
                     ],

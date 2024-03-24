@@ -70,6 +70,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
+  flutter_sizer:
+    dependency: "direct main"
+    description:
+      name: flutter_sizer
+      sha256: "8807183611c902697de0c07fc7f87051b25cf1d2cf6b0a7792260b2c47122735"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.5"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -258,4 +266,4 @@ packages:
     version: "0.5.1"
 sdks:
   dart: ">=3.3.1 <4.0.0"
-  flutter: ">=1.16.0"
+  flutter: ">=1.17.0"

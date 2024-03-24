@@ -1,6 +1,8 @@
 
+import 'package:eisapp/view/DashboardScreen.dart';
 import 'package:eisapp/view/LoginScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sizer/flutter_sizer.dart';
 // import 'package:provider/provider.dart';
 
 void main() {
@@ -27,8 +29,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: LoginScreen(),
+    return  FlutterSizer(
+        builder: (context, orientation, screenType) {
+        return  const MaterialApp(
+          home: LoginScreen(),
+        );
+      }
     );
   }
 }
