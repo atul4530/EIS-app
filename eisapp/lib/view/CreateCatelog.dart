@@ -1,3 +1,4 @@
+import 'package:eisapp/view/ProductDetailsScreen.dart';
 import 'package:eisapp/view/design_consts/DecorationMixin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -171,71 +172,76 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
   }
 
   Widget gridItem(BuildContext context){
-    return Card(
-      elevation: 6,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Container(
-        width: MediaQuery.of(context).size.width/2.2,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12)
-        ),
-        child: Stack(
-          alignment: Alignment.topRight,
-          children: [
-      
-            Column(
-              children: [
-                Column(
-                  children: [
-                      Container(
-                          width: MediaQuery.of(context).size.width/2.1,
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> ProductDetailsScreen()));
+      },
+      child: Card(
+        elevation: 6,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: Container(
+          width: MediaQuery.of(context).size.width/2.2,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12)
+          ),
+          child: Stack(
+            alignment: Alignment.topRight,
+            children: [
 
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
-                          ),
-                          alignment: Alignment.center,
-                          child: ClipRRect(
-                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
-                              child: Image.asset("assets/images/jewellery.png",height: MediaQuery.of(context).size.width/5.5,width: MediaQuery.of(context).size.width/6.5,fit: BoxFit.cover,))),
-                      Container(
-                        width: MediaQuery.of(context).size.width/2.1,
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(3),
-                        decoration: BoxDecoration(
-                          color: const Color(0xff8953a8).withOpacity(0.5)
-                        ),
-                        child:  Text("CN/592410",style: TextStyle(fontSize: userMobile(context)?13.sp:15.sp),),
-                      )
-
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 4,right: 4,bottom: 8,top: 3),
-                  child: Column(
+              Column(
+                children: [
+                  Column(
                     children: [
-                      detailedWidget("099033"),
-                      detailedWidget("Pendant"),
-                      detailedWidget("Diamond Classic Collection"),
-                      detailedWidget("Diamond Classic"),
-                      detailedWidget("Diamond 0.43 Cts."),
-                      detailedWidget("14k White Gold: 8.95 Gms"),
+                        Container(
+                            width: MediaQuery.of(context).size.width/2.1,
+
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
+                            ),
+                            alignment: Alignment.center,
+                            child: ClipRRect(
+                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
+                                child: Image.asset("assets/images/jewellery.png",height: MediaQuery.of(context).size.width/5.5,width: MediaQuery.of(context).size.width/6.5,fit: BoxFit.cover,))),
+                        Container(
+                          width: MediaQuery.of(context).size.width/2.1,
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                            color: const Color(0xff8953a8).withOpacity(0.5)
+                          ),
+                          child:  Text("CN/592410",style: TextStyle(fontSize: userMobile(context)?13.sp:15.sp),),
+                        )
+
                     ],
                   ),
-                ),
-              ],
-            ),
-             GestureDetector(
-               onTap: (){
-                 openDigitalCatelog(context);
-               },
-               child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Icon(Icons.add_shopping_cart_outlined,color: Color(0xff6a208f),size: userMobile(context)?24.sp:27.sp,),
-                           ),
-             ),
-          ],
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4,right: 4,bottom: 8,top: 3),
+                    child: Column(
+                      children: [
+                        detailedWidget("099033"),
+                        detailedWidget("Pendant"),
+                        detailedWidget("Diamond Classic Collection"),
+                        detailedWidget("Diamond Classic"),
+                        detailedWidget("Diamond 0.43 Cts."),
+                        detailedWidget("14k White Gold: 8.95 Gms"),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+               GestureDetector(
+                 onTap: (){
+                   openDigitalCatelog(context);
+                 },
+                 child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(Icons.add_shopping_cart_outlined,color: Color(0xff6a208f),size: userMobile(context)?24.sp:27.sp,),
+                             ),
+               ),
+            ],
+          ),
         ),
       ),
     );
