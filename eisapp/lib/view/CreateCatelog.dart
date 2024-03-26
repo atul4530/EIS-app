@@ -94,7 +94,7 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
                         tileMode: TileMode.clamp),
                     borderRadius: const BorderRadius.only(topLeft: Radius.circular(20),topRight:  Radius.circular(20))
                 ),
-                height: MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/8,
+                height: MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/5.8,
                 width: MediaQuery.of(context).size.width,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),

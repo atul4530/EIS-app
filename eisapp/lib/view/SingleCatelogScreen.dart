@@ -38,7 +38,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen> with Backgrou
                               onTap: (){
                                 Navigator.pop(context);
                               },
-                              child:  Icon(Icons.arrow_back,color: Colors.white,size: userMobile(context)?16.sp:25.sp,)),
+                              child:  Icon(Icons.arrow_back,color: Colors.white,size:  userMobile(context)?22.sp:27.sp,)),
 
                         ],
                       ),
