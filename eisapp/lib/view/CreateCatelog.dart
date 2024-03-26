@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 
+import 'CatelogListScreen.dart';
+
 class CreateCatelog extends StatefulWidget {
   const CreateCatelog({super.key});
 
@@ -60,13 +62,16 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Create Catelog",style: TextStyle(color: Colors.white,fontSize:  userMobile(context)?16.sp:18.sp),),
+                          Text("Create Catelog",style: TextStyle(color: Colors.white,fontSize:  userMobile(context)?16.sp:20.sp),),
                            Row(
                             children: [
-                              Icon(Icons.search,color: Colors.white,size:  userMobile(context)?22.sp:25.sp,),
+                              Icon(Icons.search,color: Colors.white,size:  userMobile(context)?22.sp:27.sp,),
                               SizedBox(width: 10,),
-                              Icon(Icons.menu_outlined,color: Colors.white,size: userMobile(context)?22.sp:25.sp,),
-                            ],
+                              GestureDetector(
+                                  onTap: (){
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=> CatelogListScreen()));
+                                  },
+                                  child: Icon(Icons.list,color: Colors.white,size:  userMobile(context)?22.sp:27.sp,))],
                           )
                         ],
                       ),
@@ -120,13 +125,13 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
                                   ),
                                 ),
                                 const SizedBox(width: 8,),
-                                 Text("CONTRACT",style: TextStyle(color: Colors.black,fontSize: userMobile(context)?15.sp:17.sp),),
+                                 Text("CONTRACT",style: TextStyle(color: Colors.black,fontSize: userMobile(context)?15.sp:20.sp),),
 
                               ],
                             ),
                             Row(
                               children: [
-                                 Text("In Stock",style: TextStyle(color: Colors.black,fontSize:  userMobile(context)?15.sp:17.sp),),
+                                 Text("In Stock",style: TextStyle(color: Colors.black,fontSize:  userMobile(context)?15.sp:20.sp),),
                                 Switch(
                                   // This bool value toggles the switch.
                                   value: light,
@@ -211,7 +216,7 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
                           decoration: BoxDecoration(
                             color: const Color(0xff8953a8).withOpacity(0.5)
                           ),
-                          child:  Text("CN/592410",style: TextStyle(fontSize: userMobile(context)?13.sp:15.sp),),
+                          child:  Text("CN/592410",style: TextStyle(fontSize: userMobile(context)?13.sp:20.sp),),
                         )
 
                     ],
@@ -244,6 +249,16 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
           ),
         ),
       ),
+    );
+  }
+
+  Widget detailedWidget(String name){
+    return Row(
+      children: [
+        const Icon(Icons.circle_outlined,color: Colors.black,size: 12,),
+        const SizedBox(width: 3,),
+        Text(name,style:  TextStyle(fontSize: userMobile(context)? 11.sp:18.sp,fontWeight: FontWeight.w500),)
+      ],
     );
   }
 
@@ -349,17 +364,6 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
         ));
   }
 
-
-
-  Widget detailedWidget(String name){
-     return Row(
-       children: [
-         const Icon(Icons.circle_outlined,color: Colors.black,size: 12,),
-         const SizedBox(width: 3,),
-         Text(name,style:  TextStyle(fontSize: userMobile(context)? 11.sp:17.sp,fontWeight: FontWeight.w500),)
-       ],
-     );
-  }
 }
 
 bool userMobile(BuildContext context){

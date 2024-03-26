@@ -60,7 +60,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> with Backgr
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("CN/592690",style: TextStyle(color: Colors.white,fontSize:  userMobile(context)?16.sp:18.sp),),
+                          Text("CN/592690",style: TextStyle(color: Colors.white,fontSize:  userMobile(context)?userMobile(context)?  16.sp:20.sp:18.sp),),
                           Container()
                         ],
                       ),
@@ -129,7 +129,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> with Backgr
                                   decoration: BoxDecoration(
                                     color: Color(0xffB3B1AB).withOpacity(0.5)
                                   ),
-                                  child: Text("Product Information",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 16.sp),textAlign: TextAlign.start,),
+                                  child: Text("Product Information",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: userMobile(context)?  16.sp:20.sp),textAlign: TextAlign.start,),
                                 ),
                                 Container(
                                   alignment: Alignment.centerLeft,
@@ -141,7 +141,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> with Backgr
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("Style Number",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 16.sp),textAlign: TextAlign.start,),
+                                      Text("Style Number",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: userMobile(context)?  16.sp:20.sp),textAlign: TextAlign.start,),
                                       Text("618836",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 14.sp),textAlign: TextAlign.start,),
                                     ],
                                   ),
@@ -156,7 +156,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> with Backgr
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("Contact Number",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 16.sp),textAlign: TextAlign.start,),
+                                      Text("Contact Number",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: userMobile(context)?  16.sp:20.sp),textAlign: TextAlign.start,),
                                       Text("CN/592690",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 14.sp),textAlign: TextAlign.start,),
                                     ],
                                   ),
@@ -171,7 +171,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> with Backgr
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("KGK Collection",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 16.sp),textAlign: TextAlign.start,),
+                                      Text("KGK Collection",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: userMobile(context)?  16.sp:20.sp),textAlign: TextAlign.start,),
                                       Text("Diamond Classic Collection",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 14.sp),textAlign: TextAlign.start,),
                                     ],
                                   ),
@@ -186,7 +186,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> with Backgr
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("Customer Collection",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 16.sp),textAlign: TextAlign.start,),
+                                      Text("Customer Collection",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: userMobile(context)?  16.sp:20.sp),textAlign: TextAlign.start,),
                                       Text("Diamond Classic Collection",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 14.sp),textAlign: TextAlign.start,),
                                     ],
                                   ),
@@ -197,7 +197,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> with Backgr
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("Jewellery Type",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 16.sp),textAlign: TextAlign.start,),
+                                      Text("Jewellery Type",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: userMobile(context)?  16.sp:20.sp),textAlign: TextAlign.start,),
                                       Text("Ring",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 14.sp),textAlign: TextAlign.start,),
                                     ],
                                   ),
@@ -208,7 +208,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> with Backgr
                                   decoration: BoxDecoration(
                                       color: Color(0xffB3B1AB).withOpacity(0.5)
                                   ),
-                                  child: Text("Certified Diamond",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 16.sp),textAlign: TextAlign.start,),
+                                  child: Text("Certified Diamond",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: userMobile(context)?  16.sp:20.sp),textAlign: TextAlign.start,),
                                 ),
                                 Container(
                                   alignment: Alignment.centerLeft,
@@ -219,7 +219,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> with Backgr
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("Weight",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 16.sp),textAlign: TextAlign.start,),
+                                      Text("Weight",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: userMobile(context)?  16.sp:20.sp),textAlign: TextAlign.start,),
                                       Text("0.43",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 14.sp),textAlign: TextAlign.start,),
                                     ],
                                   ),
@@ -233,7 +233,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> with Backgr
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("No of Place",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 16.sp),textAlign: TextAlign.start,),
+                                      Text("No of Place",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: userMobile(context)?  16.sp:20.sp),textAlign: TextAlign.start,),
                                       Text("1",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 14.sp),textAlign: TextAlign.start,),
                                     ],
                                   ),
@@ -247,7 +247,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> with Backgr
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("Color",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 16.sp),textAlign: TextAlign.start,),
+                                      Text("Color",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: userMobile(context)?  16.sp:20.sp),textAlign: TextAlign.start,),
                                       Text("Blue",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 14.sp),textAlign: TextAlign.start,),
                                     ],
                                   ),
@@ -259,7 +259,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> with Backgr
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("MM Size",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 16.sp),textAlign: TextAlign.start,),
+                                      Text("MM Size",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: userMobile(context)?  16.sp:20.sp),textAlign: TextAlign.start,),
                                       Text("4.13",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 14.sp),textAlign: TextAlign.start,),
                                     ],
                                   ),
@@ -270,7 +270,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> with Backgr
                                   decoration: BoxDecoration(
                                       color: Color(0xffB3B1AB).withOpacity(0.5)
                                   ),
-                                  child: Text("14KW",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 16.sp),textAlign: TextAlign.start,),
+                                  child: Text("14KW",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: userMobile(context)?  16.sp:20.sp),textAlign: TextAlign.start,),
                                 ),
                               ],
                             )
@@ -279,7 +279,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> with Backgr
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Icon(Icons.shopping_cart_checkout_outlined,size: 22.sp,),
+                        child: Icon(Icons.shopping_cart_checkout_outlined,size:userMobile(context)?  22.sp:35.sp,),
                       )
                     ],
                   ),

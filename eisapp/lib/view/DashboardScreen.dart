@@ -1,3 +1,4 @@
+import 'package:eisapp/view/ApprovalScreen.dart';
 import 'package:eisapp/view/design_consts/DecorationMixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
@@ -21,7 +22,7 @@ class _DashboardScreenState extends State<DashboardScreen> with BackgroundDecora
     final bool useMobileLayout = shortestSide < 600;
     return SafeArea(
       child: Scaffold(
-        body: selectedIndex==1?ProductsScreen(): dashBoardView(),
+        body: selectedIndex==1?ProductsScreen():selectedIndex==2?ApprovalScreen():selectedIndex==3?Container(): dashBoardView(),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.white,
           elevation: 5,
@@ -150,7 +151,6 @@ class _DashboardScreenState extends State<DashboardScreen> with BackgroundDecora
   }
 
 }
-
 
 Widget buttonTile(BuildContext context,String image,String name,dynamic onTap){
 

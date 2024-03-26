@@ -39,6 +39,8 @@ dependencies:
   provider: ^6.1.2
   flutter_sizer: ^1.0.5
   widget_zoom: ^0.0.4
+  simple_barcode_scanner: ^0.1.1
+
 
 dev_dependencies:
   flutter_test:

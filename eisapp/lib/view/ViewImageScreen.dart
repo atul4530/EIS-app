@@ -27,6 +27,7 @@ class _ViewImageScreenState extends State<ViewImageScreen> with BackgroundDecora
                 //color: Colors.black,
                 height: MediaQuery.of(context).size.height/9,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
                       padding:  EdgeInsets.all(userMobile(context)? 8.0:16),
@@ -47,7 +48,7 @@ class _ViewImageScreenState extends State<ViewImageScreen> with BackgroundDecora
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("View Image",style: TextStyle(color: Colors.white,fontSize:  userMobile(context)?16.sp:18.sp),),
+                          Text("View Image",style: TextStyle(color: Colors.white,fontSize:  userMobile(context)?16.sp:22.sp),),
                           Container()
                         ],
                       ),

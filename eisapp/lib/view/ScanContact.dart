@@ -1,9 +1,11 @@
 
+import 'package:eisapp/view/CatelogListScreen.dart';
 import 'package:eisapp/view/design_consts/DecorationMixin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 import 'CreateCatelog.dart';
 
@@ -16,7 +18,11 @@ class ScanContact extends StatefulWidget {
 
 class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
   bool allowMultiple =false;
-  List<String> listBarcode = [];
+  List<String> listBarcode = [
+    "ddssss",
+    "fsfsfsfsfs"
+  ];
+  String result = "";
   @override
   Widget build(BuildContext context) {
 
@@ -30,6 +36,7 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                 //color: Colors.black,
                 height: MediaQuery.of(context).size.height/7,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
                       padding:  EdgeInsets.all(userMobile(context)? 8.0:16),
@@ -51,7 +58,7 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                               children: [
                                 Text("Select Catelog",style: TextStyle(color: Colors.black,fontSize:  userMobile(context)?13.sp:16.sp),),
                                 SizedBox(width: 5,),
-                                Icon(Icons.arrow_drop_down,color: Colors.black,size: 15.sp,),
+                                Icon(Icons.arrow_drop_down,color: Colors.black,size:  userMobile(context)?15.sp:20.sp,),
                               ],
                             ),
                           )
@@ -63,7 +70,7 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Scan Contact",style: TextStyle(color: Colors.white,fontSize:  userMobile(context)?16.sp:18.sp),),
+                          Text("Scan Contact",style: TextStyle(color: Colors.white,fontSize:  userMobile(context)?16.sp:22.sp),),
                           Container(
                             child: Row(
                               children: [
@@ -80,9 +87,13 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                                     });
                                   },
                                 ),
-                                Text("Allow Duplicate",style: TextStyle(color: Colors.white,fontSize: 12.sp),),
+                                Text("Allow Duplicate",style: TextStyle(color: Colors.white,fontSize:userMobile(context)? 12.sp:16.sp),),
                                 SizedBox(width: 8,),
-                                Icon(Icons.list,color: Colors.white,size: 22.sp,)
+                                GestureDetector(
+                                    onTap: (){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=> CatelogListScreen()));
+                                    },
+                                    child: Icon(Icons.list,color: Colors.white,size: userMobile(context)? 22.sp:25.sp,))
 
                               ],
                             ),
@@ -136,7 +147,7 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                                     stops: [0.0, 1.0,],
                                     tileMode: TileMode.mirror),
                               ),
-                              child: Text("SAVE AS CATELOG",style: TextStyle(color: Colors.white,fontSize: 12.sp),),
+                              child: Text("SAVE AS CATELOG",style: TextStyle(color: Colors.white,fontSize:userMobile(context)?  12.sp:18.sp),),
                             ),
                           ),
                           Row(
@@ -160,26 +171,40 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                                         stops: [0.0, 1.0,],
                                         tileMode: TileMode.mirror),
                                   ),
-                                  child: Text("MANUAL",style: TextStyle(color: Colors.white,fontSize: 12.sp),),
+                                  child: Text("MANUAL",style: TextStyle(color: Colors.white,fontSize: userMobile(context)?  12.sp:18.sp),),
                                 ),
                               ),
                               SizedBox(width: 5,),
-                              Container(
-                                padding: EdgeInsets.symmetric(vertical: 8,horizontal: 10),
-                                decoration:BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xFF562162),
-                                        Color(0xFF553BDF),
-                                      ],
+                              GestureDetector(
+                                onTap: () async {
+                                  var res = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const SimpleBarcodeScannerPage(),
+                                      ));
+                                  setState(() {
+                                    if (res is String) {
+                                      result = res;
+                                    }
+                                  });
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 8,horizontal: 10),
+                                  decoration:BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    gradient: LinearGradient(
+                                        colors: [
+                                          Color(0xFF562162),
+                                          Color(0xFF553BDF),
+                                        ],
 
-                                      begin:  FractionalOffset(1.0, 0.0),
-                                      end:  FractionalOffset(0.0, 0.5),
-                                      stops: [0.0, 1.0,],
-                                      tileMode: TileMode.mirror),
+                                        begin:  FractionalOffset(1.0, 0.0),
+                                        end:  FractionalOffset(0.0, 0.5),
+                                        stops: [0.0, 1.0,],
+                                        tileMode: TileMode.mirror),
+                                  ),
+                                  child: Text("BARCODE SCAN",style: TextStyle(color: Colors.white,fontSize:userMobile(context)?  12.sp:18.sp),),
                                 ),
-                                child: Text("BARCODE SCAN",style: TextStyle(color: Colors.white,fontSize: 12.sp),),
                               ),
                             ],
                           )
@@ -188,7 +213,7 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                     ),
                     listBarcode.isEmpty? Container(
                       margin: EdgeInsets.only(top: 30),
-                      child: Text("Scan Barcode of Contact number\n to Create Catelog",textAlign: TextAlign.center,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 15.sp),),):  Expanded(
+                      child: Text("Scan Barcode of Contact number\n to Create Catelog",textAlign: TextAlign.center,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: userMobile(context)?  15.sp:20.sp),),):  Expanded(
                       child: ListView.builder(
                         itemCount: listBarcode.length,
                         itemBuilder: (BuildContext context, int index) {
@@ -206,7 +231,7 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(listBarcode[index].trim().toUpperCase(),style: TextStyle(color: Colors.black,fontSize: 15.sp),),
+                                  Text(listBarcode[index].trim().toUpperCase(),style: TextStyle(color: Colors.black,fontSize: userMobile(context)?  15.sp:20.sp),),
                                   GestureDetector(
                                       onTap: (){
                                         listBarcode.removeAt(index);
@@ -240,7 +265,7 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
     Dialog errorDialog = Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)), //this right here
       child: Container(
-        height: 75.w,
+        height: userMobile(context)?  75.w:60.w,
         width: 85.w,
 
         child: Column(
@@ -251,7 +276,7 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Manual Entry",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w700,fontSize: 18.sp),),
+                      Text("Manual Entry",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w700,fontSize: userMobile(context)? 18.sp:24.sp),),
                       GestureDetector(
                           onTap: (){
                             Navigator.pop(context);
@@ -300,7 +325,7 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                         color: Colors.green.withOpacity(0.9),
                         borderRadius: BorderRadius.circular(4)
                       ),
-                      child: Text("ADD",style: TextStyle(color: Colors.white,fontSize: 16.sp),),
+                      child: Text("ADD",style: TextStyle(color: Colors.white,fontSize: userMobile(context)?  16.sp:25.sp),),
                     ),
                   ),
                 ],
