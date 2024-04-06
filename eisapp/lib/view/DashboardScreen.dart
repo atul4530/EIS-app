@@ -1,8 +1,12 @@
+import 'dart:convert';
+
+import 'package:eisapp/model/LoginResponeModel.dart';
 import 'package:eisapp/view/ApprovalScreen.dart';
 import 'package:eisapp/view/design_consts/DecorationMixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 
+import '../helper/pref_data.dart';
 import 'ProductsScreen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -14,6 +18,23 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> with BackgroundDecoration {
   int selectedIndex=0;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData(context);
+  }
+
+  getData(BuildContext context){
+    PreferenceHelper().getStringValuesSF("data").then((value) {
+      print("---Value----$value");
+      LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(jsonDecode(value!));
+      print("------${loginResponseModel.data!.first.digitalCatalogueReg}");
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

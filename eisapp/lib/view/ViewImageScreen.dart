@@ -77,7 +77,7 @@ class _ViewImageScreenState extends State<ViewImageScreen> with BackgroundDecora
                   child: Container(
                     height: MediaQuery.of(context).size.width,
                     width: MediaQuery.of(context).size.width,
-                    child: WidgetZoom(zoomWidget: Image.asset(widget.image), heroAnimationTag: "tag",),
+                    child: WidgetZoom(zoomWidget: Image.network(widget.image), heroAnimationTag: "tag",),
                   ),
                 ),
               )

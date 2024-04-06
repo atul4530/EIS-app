@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:eisapp/view/CreateCatelog.dart';
 import 'package:eisapp/view/ScanContact.dart';
 import 'package:eisapp/view/design_consts/DecorationMixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 
+import '../helper/pref_data.dart';
+import '../model/LoginResponeModel.dart';
 import 'DashboardScreen.dart';
 
 class ProductsScreen extends StatefulWidget {
@@ -14,6 +18,30 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> with BackgroundDecoration{
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData(context);
+  }
+
+  bool showCatelog=false;
+
+  getData(BuildContext context){
+    PreferenceHelper().getStringValuesSF("data").then((value) {
+      print("---Value----$value");
+      LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(jsonDecode(value!));
+      print("------${loginResponseModel.data!.first.digitalCatalogueReg}");
+      if(loginResponseModel.data!.first.digitalCatalogueReg!.toUpperCase()=="Y"){
+        setState(() {
+          showCatelog=true;
+        });
+      }
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -65,10 +93,10 @@ class _ProductsScreenState extends State<ProductsScreen> with BackgroundDecorati
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(height: 20,),
-                  Row(
+                  showCatelog?   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      buttonTile(context,"catalog.jpg","Catelog",(){
+                     buttonTile(context,"catalog.jpg","Catelog",(){
                         Navigator.push(context, MaterialPageRoute(builder: (context)=> CreateCatelog()));
                       }),
                       buttonTile(context,"barcode-scan.png","Barcode\nScan",(){
@@ -82,6 +110,12 @@ class _ProductsScreenState extends State<ProductsScreen> with BackgroundDecorati
                           color: Colors.transparent,
                         ),
                       )
+                    ],
+                  ):Row(
+                    children: [
+                      buttonTile(context,"barcode-scan.png","Barcode\nScan",(){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> ScanContact()));
+                      })
                     ],
                   ),
                 ],

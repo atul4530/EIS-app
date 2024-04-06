@@ -1,10 +1,21 @@
+import 'dart:convert';
+
+import 'package:eisapp/helper/pref_data.dart';
+import 'package:eisapp/model/GetBarCodeContactColumnRequired.dart';
+import 'package:eisapp/model/GetBarcodeCatelogListNameModel.dart';
 import 'package:eisapp/view/ProductDetailsScreen.dart';
 import 'package:eisapp/view/design_consts/DecorationMixin.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:eisapp/view/loader/loader.dart';
+
 import 'package:flutter/material.dart';
+
 import 'package:flutter_sizer/flutter_sizer.dart';
 
+import '../model/GetBarCodeCatelogListModel.dart';
+import '../model/LoginResponeModel.dart';
+import '../network/ApiService.dart';
 import 'CatelogListScreen.dart';
+
 
 class CreateCatelog extends StatefulWidget {
   const CreateCatelog({super.key});
@@ -15,6 +26,46 @@ class CreateCatelog extends StatefulWidget {
 
 class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration {
   bool light = false;
+  bool selectedContact=false;
+
+  List<GetBarCodeCatalogNameList> selectedColumnData = [];
+  List<GetCatalogReqColumn> selectedColumnDataContract = [];
+  List<GetBarCodeCatalogNameList> selectedData = [];
+  List<GetCatalogReqColumn> selectedDataContract = [];
+  bool dataLoading = true;
+  GetBarCodeCatalogListModel? getBarCodeCatalogListModel;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getBarcodeCatelogListData();
+  }
+
+  getBarcodeCatelogListData() async {
+    setState(() {
+      dataLoading=true;
+    });
+    LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(jsonDecode((await PreferenceHelper().getStringValuesSF("data")).toString()));
+    var response = await ApiService.getData("rfid/TA/result/getBarCodeCatalogList/-1/${loginResponseModel.data!.first.cscId}/-1/-1/- 1/1/'-1'/'-1'/'-1'/-1/-1/-1/-1/-1/-1/-1/-1");
+    GetBarCodeCatalogListModel data = GetBarCodeCatalogListModel.fromJson(jsonDecode(response.body));
+    if(data.result ?? false){
+      setState(() {
+        getBarCodeCatalogListModel=data;
+        dataLoading=false;
+      });
+    }
+    else
+      {
+        setState(() {
+          dataLoading=false;
+        });
+      }
+
+
+
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -22,7 +73,7 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
       child: Scaffold(body: Container(
         decoration: bgDecoration(),
         child: SingleChildScrollView(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           child: Column(
             children: [
               SizedBox(
@@ -40,18 +91,24 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
                                 Navigator.pop(context);
                               },
                               child: const Icon(Icons.arrow_back,color: Colors.white,)),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(35)
-                            ),
-                            child:  Row(
-                              children: [
-                                Text("Select Catelog",style: TextStyle(color: Colors.black,fontSize:  userMobile(context)?13.sp:16.sp),),
-                                SizedBox(width: 5,),
-                                Icon(Icons.arrow_drop_down,color: Colors.black,size: 15.sp,),
-                              ],
+                          GestureDetector(
+                            onTap: () async {
+                              await getBarcodeCatelogNameListModel();
+                              openDigitalCatelog(context);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(35)
+                              ),
+                              child:  Row(
+                                children: [
+                                  Text("Select Catelog",style: TextStyle(color: Colors.black,fontSize:  userMobile(context)?13.sp:16.sp),),
+                                  const SizedBox(width: 5,),
+                                  Icon(Icons.arrow_drop_down,color: Colors.black,size: 15.sp,),
+                                ],
+                              ),
                             ),
                           )
                         ],
@@ -66,10 +123,10 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
                            Row(
                             children: [
                               Icon(Icons.search,color: Colors.white,size:  userMobile(context)?22.sp:27.sp,),
-                              SizedBox(width: 10,),
+                              const SizedBox(width: 10,),
                               GestureDetector(
                                   onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=> CatelogListScreen()));
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=> const CatelogListScreen()));
                                   },
                                   child: Icon(Icons.list,color: Colors.white,size:  userMobile(context)?22.sp:27.sp,))],
                           )
@@ -104,30 +161,37 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              children: [
-                                Container(
-                                  width: 22,
-                                  height: 22,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(22),
-                                    border: Border.all(width: 1,color: const Color(0xff32B7C6))
-                                  ),
-                                  child: Container(
-                                    height: 14,
-                                    width: 14,
-                                    margin: const EdgeInsets.all(4),
+                            GestureDetector(
+                              onTap: (){
+                                setState(() {
+                                  selectedContact=!selectedContact;
+                                });
+                              },
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 22,
+                                    height: 22,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(14),
-                                      color:  const Color(0xff32B7C6),
-                                      border: Border.all(color:  const Color(0xff32B7C6))
+                                      borderRadius: BorderRadius.circular(22),
+                                      border: Border.all(width: 1,color: const Color(0xff32B7C6))
+                                    ),
+                                    child: Container(
+                                      height: 14,
+                                      width: 14,
+                                      margin: const EdgeInsets.all(4),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(14),
+                                        color: selectedContact? const Color(0xff32B7C6):Colors.transparent,
+                                        border: Border.all(color:  selectedContact? const Color(0xff32B7C6):Colors.transparent)
+                                      ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(width: 8,),
-                                 Text("CONTRACT",style: TextStyle(color: Colors.black,fontSize: userMobile(context)?15.sp:20.sp),),
+                                  const SizedBox(width: 8,),
+                                   Text("CONTRACT",style: TextStyle(color: Colors.black,fontSize: userMobile(context)?15.sp:20.sp),),
 
-                              ],
+                                ],
+                              ),
                             ),
                             Row(
                               children: [
@@ -147,7 +211,7 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
                             )
                           ],
                         ),
-                      Expanded(
+                      dataLoading?const Center(child: CircularProgressIndicator(),):   Expanded(
                         child: GridView.builder(
                          // physics: NeverScrollableScrollPhysics(),
                           gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
@@ -157,9 +221,10 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
                             crossAxisSpacing:  userMobile(context)? 2:10
                           ),
                           padding: const EdgeInsets.all(0), // padding around the grid
-                          itemCount: 20, // total number of items
+                          itemCount: getBarCodeCatalogListModel!.getBarCodeCatalogList!.length, // total number of items
                           itemBuilder: (context, index) {
-                            return gridItem(context);
+                            var details = getBarCodeCatalogListModel!.getBarCodeCatalogList![index];
+                            return gridItem(context,details);
                           },
                         ),
                       )
@@ -176,10 +241,10 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
     );
   }
 
-  Widget gridItem(BuildContext context){
+  Widget gridItem(BuildContext context,GetBarCodeCatalogList getBarCodeCatalogList){
     return GestureDetector(
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> ProductDetailsScreen()));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>  ProductDetailsScreen(cont_id: getBarCodeCatalogList.contId.toString(),list: getBarCodeCatalogListModel!.getBarCodeCatalogList!.first)));
       },
       child: Card(
         elevation: 6,
@@ -208,7 +273,7 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
                             alignment: Alignment.center,
                             child: ClipRRect(
                                 borderRadius: const BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
-                                child: Image.asset("assets/images/jewellery.png",height: MediaQuery.of(context).size.width/5.5,width: MediaQuery.of(context).size.width/6.5,fit: BoxFit.cover,))),
+                                child: Image.network(getBarCodeCatalogList.img!,height: MediaQuery.of(context).size.width/5.5,width: MediaQuery.of(context).size.width/6.5,fit: BoxFit.cover,))),
                         Container(
                           width: MediaQuery.of(context).size.width/2.1,
                           alignment: Alignment.center,
@@ -216,7 +281,7 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
                           decoration: BoxDecoration(
                             color: const Color(0xff8953a8).withOpacity(0.5)
                           ),
-                          child:  Text("CN/592410",style: TextStyle(fontSize: userMobile(context)?13.sp:20.sp),),
+                          child:  Text(getBarCodeCatalogList.contTypeNo!,style: TextStyle(fontSize: userMobile(context)?13.sp:20.sp),),
                         )
 
                     ],
@@ -225,12 +290,12 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
                     padding: const EdgeInsets.only(left: 4,right: 4,bottom: 8,top: 3),
                     child: Column(
                       children: [
-                        detailedWidget("099033"),
-                        detailedWidget("Pendant"),
-                        detailedWidget("Diamond Classic Collection"),
-                        detailedWidget("Diamond Classic"),
-                        detailedWidget("Diamond 0.43 Cts."),
-                        detailedWidget("14k White Gold: 8.95 Gms"),
+                        detailedWidget("${getBarCodeCatalogList.contId!}"),
+                        detailedWidget(getBarCodeCatalogList.jewelleryTypeName!),
+                        detailedWidget(getBarCodeCatalogList.collection1!),
+                        detailedWidget(getBarCodeCatalogList.businessCategoryName!),
+                        detailedWidget(getBarCodeCatalogList.stoneDesc!),
+                        detailedWidget(getBarCodeCatalogList.metalDesc!),
                       ],
                     ),
                   ),
@@ -238,11 +303,11 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
               ),
                GestureDetector(
                  onTap: (){
-                   openDigitalCatelog(context);
+
                  },
                  child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Icon(Icons.add_shopping_cart_outlined,color: Color(0xff6a208f),size: userMobile(context)?24.sp:27.sp,),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(Icons.add_shopping_cart_outlined,color: const Color(0xff6a208f),size: userMobile(context)?24.sp:27.sp,),
                              ),
                ),
             ],
@@ -262,106 +327,223 @@ class _CreateCatelogState extends State<CreateCatelog> with BackgroundDecoration
     );
   }
 
+  TextEditingController catelogNameController = TextEditingController();
+  TextEditingController remarksController = TextEditingController();
+
   openDigitalCatelog(BuildContext context){
+    selectedData.clear();
     showDialog<void>(
         context: context,
-        builder: (context) => Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-          child: Container(
-            height: 70.h,
-            width: 98.w,
+        builder: (context) => StatefulBuilder(
+            builder: (context, setState) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+               contentPadding: EdgeInsets.zero,
+              content: Container(
+                height: 70.h,
+                width: 98.w,
+                color: Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Digital Catelog",style: TextStyle(color: const Color(0xff6a208f),fontSize: 22.sp,fontWeight: FontWeight.w400),),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.green,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Text("SAVE",style: TextStyle(color: Colors.white,fontSize: 16.sp),),
+                                )
+                              ],
+                            ),
+                          ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text("Catelog Name*",style: TextStyle(color: Colors.black.withOpacity(0.5),fontSize: 13.sp),textAlign: TextAlign.start,)),
+                          Container(
+                            height: 30.sp,
+                            margin: const EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black.withOpacity(0.5),width: 0.5),
+                              borderRadius: BorderRadius.circular(10)
+                            ),
+                            child:  TextField(
+                                controller: catelogNameController,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none
+                                ),
+                            ),
+                          )
 
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Digital Catelog",style: TextStyle(color: Color(0xff6a208f),fontSize: 22.sp,fontWeight: FontWeight.w400),),
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 20,vertical: 4),
-                              decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Text("SAVE",style: TextStyle(color: Colors.white,fontSize: 16.sp),),
-                            )
-                          ],
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text("Remarks",style: TextStyle(color: Colors.black.withOpacity(0.5),fontSize: 13.sp),textAlign: TextAlign.start,)),
+                          Container(
+                            height: 30.sp,
+                            margin: const EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black.withOpacity(0.5),width: 0.5),
+                              borderRadius: BorderRadius.circular(10)
+                            ),
+                            child:  TextField(
+                              controller: remarksController,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none
+                                ),
+                            ),
+                          )
+
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Card(
+                        elevation: 1,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10),side: BorderSide(width: 1,color: Colors.black.withOpacity(0.5))),
+                        margin: const EdgeInsets.symmetric(horizontal: 12,vertical: 3),
+                        color: Colors.white,
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          child: Container(
+                            height: 30.sp,
+                            width: 100.w,
+                            //color: selectedData.contains(data)?Colors.deepPurple.withOpacity(0.5):Colors.white,
+                            alignment: Alignment.centerLeft,
+                            child:  Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text("Select Column Required*",style: TextStyle(fontSize: 13.5.sp,color: Colors.black.withOpacity(0.5)),),
+                            ),
+                          ),
                         ),
                       ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                          margin: EdgeInsets.symmetric(horizontal: 12),
-                          child: Text("Catelog Name*",style: TextStyle(color: Colors.black.withOpacity(0.5),fontSize: 13.sp),textAlign: TextAlign.start,)),
-                      Container(
-                        height: 30.sp,
-                        margin: EdgeInsets.symmetric(horizontal: 12),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black.withOpacity(0.5),width: 0.5),
-                          borderRadius: BorderRadius.circular(10)
-                        ),
-                        child: const TextField(
-                            decoration: InputDecoration(
-                              border: InputBorder.none
-                            ),
-                        ),
-                      )
+                    ),
+                    SizedBox(
+                      height: 37.h,
 
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                          margin: EdgeInsets.symmetric(horizontal: 12),
-                          child: Text("Remarks",style: TextStyle(color: Colors.black.withOpacity(0.5),fontSize: 13.sp),textAlign: TextAlign.start,)),
-                      Container(
-                        height: 30.sp,
-                        margin: EdgeInsets.symmetric(horizontal: 12),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black.withOpacity(0.5),width: 0.5),
-                          borderRadius: BorderRadius.circular(10)
-                        ),
-                        child: const TextField(
-                            decoration: InputDecoration(
-                              border: InputBorder.none
-                            ),
-                        ),
-                      )
+                      child: ListView.builder(
+                          itemCount: selectedContact?selectedColumnDataContract.length:selectedColumnData.length,
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          itemBuilder: (context,index){
+                            var data = selectedContact? GetBarCodeCatalogNameList():selectedColumnData[index];
+                            var dataC = selectedContact? selectedColumnDataContract[index]:GetCatalogReqColumn();
+                            return GestureDetector(
+                              onTap: (){
+                               if(selectedContact){
+                                 if(selectedDataContract.contains(dataC)){
+                                   selectedDataContract.remove(dataC);
+                                 }
+                                 else
+                                 {
+                                   selectedDataContract.add(dataC);
+                                 }
 
-                    ],
-                  ),
+                                 print("------- $selectedDataContract");
+                                 setState(() {
+
+                                 });
+                               }
+                               else
+                                 {
+                                   if(selectedData.contains(data)){
+                                     selectedData.remove(data);
+                                   }
+                                   else
+                                   {
+                                     selectedData.add(data);
+                                   }
+
+                                   print("------- $selectedData");
+                                   setState(() {
+
+                                   });
+                                 }
+                              },
+                              child: SizedBox(
+                                height: 5.h,
+                                child: Card(
+                                  elevation: 1,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                  margin: const EdgeInsets.symmetric(horizontal: 12,vertical: 3),
+                                  color: selectedContact?(selectedDataContract.contains(dataC)?Colors.deepPurple.withOpacity(0.5):Colors.white):(selectedData.contains(data)?Colors.deepPurple.withOpacity(0.5):Colors.white),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(8),
+                                    child: Container(
+                                      height: 30.sp,
+                                      width: 100.w,
+                                      //color: selectedData.contains(data)?Colors.deepPurple.withOpacity(0.5):Colors.white,
+                                      alignment: Alignment.centerLeft,
+                                      child:  Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Text(selectedContact?dataC.label!:data.label!,style: TextStyle(fontSize: 13.5.sp,color: Colors.black.withOpacity(0.5)),),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                    ),
+                      ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Container(
-                   height: 30.sp,
-                   width: 100.w,
-                   margin: EdgeInsets.symmetric(horizontal: 12),
-                   decoration: BoxDecoration(
-                     border: Border.all(color: Colors.black.withOpacity(0.5),width: 0.5),
-                     borderRadius: BorderRadius.circular(10)
-                   ),
-                   alignment: Alignment.centerLeft,
-                   child:  Padding(
-                     padding: const EdgeInsets.only(left: 8.0),
-                     child: Text("Select Columns Required*",style: TextStyle(fontSize: 15.sp,color: Colors.black.withOpacity(0.5)),),
-                   ),
-                                        ),
-                ),
-                  ],
-            ),
-          ),
+              ),
+            );
+          }
         ));
+  }
+
+  getBarcodeCatelogNameListModel() async {
+
+    LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(jsonDecode((await PreferenceHelper().getStringValuesSF("data")).toString()));
+    showLoaderDialog(context);
+    selectedColumnDataContract.clear();
+    var response = await ApiService.getData(selectedContact?"rfid/TA/result/getCatalogReqColumns/-1/${loginResponseModel.data!.first.cscId}/-1/-1/'CONTRACT'/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1": "rfid/TA/result/getBarCodeCatalogNameList/-1/${loginResponseModel.data!.first.cscId!}/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1");
+    if(selectedContact){
+      GetBarCodeCatelogRequriedColumnListModel getBarCodeCatelogRequriedColumnListModel =  GetBarCodeCatelogRequriedColumnListModel.fromJson(jsonDecode(response.body));
+      if(getBarCodeCatelogRequriedColumnListModel.result ?? false){
+        Navigator.pop(context);
+        setState(() {
+          selectedColumnDataContract.addAll(getBarCodeCatelogRequriedColumnListModel.getCatalogReqColumns!);
+        });
+      }
+      else
+      {
+
+      }
+    }
+    else
+      {
+        GetBarCodeCatelogNameListModel getBarCodeCatelogNameListModel = GetBarCodeCatelogNameListModel.fromJson(jsonDecode(response.body));
+        if(getBarCodeCatelogNameListModel.result ?? false){
+          Navigator.pop(context);
+          setState(() {
+            selectedColumnData.addAll(getBarCodeCatelogNameListModel.getBarCodeCatalogNameList!);
+          });
+        }
+        else
+        {
+
+        }
+      }
   }
 
 }
