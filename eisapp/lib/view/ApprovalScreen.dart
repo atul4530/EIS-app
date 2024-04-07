@@ -1,7 +1,13 @@
+import 'dart:convert';
+
 import 'package:eisapp/view/SingleApprovalScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 
+import '../helper/pref_data.dart';
+import '../model/GetAllBcCountModel.dart';
+import '../model/LoginResponeModel.dart';
+import '../network/ApiService.dart';
 import 'CreateCatelog.dart';
 import 'design_consts/DecorationMixin.dart';
 
@@ -13,31 +19,45 @@ class ApprovalScreen extends StatefulWidget {
 }
 
 class _ApprovalScreenState extends State<ApprovalScreen> with BackgroundDecoration{
-  List<String> listApproval = [
-    "ABC",
-    "DVVE",
-    "ABC",
-    "DVVE",
-    "ABC",
-    "DVVE",
-    "ABC",
-    "DVVE",
-    "ABC",
-    "DVVE",
-    "ABC",
-    "DVVE",
-    "ABC",
-    "DVVE",
-    "ABC",
-    "DVVE",
-    "ABC",
-    "DVVE",
-    "ABC",
-    "DVVE"
-  ];
+  GetAllBcAccountModel? getAllBcAccountModel;
+  Result? result;
+
 
   bool singleApprove=false;
-  String cat="";
+
+  bool dataLoading=true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getAllBcAccountData();
+  }
+
+  getAllBcAccountData() async {
+    setState(() {
+      dataLoading=true;
+    });
+    LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(jsonDecode((await PreferenceHelper().getStringValuesSF("data")).toString()));
+    var response = await ApiService.getData("api/a/sql/get_all_bc_count/all/${loginResponseModel.data!.first.empId!}");
+    print("----Response  : ${response.body}");
+    GetAllBcAccountModel data = GetAllBcAccountModel.fromJson(jsonDecode(response.body));
+    if(data.status ?? false){
+      setState(() {
+        getAllBcAccountModel=data;
+        dataLoading=false;
+      });
+    }
+    else
+    {
+      setState(() {
+        dataLoading=false;
+      });
+    }
+
+
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +65,7 @@ class _ApprovalScreenState extends State<ApprovalScreen> with BackgroundDecorati
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       decoration: bgDecoration(),
-      child: SingleChildScrollView(
+      child:dataLoading?Center(child: CircularProgressIndicator(),): SingleChildScrollView(
         child: Column(
           children: [
             Container(
@@ -99,15 +119,15 @@ class _ApprovalScreenState extends State<ApprovalScreen> with BackgroundDecorati
               ),
               height: MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/(userMobile(context)?  4.3:5.6),
               width: 100.w,
-              child: listApproval.isEmpty?Center(child: Text("Access not available \n Contact EIS Team!",style: TextStyle(fontSize: 14.sp,color: Colors.black,fontWeight: FontWeight.w500),textAlign: TextAlign.center,),):singleApprove?SingleApprovalScreen(cat: cat): ListView.builder(
-                itemCount: listApproval.length,
+              child: getAllBcAccountModel!.result!.isEmpty?Center(child: Text("Access not available \n Contact EIS Team!",style: TextStyle(fontSize: 14.sp,color: Colors.black,fontWeight: FontWeight.w500),textAlign: TextAlign.center,),):singleApprove?SingleApprovalScreen(result: result!): ListView.builder(
+                itemCount: getAllBcAccountModel!.result!.length,
                 padding: EdgeInsets.only(top: 20),
                 itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
                     onTap: (){
                       setState(() {
                         singleApprove=true;
-                        cat=listApproval[index];
+                        result=getAllBcAccountModel!.result![index];
                       });
                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>SingleCatelogScreen(catelog: listCatelog[index],)));
                     },
@@ -129,9 +149,9 @@ class _ApprovalScreenState extends State<ApprovalScreen> with BackgroundDecorati
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SizedBox(width: 15,),
-                                Text(listApproval[index].trim().toUpperCase(),style: TextStyle(color: Colors.black,fontSize:userMobile(context)?  14.sp:19.sp ),),
+                                Text(getAllBcAccountModel!.result![index].vfCode!.trim().toUpperCase(),style: TextStyle(color: Colors.black,fontSize:userMobile(context)?  14.sp:19.sp ,fontWeight: FontWeight.w500),),
                                 SizedBox(width: 8,),
-                                Text("$index",style: TextStyle(color: Color(0xff71f306),fontSize: 14.sp),),
+                                Text("${getAllBcAccountModel!.result![index].bcCount!}",style: TextStyle(color: Color(0xff71f306),fontSize: 14.sp),),
 
                               ],
                             ),
