@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:eisapp/view/CatelogListScreen.dart';
 import 'package:eisapp/view/design_consts/DecorationMixin.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,7 +9,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
+import '../helper/pref_data.dart';
+import '../model/GetBarCodeContactColumnRequired.dart';
+import '../model/GetBarcodeCatelogListNameModel.dart';
+import '../model/LoginResponeModel.dart';
+import '../network/ApiService.dart';
 import 'CreateCatelog.dart';
+import 'loader/loader.dart';
 
 class ScanContact extends StatefulWidget {
   const ScanContact({super.key});
@@ -23,6 +31,8 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
     "fsfsfsfsfs"
   ];
   String result = "";
+  String selected_catelog = "Select Catelog";
+  String selected_catelog_id = "Select Catelog";
   @override
   Widget build(BuildContext context) {
 
@@ -48,18 +58,24 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                                 Navigator.pop(context);
                               },
                               child: const Icon(Icons.arrow_back,color: Colors.white,)),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(35)
-                            ),
-                            child:  Row(
-                              children: [
-                                Text("Select Catelog",style: TextStyle(color: Colors.black,fontSize:  userMobile(context)?13.sp:16.sp),),
-                                SizedBox(width: 5,),
-                                Icon(Icons.arrow_drop_down,color: Colors.black,size:  userMobile(context)?15.sp:20.sp,),
-                              ],
+                          GestureDetector(
+                            onTap: () async {
+                              await getSelectCatelogData();
+                              openOptions(context);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(35)
+                              ),
+                              child:  Row(
+                                children: [
+                                  Text(selected_catelog,style: TextStyle(color: Colors.black,fontSize:  userMobile(context)?13.sp:16.sp),),
+                                  const SizedBox(width: 5,),
+                                  Icon(Icons.arrow_drop_down,color: Colors.black,size: 15.sp,),
+                                ],
+                              ),
                             ),
                           )
                         ],
@@ -88,10 +104,10 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                                   },
                                 ),
                                 Text("Allow Duplicate",style: TextStyle(color: Colors.white,fontSize:userMobile(context)? 12.sp:16.sp),),
-                                SizedBox(width: 8,),
+                                const SizedBox(width: 8,),
                                 GestureDetector(
                                     onTap: (){
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=> CatelogListScreen()));
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=> const CatelogListScreen()));
                                     },
                                     child: Icon(Icons.list,color: Colors.white,size: userMobile(context)? 22.sp:25.sp,))
 
@@ -133,10 +149,10 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                               openDialogue(context);
                             },
                             child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 8,horizontal: 10),
+                              padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 10),
                               decoration:BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
-                                gradient: LinearGradient(
+                                gradient: const LinearGradient(
                                     colors: [
                                       Color(0xFF562162),
                                       Color(0xFF553BDF),
@@ -157,10 +173,10 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                                     openDialogue(context);
                                 },
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(vertical: 8,horizontal: 10),
+                                  padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 10),
                                   decoration:BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
-                                    gradient: LinearGradient(
+                                    gradient: const LinearGradient(
                                         colors: [
                                           Color(0xFF562162),
                                           Color(0xFF553BDF),
@@ -174,7 +190,7 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                                   child: Text("MANUAL",style: TextStyle(color: Colors.white,fontSize: userMobile(context)?  12.sp:18.sp),),
                                 ),
                               ),
-                              SizedBox(width: 5,),
+                              const SizedBox(width: 5,),
                               GestureDetector(
                                 onTap: () async {
                                   var res = await Navigator.push(
@@ -189,10 +205,10 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                                   });
                                 },
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(vertical: 8,horizontal: 10),
+                                  padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 10),
                                   decoration:BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
-                                    gradient: LinearGradient(
+                                    gradient: const LinearGradient(
                                         colors: [
                                           Color(0xFF562162),
                                           Color(0xFF553BDF),
@@ -212,17 +228,17 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                       ),
                     ),
                     listBarcode.isEmpty? Container(
-                      margin: EdgeInsets.only(top: 30),
+                      margin: const EdgeInsets.only(top: 30),
                       child: Text("Scan Barcode of Contact number\n to Create Catelog",textAlign: TextAlign.center,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: userMobile(context)?  15.sp:20.sp),),):  Expanded(
                       child: ListView.builder(
                         itemCount: listBarcode.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Card(
                             elevation: 6,
-                            margin: EdgeInsets.only(bottom: 8,left: 8,right: 8),
+                            margin: const EdgeInsets.only(bottom: 8,left: 8,right: 8),
 
                             child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 5,vertical: 8),
+                              padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 8),
 
                               decoration: BoxDecoration(
                                 color: Colors.white,
@@ -239,7 +255,7 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
 
                                         });
                                       },
-                                      child: Icon(Icons.delete,size: 25.sp,color: Color( 0xff74219f),))
+                                      child: Icon(Icons.delete,size: 25.sp,color: const Color( 0xff74219f),))
                                 ],
                               ),
                             ),
@@ -287,7 +303,7 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                 ),
       Container(
         height: 40.w,
-        margin: EdgeInsets.all(8),
+        margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Colors.black.withOpacity(0.5),width: 1)
@@ -296,7 +312,7 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
           controller: controller,
           maxLines: null,
           expands: true,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             border: InputBorder.none,
             fillColor: Colors.transparent
           ),
@@ -320,7 +336,7 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                       });
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 40,vertical: 5),
+                      padding: const EdgeInsets.symmetric(horizontal: 40,vertical: 5),
                       decoration: BoxDecoration(
                         color: Colors.green.withOpacity(0.9),
                         borderRadius: BorderRadius.circular(4)
@@ -336,5 +352,139 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
       ),
     );
     showDialog(context: context, builder: (BuildContext context) => errorDialog);}
+
+
+  GetBarCodeCatelogNameListModel? getBarCodeCatelogNameList;
+
+  openOptions(BuildContext context){
+    //selectedData.clear();
+    showDialog<void>(
+        context: context,
+        builder: (context) => StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                contentPadding: EdgeInsets.zero,
+                content: Container(
+                  height: 50.h,
+                  color: Colors.white,
+                  child: Column(
+                    children: [
+                      SizedBox(height: 5.h,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            GestureDetector(
+                              onTap: (){
+                                Navigator.pop(context);
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Icon(Icons.close,color: Colors.red,),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: GestureDetector(
+                          onTap: (){
+
+                            setState(() {
+                              selected_catelog="Select Catelog";
+                              selected_catelog_id="Select Catelog";
+                              Navigator.pop(context);
+                            });
+
+                          },
+                          child: SizedBox(
+                            height: 5.h,
+                            child: Card(
+                              elevation: 1,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              margin: const EdgeInsets.symmetric(horizontal: 12,vertical: 3),
+                              color:Colors.white,
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                child: Container(
+                                  height: 30.sp,
+                                  width: 100.w,
+                                  //color: selectedData.contains(data)?Colors.deepPurple.withOpacity(0.5):Colors.white,
+                                  alignment: Alignment.centerLeft,
+                                  child:  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Text("Select Catelog",style: TextStyle(fontSize: 13.5.sp,color: Colors.black.withOpacity(0.5)),),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 40.h,
+                        width: 98.w,
+                        color: Colors.white,
+                        child: ListView.builder(
+                            itemCount: getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.length,
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            itemBuilder: (context,index){
+
+                              var dataC = getBarCodeCatelogNameList!.getBarCodeCatalogNameList![index];
+                              return GestureDetector(
+                                onTap: (){
+
+                                  setState(() {
+                                    selected_catelog=dataC.label!;
+                                    selected_catelog_id=dataC.value!.toString();
+                                    Navigator.pop(context);
+                                  });
+                                },
+                                child: SizedBox(
+                                  height: 5.h,
+                                  child: Card(
+                                    elevation: 1,
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                    margin: const EdgeInsets.symmetric(horizontal: 12,vertical: 3),
+                                    color:Colors.white,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Container(
+                                        height: 30.sp,
+                                        width: 100.w,
+                                        alignment: Alignment.centerLeft,
+                                        child:  Padding(
+                                          padding: const EdgeInsets.only(left: 8.0),
+                                          child: Text(dataC.label!,style: TextStyle(fontSize: 13.5.sp,color: Colors.black.withOpacity(0.5)),),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+        )).then((value) {
+      setState(() {
+
+      });
+    });
+  }
+
+  getSelectCatelogData() async {
+    LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(jsonDecode((await PreferenceHelper().getStringValuesSF("data")).toString()));
+    showLoaderDialog(context);
+    var response = await ApiService.getData("rfid/TA/result/getBarCodeCatalogNameList/-1/${loginResponseModel.data!.first.cscId!}/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1");
+    getBarCodeCatelogNameList = GetBarCodeCatelogNameListModel.fromJson(jsonDecode(response.body));
+    Navigator.pop(context);
+
+  }
+
   }
 

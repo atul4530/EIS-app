@@ -18,14 +18,15 @@ class ApprovalScreen extends StatefulWidget {
   State<ApprovalScreen> createState() => _ApprovalScreenState();
 }
 
-class _ApprovalScreenState extends State<ApprovalScreen> with BackgroundDecoration{
+class _ApprovalScreenState extends State<ApprovalScreen>
+    with BackgroundDecoration {
   GetAllBcAccountModel? getAllBcAccountModel;
   Result? result;
 
+  bool singleApprove = false;
 
-  bool singleApprove=false;
-
-  bool dataLoading=true;
+  bool dataLoading = true;
+  String? is_approval_req = "";
 
   @override
   void initState() {
@@ -36,28 +37,35 @@ class _ApprovalScreenState extends State<ApprovalScreen> with BackgroundDecorati
 
   getAllBcAccountData() async {
     setState(() {
-      dataLoading=true;
+      dataLoading = true;
     });
-    LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(jsonDecode((await PreferenceHelper().getStringValuesSF("data")).toString()));
-    var response = await ApiService.getData("api/a/sql/get_all_bc_count/all/${loginResponseModel.data!.first.empId!}");
-    print("----Response  : ${response.body}");
-    GetAllBcAccountModel data = GetAllBcAccountModel.fromJson(jsonDecode(response.body));
-    if(data.status ?? false){
+    LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(
+        jsonDecode(
+            (await PreferenceHelper().getStringValuesSF("data")).toString()));
+    is_approval_req = loginResponseModel.data!.first.isApprovalReq ?? '';
+    if (is_approval_req == "true") {
+      var response = await ApiService.getData(
+          "api/a/sql/get_all_bc_count/all/${loginResponseModel.data!.first.empId!}");
+      print("----Response  : ${response.body}");
+      GetAllBcAccountModel data =
+          GetAllBcAccountModel.fromJson(jsonDecode(response.body));
+      if (data.status ?? false) {
+        setState(() {
+          getAllBcAccountModel = data;
+          dataLoading = false;
+        });
+      } else {
+        setState(() {
+          dataLoading = false;
+        });
+      }
+    } else {
       setState(() {
-        getAllBcAccountModel=data;
-        dataLoading=false;
+        dataLoading = false;
       });
     }
-    else
-    {
-      setState(() {
-        dataLoading=false;
-      });
-    }
-
-
-
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -65,110 +73,190 @@ class _ApprovalScreenState extends State<ApprovalScreen> with BackgroundDecorati
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       decoration: bgDecoration(),
-      child:dataLoading?Center(child: CircularProgressIndicator(),): SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              //color: Colors.black,
-              height: MediaQuery.of(context).size.height/9,
+      child: dataLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                          margin: EdgeInsets.only(left: 8,top: singleApprove?10:0),
-                          child:singleApprove?GestureDetector(
-                              onTap: (){
-                                setState(() {
-                                  singleApprove=false;
-                                });
-                              },
-                              child: Icon(Icons.arrow_back,color: Colors.white,size: 25.sp,)): Image.asset("assets/images/logo.png",width: MediaQuery.of(context).size.width/4.5,)),
-                      Padding(
-                        padding:  const EdgeInsets.symmetric(horizontal: 20),
-                        child: Icon(Icons.logout,size: 6.w,color: Colors.white,),
-                      ) ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0,bottom: 8),
-                    child: Text("Business Control Approvals",style: TextStyle(color: Colors.white,fontSize: userMobile(context)?  14.sp:22.sp,fontWeight: FontWeight.w500),),
-                  )
+                  Container(
+                    //color: Colors.black,
+                    height: MediaQuery.of(context).size.height / 9,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                                margin: EdgeInsets.only(
+                                    left: 8, top: singleApprove ? 10 : 0),
+                                child: singleApprove
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            singleApprove = false;
+                                          });
+                                        },
+                                        child: Icon(
+                                          Icons.arrow_back,
+                                          color: Colors.white,
+                                          size: 25.sp,
+                                        ))
+                                    : Image.asset(
+                                        "assets/images/logo.png",
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                4.5,
+                                      )),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: Icon(
+                                Icons.logout,
+                                size: 6.w,
+                                color: Colors.white,
+                              ),
+                            )
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0, bottom: 8),
+                          child: Text(
+                            "Business Control Approvals",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: userMobile(context) ? 14.sp : 22.sp,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        )
 
-                  // SizedBox(height: 30,),
+                        // SizedBox(height: 30,),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        gradient: LinearGradient(
+                            colors: [
+                              Color(0xFF9F9AAF).withOpacity(0.7),
+                              Color(0xFFFFFFFF),
+                            ],
+                            begin: FractionalOffset(0.0, 0.0),
+                            end: FractionalOffset(0.0, 0.9),
+                            stops: [
+                              0.0,
+                              0.35,
+                            ],
+                            tileMode: TileMode.clamp),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20))),
+                    height: MediaQuery.of(context).size.height -
+                        MediaQuery.of(context).size.height /
+                            (userMobile(context) ? 4.3 : 5.6),
+                    width: 100.w,
+                    child:getAllBcAccountModel==null?Center(
+                      child: Text(
+                        "No Data Found",
+                        style: TextStyle(
+                            fontSize: 14.sp,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.center,
+                      ),
+                    ): is_approval_req == "false"
+                        ? Center(
+                            child: Text(
+                              "Access not available \n Contact EIS Team!",
+                              style: TextStyle(
+                                  fontSize: 14.sp,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500),
+                              textAlign: TextAlign.center,
+                            ),
+                          )
+                        : singleApprove
+                            ? SingleApprovalScreen(result: result!)
+                            : ListView.builder(
+                                itemCount: getAllBcAccountModel!.result!.length,
+                                padding: EdgeInsets.only(top: 20),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        singleApprove = true;
+                                        result = getAllBcAccountModel!
+                                            .result![index];
+                                      });
+                                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>SingleCatelogScreen(catelog: listCatelog[index],)));
+                                    },
+                                    child: Card(
+                                      elevation: 6,
+                                      margin: EdgeInsets.only(
+                                          bottom: 8, left: 8, right: 8),
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 5, vertical: 14),
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                SizedBox(
+                                                  width: 15,
+                                                ),
+                                                Text(
+                                                  getAllBcAccountModel!
+                                                      .result![index].vfCode!
+                                                      .trim()
+                                                      .toUpperCase(),
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize:
+                                                          userMobile(context)
+                                                              ? 14.sp
+                                                              : 19.sp,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                                SizedBox(
+                                                  width: 8,
+                                                ),
+                                                Text(
+                                                  "${getAllBcAccountModel!.result![index].bcCount!}",
+                                                  style: TextStyle(
+                                                      color: Color(0xff71f306),
+                                                      fontSize: 14.sp),
+                                                ),
+                                              ],
+                                            ),
+                                            Icon(
+                                              Icons.arrow_forward_ios,
+                                              color: Color(0xff6a208f),
+                                              size: 20.sp,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                  )
                 ],
               ),
             ),
-            Container(
-
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  gradient: LinearGradient(
-                      colors: [
-                        Color(0xFF9F9AAF).withOpacity(0.7),
-                        Color(0xFFFFFFFF),
-                      ],
-
-                      begin:  FractionalOffset(0.0, 0.0),
-                      end:  FractionalOffset(0.0, 0.9),
-                      stops: [0.0, 0.35,],
-                      tileMode: TileMode.clamp),
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight:  Radius.circular(20))
-              ),
-              height: MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/(userMobile(context)?  4.3:5.6),
-              width: 100.w,
-              child: getAllBcAccountModel!.result!.isEmpty?Center(child: Text("Access not available \n Contact EIS Team!",style: TextStyle(fontSize: 14.sp,color: Colors.black,fontWeight: FontWeight.w500),textAlign: TextAlign.center,),):singleApprove?SingleApprovalScreen(result: result!): ListView.builder(
-                itemCount: getAllBcAccountModel!.result!.length,
-                padding: EdgeInsets.only(top: 20),
-                itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: (){
-                      setState(() {
-                        singleApprove=true;
-                        result=getAllBcAccountModel!.result![index];
-                      });
-                     // Navigator.push(context, MaterialPageRoute(builder: (context)=>SingleCatelogScreen(catelog: listCatelog[index],)));
-                    },
-                    child: Card(
-                      elevation: 6,
-                      margin: EdgeInsets.only(bottom: 8,left: 8,right: 8),
-
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 5,vertical: 14),
-
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5)
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SizedBox(width: 15,),
-                                Text(getAllBcAccountModel!.result![index].vfCode!.trim().toUpperCase(),style: TextStyle(color: Colors.black,fontSize:userMobile(context)?  14.sp:19.sp ,fontWeight: FontWeight.w500),),
-                                SizedBox(width: 8,),
-                                Text("${getAllBcAccountModel!.result![index].bcCount!}",style: TextStyle(color: Color(0xff71f306),fontSize: 14.sp),),
-
-                              ],
-                            ),
-                            Icon(Icons.arrow_forward_ios,color: Color(0xff6a208f),size: 20.sp,)
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            )
-
-          ],
-        ),
-      ),
     );
   }
 }
-

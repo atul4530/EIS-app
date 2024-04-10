@@ -1,12 +1,20 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_sizer/flutter_sizer.dart';
-// import 'package:share_plus/share_plus.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
+import 'package:flutter_sizer/flutter_sizer.dart';
+
+
+import '../helper/pref_data.dart';
+import '../model/GetBarCodeContactColumnRequired.dart';
+
+import '../model/GetBarcodeCatelogListNameModel.dart';
+import '../model/LoginResponeModel.dart';
+import '../network/ApiService.dart';
 import 'CreateCatelog.dart';
 import 'SingleCatelogScreen.dart';
 import 'design_consts/DecorationMixin.dart';
+
 
 class CatelogListScreen extends StatefulWidget {
   const CatelogListScreen({super.key});
@@ -16,11 +24,35 @@ class CatelogListScreen extends StatefulWidget {
 }
 
 class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundDecoration {
-  List<String> listCatelog = [
-    "Catename(1)",
-    "Document(1)",
-    "Catelog Name(3)"
-  ];
+
+
+  bool dataLoading=true;
+  GetBarCodeCatelogNameListModel? getBarCodeCatelogNameList;
+
+  getSelectCatelogData() async {
+    LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(jsonDecode((await PreferenceHelper().getStringValuesSF("data")).toString()));
+    setState(() {
+      dataLoading=true;
+    });
+    var response = await ApiService.getData("rfid/TA/result/getBarCodeCatalogNameList/-1/${loginResponseModel.data!.first.cscId!}/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1");
+    getBarCodeCatelogNameList = GetBarCodeCatelogNameListModel.fromJson(jsonDecode(response.body));
+    setState(() {
+      dataLoading=false;
+    });
+
+  }
+
+  shareCatelog() async {
+
+
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSelectCatelogData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,20 +113,21 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                 ),
                 height: MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/4,
                 width: MediaQuery.of(context).size.width,
-                child:ListView.builder(
-                  itemCount: listCatelog.length,
-                  padding: EdgeInsets.only(top: 20),
+                child: dataLoading?Center(child: CircularProgressIndicator(),):ListView.builder(
+                  itemCount: getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.length,
+                  padding: const EdgeInsets.only(top: 20),
                   itemBuilder: (BuildContext context, int index) {
+                    var data = getBarCodeCatelogNameList!.getBarCodeCatalogNameList![index];
                     return GestureDetector(
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>SingleCatelogScreen(catelog: listCatelog[index],)));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>SingleCatelogScreen(catelog: data,)));
                       },
                       child: Card(
                         elevation: 6,
-                        margin: EdgeInsets.only(bottom: 8,left: 8,right: 8),
+                        margin: const EdgeInsets.only(bottom: 8,left: 8,right: 8),
 
                         child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 5,vertical: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 8),
 
                           decoration: BoxDecoration(
                               color: Colors.white,
@@ -103,15 +136,15 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(listCatelog[index].trim().toUpperCase(),style: TextStyle(color: Colors.black,fontSize: userMobile(context)? 15.sp:20.sp),),
+                              Text(data.label!.toUpperCase(),style: TextStyle(color: Colors.black,fontSize: userMobile(context)? 15.sp:20.sp),),
                               Row(
                                 children: [
                                   GestureDetector(
                                     onTap: (){
                                       controller.clear();
-                                      controller.text = listCatelog[index];
+                                      controller.text = data.label!;
 
-                                      openUpdateCatelog(context,index);
+                                      openUpdateCatelog(context,data);
                                     },
                                     child: Padding(
                                       padding:  EdgeInsets.symmetric(horizontal: 2.5.sp),
@@ -129,7 +162,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                                   ),
                                   GestureDetector(
                                     onTap:(){
-                                      printCatelog(context,index);
+                                      printCatelog(context,data);
                                      },
                                     child: Padding(
                                       padding:  EdgeInsets.symmetric(horizontal: 5.sp),
@@ -156,9 +189,9 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
 
   TextEditingController controller = TextEditingController();
   List gender=["PDF","Excel"];
-  String? select;
+  String? select="PDF";
 
-  openUpdateCatelog(BuildContext context,int index){
+  openUpdateCatelog(BuildContext context,GetBarCodeCatalogNameList getCatalogReqColumn){
 
     Dialog errorDialog = Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)), //this right here
@@ -185,7 +218,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
             ),
             Container(
               height: 12.w,
-              margin: EdgeInsets.all(12),
+              margin: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4),
                   border: Border.all(color: Colors.black.withOpacity(0.5),width: 1)
@@ -194,7 +227,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                 controller: controller,
                 maxLines: 2,
                 style: TextStyle(fontSize: 20.sp),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.only(left: 5),
                     fillColor: Colors.transparent
@@ -210,17 +243,14 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                 children: [
                   GestureDetector(
                     onTap: (){
-                      print("List----${controller.text.trim().split("\n")}");
-                      Navigator.pop(context);
-                      setState(() {
-                        listCatelog[index]=controller.text.trim();
-                      });
-
-
-
-                    },
+                      if(controller.text.trim().length>0){
+                        print("List----${controller.text.trim().split("\n")}");
+                        Navigator.pop(context);
+                        updateCatelogName(getCatalogReqColumn.value!.toString(), controller.text.trim());
+                      }
+                       },
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 40,vertical: 5),
+                      padding: const EdgeInsets.symmetric(horizontal: 40,vertical: 5),
                       decoration: BoxDecoration(
                           color: Colors.green.withOpacity(0.9),
                           borderRadius: BorderRadius.circular(4)
@@ -237,28 +267,20 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
     );
     showDialog(context: context, builder: (BuildContext context) => errorDialog);}
 
-  Row addRadioButton(BuildContext context,int btnValue, String title) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        Radio(
-          activeColor: Color(0xff5f1e80),
 
-          value: gender[btnValue],
-          groupValue: select,
-          onChanged: (value){
-            setState(() {
-              print(value);
-              select=value;
-            });
-          },
-        ),
-        Text(title)
-      ],
-    );
+
+  updateCatelogName(String id, String name) async {
+    setState(() {
+      dataLoading = true;
+    });
+     var response = await ApiService.getData(
+        'rfid/TA/kciUpdateCatalogName/{"catalogId":"$id","catalogName":"$name"}');
+    print("----Response  : ${response.body}");
+    getSelectCatelogData();
   }
 
-  printCatelog(BuildContext context,int index){
+
+  printCatelog(BuildContext context,GetBarCodeCatalogNameList getBarCodeCatalogNameList){
 
 
     showDialog(context: context, builder: (BuildContext context) { 
@@ -290,17 +312,17 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                   ),
                   Container(
                     height: 8.w,
-                    margin: EdgeInsets.all(12),
+                    margin: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(4),
                         border: Border.all(color: Colors.black.withOpacity(0.5),width: 1)
                     ),
                     child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 8),
+                      margin: const EdgeInsets.symmetric(horizontal: 8),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("${listCatelog[index]}",style: TextStyle(fontSize: 14.sp,color: Colors.black,fontWeight: FontWeight.w500),),
+                          Text("${getBarCodeCatalogNameList.label}",style: TextStyle(fontSize: 14.sp,color: Colors.black,fontWeight: FontWeight.w500),),
                           Icon(Icons.arrow_drop_down_outlined,size: 22.sp,color: Colors.black,)
                         ],
                       ),
@@ -313,7 +335,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Radio(
-                            activeColor: Color(0xff5f1e80),
+                            activeColor: const Color(0xff5f1e80),
 
                             value: gender[0],
                             groupValue: select,
@@ -324,14 +346,14 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                               });
                             },
                           ),
-                          Text("PDF")
+                          const Text("PDF")
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Radio(
-                            activeColor: Color(0xff5f1e80),
+                            activeColor: const Color(0xff5f1e80),
 
                             value: gender[1],
                             groupValue: select,
@@ -342,7 +364,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                               });
                             },
                           ),
-                          Text("Excel")
+                          const Text("Excel")
                         ],
                       ),
 
@@ -354,13 +376,13 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                       Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Color(0xff5f1e80),width: 1)
+                            border: Border.all(color: const Color(0xff5f1e80),width: 1)
                         ),
-                        padding: EdgeInsets.symmetric(horizontal: 40,vertical: 4),
+                        padding: const EdgeInsets.symmetric(horizontal: 40,vertical: 4),
                         alignment: Alignment.center,
-                        child: Text("Print",style: TextStyle(fontSize: 12.sp,color:  Color(0xff5f1e80),fontWeight: FontWeight.w500),),
+                        child: Text("Print",style: TextStyle(fontSize: 12.sp,color:  const Color(0xff5f1e80),fontWeight: FontWeight.w500),),
                       ),
-                      SizedBox(width: 20,),
+                      const SizedBox(width: 20,),
                       GestureDetector(
                         onTap: (){
                           Navigator.pop(context);
@@ -368,11 +390,11 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                         child: Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Color(0xff6b6666),width: 1)
+                              border: Border.all(color: const Color(0xff6b6666),width: 1)
                           ),
-                          padding: EdgeInsets.symmetric(horizontal: 40,vertical:4),
+                          padding: const EdgeInsets.symmetric(horizontal: 40,vertical:4),
                           alignment: Alignment.center,
-                          child: Text("Cancel",style: TextStyle(fontSize: 12.sp,color:  Color(0xff6b6666),fontWeight: FontWeight.w500),),
+                          child: Text("Cancel",style: TextStyle(fontSize: 12.sp,color:  const Color(0xff6b6666),fontWeight: FontWeight.w500),),
                         ),
                       ),
                     ],

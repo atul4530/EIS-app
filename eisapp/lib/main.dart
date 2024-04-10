@@ -1,5 +1,4 @@
 
-import 'package:eisapp/view/LoginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 
