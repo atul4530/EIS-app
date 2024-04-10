@@ -42,8 +42,10 @@ class _ApprovalScreenState extends State<ApprovalScreen>
     LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(
         jsonDecode(
             (await PreferenceHelper().getStringValuesSF("data")).toString()));
+    print("******************${loginResponseModel.data!.first.isApprovalReq}");
     is_approval_req = loginResponseModel.data!.first.isApprovalReq ?? '';
-    if (is_approval_req == "true") {
+    print("******************$is_approval_req");
+    if (is_approval_req == "Y") {
       var response = await ApiService.getData(
           "api/a/sql/get_all_bc_count/all/${loginResponseModel.data!.first.empId!}");
       print("----Response  : ${response.body}");
@@ -73,11 +75,7 @@ class _ApprovalScreenState extends State<ApprovalScreen>
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       decoration: bgDecoration(),
-      child: dataLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : SingleChildScrollView(
+      child: SingleChildScrollView(
               child: Column(
                 children: [
                   Container(
@@ -159,7 +157,11 @@ class _ApprovalScreenState extends State<ApprovalScreen>
                         MediaQuery.of(context).size.height /
                             (userMobile(context) ? 4.3 : 5.6),
                     width: 100.w,
-                    child:getAllBcAccountModel==null?Center(
+                    child: dataLoading
+                        ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                        :getAllBcAccountModel==null?Center(
                       child: Text(
                         "No Data Found",
                         style: TextStyle(

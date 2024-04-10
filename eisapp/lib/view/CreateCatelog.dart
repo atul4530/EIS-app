@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously, avoid_print
 
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:eisapp/helper/pref_data.dart';
 import 'package:eisapp/model/GetBarCodeContactColumnRequired.dart';
@@ -8,7 +9,7 @@ import 'package:eisapp/model/GetBarcodeCatelogListNameModel.dart';
 import 'package:eisapp/view/ProductDetailsScreen.dart';
 import 'package:eisapp/view/design_consts/DecorationMixin.dart';
 import 'package:eisapp/view/loader/loader.dart';
-import 'package:flutter/cupertino.dart';
+
 
 import 'package:flutter/material.dart';
 
@@ -327,8 +328,7 @@ class _CreateCatelogState extends State<CreateCatelog>
             MaterialPageRoute(
                 builder: (context) => ProductDetailsScreen(
                     cont_id: getBarCodeCatalogList.contId.toString(),
-                    list: getBarCodeCatalogListModel!
-                        .getBarCodeCatalogList!.first)));
+                    data:getBarCodeCatalogList)));
       },
       child: Card(
         elevation: 6,
@@ -508,11 +508,16 @@ class _CreateCatelogState extends State<CreateCatelog>
         .then((picked) {
       if (picked != null && picked != selectedDate) {
         setState(() {
-          final DateFormat formatter = DateFormat('dd-mmm-yyyy');
+          selectedDate=picked;
+          final DateFormat formatter = DateFormat('dd-MMM-yyyy');
           final String formatted = formatter.format(selectedDate);
           expiry = formatted;
 
           print("DATA\n\n\n\n\n\n ${formatted}");
+        });
+
+        setState(() {
+
         });
       }
     });
@@ -645,7 +650,9 @@ class _CreateCatelogState extends State<CreateCatelog>
                                 )),
                             GestureDetector(
                               onTap: () {
-                                _selectDate(context);
+                                _selectDate(context).then((value) {
+                                  setState((){});
+                                });
                               },
                               child: SizedBox(
                                 height: 5.h,

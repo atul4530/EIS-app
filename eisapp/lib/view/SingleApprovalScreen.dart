@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:eisapp/model/GetAllBcCountModel.dart'as d;
 import 'package:eisapp/model/GetVfStageDetaulsModel.dart';
+import 'package:eisapp/view/loader/loader.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_sizer/flutter_sizer.dart';
@@ -253,108 +254,141 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
       ),
     );
   }
-}
 
-TextEditingController controller = TextEditingController();
+  TextEditingController controller = TextEditingController();
 
-approveDialogue(BuildContext context) {
-  Dialog errorDialog = Dialog(
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-    //this right here
-    child: Container(
-      height: userMobile(context) ? 51.w : 30.w,
-      width: userMobile(context) ? 75.w : 60.w,
-      color: Colors.white,
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Approve",
-              style: TextStyle(
-                  color: Color(0xff74219f),
-                  fontWeight: FontWeight.w700,
-                  fontSize: userMobile(context) ? 20.sp : 25.sp),
+  approveDialogue(BuildContext context) {
+    controller.clear();
+    Dialog errorDialog = Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      //this right here
+      child: Container(
+        height: userMobile(context) ? 51.w : 30.w,
+        width: userMobile(context) ? 75.w : 60.w,
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Approve",
+                style: TextStyle(
+                    color: Color(0xff74219f),
+                    fontWeight: FontWeight.w700,
+                    fontSize: userMobile(context) ? 20.sp : 25.sp),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 0),
-            child: Text(
-              "Do You want Approve!",
-              style: TextStyle(
-                  color: Colors.black.withOpacity(0.2),
-                  fontWeight: FontWeight.w700,
-                  fontSize: userMobile(context) ? 16.sp : 21.sp),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(8),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.grey.withOpacity(0.2),
-                border:
-                    Border.all(color: Colors.grey.withOpacity(0.5), width: 1)),
-            child: TextField(
-              controller: controller,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                fillColor: Colors.transparent,
-                hintText: "Comments",
-                contentPadding: EdgeInsets.only(left: 10),
-                hintStyle: TextStyle(
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 0),
+              child: Text(
+                "Do You want Approve!",
+                style: TextStyle(
                     color: Colors.black.withOpacity(0.2),
                     fontWeight: FontWeight.w700,
-                    fontSize: 16.sp),
+                    fontSize: userMobile(context) ? 16.sp : 21.sp),
               ),
-              keyboardType: TextInputType.multiline,
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                    decoration: BoxDecoration(
-                        color: Color(0xffff402a),
-                        borderRadius: BorderRadius.circular(4)),
-                    child: Text(
-                      "CANCEL",
-                      style: TextStyle(
-                          color: Color(0xffffffff),
-                          fontSize: userMobile(context) ? 13.sp : 18.sp),
+            Container(
+              margin: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey.withOpacity(0.2),
+                  border:
+                  Border.all(color: Colors.grey.withOpacity(0.5), width: 1)),
+              child: TextField(
+                controller: controller,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  fillColor: Colors.transparent,
+                  hintText: "Comments",
+                  contentPadding: EdgeInsets.only(left: 10),
+                  hintStyle: TextStyle(
+                      color: Colors.black.withOpacity(0.2),
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16.sp),
+                ),
+                keyboardType: TextInputType.multiline,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                      decoration: BoxDecoration(
+                          color: Color(0xffff402a),
+                          borderRadius: BorderRadius.circular(4)),
+                      child: Text(
+                        "CANCEL",
+                        style: TextStyle(
+                            color: Color(0xffffffff),
+                            fontSize: userMobile(context) ? 13.sp : 18.sp),
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                    decoration: BoxDecoration(
-                        color: Color(0xff0fd587),
-                        borderRadius: BorderRadius.circular(4)),
-                    child: Text(
-                      "APPROVE",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: userMobile(context) ? 13.sp : 18.sp),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      if(controller.text.trim().length>0){
+                        LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(
+                            jsonDecode(
+                                (await PreferenceHelper().getStringValuesSF("data")).toString()));
+
+                        approveCall(context,"catalog/vfapprove/a/${widget.result.vfStageId}/${await loginResponseModel.data!.first.empId}?comment=${controller.text.trim()}");
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                      decoration: BoxDecoration(
+                          color: Color(0xff0fd587),
+                          borderRadius: BorderRadius.circular(4)),
+                      child: Text(
+                        "APPROVE",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: userMobile(context) ? 13.sp : 18.sp),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
+                ],
+              ),
+            )
+          ],
+        ),
       ),
-    ),
-  );
-  showDialog(context: context, builder: (BuildContext context) => errorDialog);
+    );
+    showDialog(context: context, builder: (BuildContext context) => errorDialog);
+  }
 }
+
+approveCall(BuildContext context,String url) async {
+    Navigator.pop(context);
+    showLoaderDialog(context);
+    var response = await ApiService.getData(url);
+    print("Reponse : ${response.body}");
+    Navigator.pop(context);
+
+    if (response.body.contains("SUCCESS")) {
+      var snackBar =  SnackBar(
+        content: Text(
+            "Approved!!!!",style: TextStyle(color: Colors.white,fontSize: 16.sp,fontWeight: FontWeight.w800),),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    } else {
+      const snackBar = SnackBar(
+        content: Text("Something Went Wrong!!"),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+
+}
+
+
