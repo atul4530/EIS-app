@@ -33,6 +33,14 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
   String result = "";
   String selected_catelog = "Select Catelog";
   String selected_catelog_id = "Select Catelog";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+     getSelectCatelogData();
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -60,7 +68,7 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                               child: const Icon(Icons.arrow_back,color: Colors.white,)),
                           GestureDetector(
                             onTap: () async {
-                              await getSelectCatelogData();
+
                               openOptions(context);
                             },
                             child: Container(
@@ -145,8 +153,12 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           listBarcode.isEmpty?Container():   GestureDetector(
-                            onTap: (){
-                              openDialogue(context);
+                            onTap: () async {
+                                ///Save Catelog
+                              LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(jsonDecode((await PreferenceHelper().getStringValuesSF("data")).toString()));
+
+                                var url = 'rfid/TA/kciSaveBarCodeScan/{"catalogId":"$selected_catelog_id","catalogName":"$selected_catelog","cscId":"${loginResponseModel.data!.first.cscId}","catalogFor":"CONTRACT","reqColumns":"","contractNo":"${listBarcode.toString().replaceAll("[", "").replaceAll("]", "")}","contractId":"","userId":"${loginResponseModel.data!.first.empId}","remarks":""}';
+                              submitFormData(context,url);
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 10),
@@ -273,6 +285,27 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
         ),
       ),),
     );
+  }
+
+  submitFormData(BuildContext context, String url) async {
+    showLoaderDialog(context);
+    //LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(jsonDecode((await PreferenceHelper().getStringValuesSF("data")).toString()));
+    var response = await ApiService.getData(url);
+    print("Response :  ${response.body}");
+    //Navigator.pop(context);
+    Navigator.pop(context);
+    if (response.body.contains("SUCCESS")) {
+      var snackBar = SnackBar(
+        content: Text(
+            "Barcode Added Successfully in ${(jsonDecode(response.body))["BarCodeCatalogId"].first["digital_catalogue_name"]}"),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    } else {
+      const snackBar = SnackBar(
+        content: Text("Something Went Wrong!!"),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 
   TextEditingController controller = TextEditingController();
@@ -482,7 +515,22 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
     showLoaderDialog(context);
     var response = await ApiService.getData("rfid/TA/result/getBarCodeCatalogNameList/-1/${loginResponseModel.data!.first.cscId!}/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1");
     getBarCodeCatelogNameList = GetBarCodeCatelogNameListModel.fromJson(jsonDecode(response.body));
-    Navigator.pop(context);
+    if(getBarCodeCatelogNameList==null){
+      Navigator.pop(context);
+    }
+    else
+      {
+        if(getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.isNotEmpty){
+          selected_catelog= getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.first.label!;
+          selected_catelog_id=getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.first.value!.toString();
+          Navigator.pop(context);
+          setState(() {
+
+          });
+        }
+      }
+
+
 
   }
 
