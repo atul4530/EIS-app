@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 mixin BackgroundDecoration{
   BoxDecoration bgDecoration(){
-    return const BoxDecoration(
+    return  BoxDecoration(
+
       gradient: LinearGradient(
           colors: [
              Color(0xFF562162),

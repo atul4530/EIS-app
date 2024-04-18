@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:eisapp/model/GetAllBcCountModel.dart'as d;
 import 'package:eisapp/model/GetVfStageDetaulsModel.dart';
 import 'package:eisapp/view/loader/loader.dart';
+import 'package:eisapp/view/vf_stage/vf_stage_wise_details.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_sizer/flutter_sizer.dart';
@@ -37,11 +38,12 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
     setState(() {
       dataLoading = true;
     });
+    print("-------------API Call");
     LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(
         jsonDecode(
             (await PreferenceHelper().getStringValuesSF("data")).toString()));
     var response = await ApiService.getData(
-        "api/a/sql/bc_vf_stage_details/csc/1?XuserId=${loginResponseModel.data!.first.empId!}");
+        "api/a/sql/bc_vf_stage_details/csc/${widget.result.vfStageId}?XuserId=${loginResponseModel.data!.first.empId!}");
     print("----Response  : ${response.body}");
     GetVfStageDetailsModel data =
     GetVfStageDetailsModel.fromJson(jsonDecode(response.body));
@@ -56,6 +58,8 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
       });
     }
   }
+
+  TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +95,14 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
                 height: 9.w,
                 alignment: Alignment.centerLeft,
                 child: TextField(
+                  controller: searchController,
+                  onChanged: (val){
+                    if(val.trim().length>0){
+                      setState(() {
+
+                      });
+                    }
+                  },
                   decoration: InputDecoration(
                       border: InputBorder.none,
                       fillColor: Colors.transparent,
@@ -119,131 +131,144 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
               //physics: NeverScrollableScrollPhysics(),
               padding: const EdgeInsets.only(top: 20),
               itemBuilder: (BuildContext context, int index) {
+
                 var data = getVfStageDetailsModel!.result![index];
+                print("-------${data.vfStageId}");
                 double font_Size = userMobile(context) ? 16.sp : 20.sp;
-                return Card(
-                  elevation: 6,
-                  margin: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "${data.vfInvId}-${data.vfInvNo}",
-                              style: TextStyle(
-                                  color: const Color(0xff6a208f),
-                                  fontSize: font_Size),
-                            ),
-                            Text(
-                              "${data.cscCode}",
-                              style: TextStyle(
-                                  color: Colors.black.withOpacity(0.2),
-                                  fontSize: font_Size),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Text(
-                          "${data.subject}",
-                          style: TextStyle(
-                              color: Colors.black.withOpacity(0.3),
-                              fontSize: font_Size - 2.sp,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Approver Name:",
-                              style: TextStyle(
-                                  color: const Color(0xff000000),
-                                  fontSize: font_Size - 3.sp,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            Text(
-                              "${data.approverName}",
-                              style: TextStyle(
-                                  color: const Color(0xff6a208f),
-                                  fontSize: font_Size - 3.sp,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Remarks:.",
-                              style: TextStyle(
-                                  color: const Color(0xff000000),
-                                  fontSize: font_Size - 3.sp,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            Text(
-                              "${data.remarks == "null"?"-":data.remarks}",
-                              style: TextStyle(
-                                  color: const Color(0xff6a208f),
-                                  fontSize: font_Size - 3.sp,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          "GP:${data.keyValue!}",
-                          style: TextStyle(
-                              color: const Color(0xffcc2c2c),
-                              fontSize: font_Size,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text("View More",
+                if(searchController.text.trim().length>0){
+                  if(!data.approverName!.toString().toLowerCase().contains(searchController.text.trim())){
+                    return Container();
+                  }
+                }
+
+                return GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> VfStageDetails(result: data,name: widget.result.vfCode!,)));
+                  },
+                  child: Card(
+                    elevation: 6,
+                    margin: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "${data.vfInvId}-${data.vfInvNo}",
                                 style: TextStyle(
-                                    fontSize: font_Size,
-                                    fontWeight: FontWeight.w400,
                                     color: const Color(0xff6a208f),
-                                    decoration: TextDecoration.underline)),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                approveDialogue(context);
-                              },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 3),
-                                decoration: BoxDecoration(
-                                    color: Color(0xff0fd587),
-                                    borderRadius: BorderRadius.circular(4)),
-                                child: Text(
-                                  "APPROVE",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: font_Size),
-                                ),
+                                    fontSize: font_Size),
                               ),
-                            )
-                          ],
-                        )
-                      ],
+                              Text(
+                                "${data.cscCode}",
+                                style: TextStyle(
+                                    color: Colors.black.withOpacity(0.2),
+                                    fontSize: font_Size),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 4,
+                          ),
+                          Text(
+                            "${data.subject}",
+                            style: TextStyle(
+                                color: Colors.black.withOpacity(0.3),
+                                fontSize: font_Size - 2.sp,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          const SizedBox(
+                            height: 4,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Approver Name:",
+                                style: TextStyle(
+                                    color: const Color(0xff000000),
+                                    fontSize: font_Size - 3.sp,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                "${data.approverName}",
+                                style: TextStyle(
+                                    color: const Color(0xff6a208f),
+                                    fontSize: font_Size - 3.sp,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 4,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "Remarks:.",
+                                style: TextStyle(
+                                    color: const Color(0xff000000),
+                                    fontSize: font_Size - 3.sp,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                "${data.remarks == "null"?"-":data.remarks}",
+                                style: TextStyle(
+                                    color: const Color(0xff6a208f),
+                                    fontSize: font_Size - 3.sp,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            "${data.keyValue ?? "-"}",
+                            style: TextStyle(
+                                color: const Color(0xffcc2c2c),
+                                fontSize: font_Size,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          const SizedBox(
+                            height: 4,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text("View More",
+                                  style: TextStyle(
+                                      fontSize: font_Size,
+                                      fontWeight: FontWeight.w400,
+                                      color: const Color(0xff6a208f),
+                                      decoration: TextDecoration.underline)),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  approveDialogue(context);
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 3),
+                                  decoration: BoxDecoration(
+                                      color: Color(0xff0fd587),
+                                      borderRadius: BorderRadius.circular(4)),
+                                  child: Text(
+                                    "APPROVE",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: font_Size),
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 );

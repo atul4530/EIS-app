@@ -3,14 +3,14 @@ import 'dart:convert';
 
 import 'package:eisapp/view/CatelogListScreen.dart';
 import 'package:eisapp/view/design_consts/DecorationMixin.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 import '../helper/pref_data.dart';
-import '../model/GetBarCodeContactColumnRequired.dart';
+
 import '../model/GetBarcodeCatelogListNameModel.dart';
 import '../model/LoginResponeModel.dart';
 import '../network/ApiService.dart';
@@ -27,8 +27,7 @@ class ScanContact extends StatefulWidget {
 class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
   bool allowMultiple =false;
   List<String> listBarcode = [
-    "ddssss",
-    "fsfsfsfsfs"
+
   ];
   String result = "";
   String selected_catelog = "Select Catelog";

@@ -35,7 +35,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
         jsonDecode(
             (await PreferenceHelper().getStringValuesSF("data")).toString()));
     var response = await ApiService.getData(
-        'rfid/TA/getBarCodeCatalogListById/{"catalogId":"${widget.catelog.value}","catalogDetId":"${widget.catelog.catCount}"}');
+        'rfid/TA/getBarCodeCatalogListById/{"catalogId":"${widget.catelog.value}","catalogDetId":"-1"}');
     print("Response  : ${response.body}");
     GetCatelogListModelById data =
         GetCatelogListModelById.fromJson(jsonDecode(response.body));
@@ -109,7 +109,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
                     ],
                   ),
                 ),
-                dataLoading?const Center(child: CircularProgressIndicator(),):   Container(
+                dataLoading?const Center(child: CircularProgressIndicator(),):getCatelogListModelById==null?Center(child: Text("Something Went Wrong"),):   Container(
                   decoration: BoxDecoration(
                       color: Colors.white,
                       gradient: LinearGradient(
@@ -130,7 +130,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
                   height: MediaQuery.of(context).size.height -
                       MediaQuery.of(context).size.height / 5.8,
                   width: MediaQuery.of(context).size.width,
-                  child: GridView.builder(
+                  child:getCatelogListModelById!.getBarCodeCatalogListById!.isEmpty?Center(child: Text("No Data Found"),): GridView.builder(
                     // physics: NeverScrollableScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
@@ -246,8 +246,22 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
 
   deleteData(BuildContext context,GetBarCodeCatalogListById getBarCodeCatalogListById) async {
     showLoaderDialog(context);
-    var response = await delete(Uri.parse('http://10.20.1.41:2910/kgkapi/rfid/TA/getBarCodeCatalogListById/{"catalogId":"${widget.catelog.value}","catalogDetId":"${widget.catelog.catCount}"}'));
+    var response = await get(Uri.parse('http://10.20.1.41:2910/kgkapi/rfid/TA/getBarCodeCatalogListById/{"catalogId":"-1","catalogDetId":"${getBarCodeCatalogListById.digitalCatalogueDetId}"}'));
     print("Response  : ${response.body}");
+    Navigator.pop(context);
+    if (response.body.contains("SUCCESS")) {
+      var snackBar = SnackBar(
+        content: Text(
+            "Deleted Successfully"),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      getBarcodeCatelogListData();
+    } else {
+      const snackBar = SnackBar(
+        content: Text("Something Went Wrong!!"),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
 
   }
 
