@@ -212,6 +212,7 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                                   setState(() {
                                     if (res is String) {
                                       result = res;
+                                      listBarcode.add(result);
                                     }
                                   });
                                 },

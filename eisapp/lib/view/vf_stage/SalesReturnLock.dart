@@ -54,9 +54,9 @@ class _SalesReturnLockState extends State<SalesReturnLock> {
     double font_Size = userMobile(context) ? 18.sp : 22.sp;
     print("-> PO Type $dataLoading");
     if(dataLoading){
-      return Container();
+      return Container(child: Center(child: CircularProgressIndicator(),),);
     }
-    return salesReturnLock!.result!.isEmpty?Container(): SingleChildScrollView(
+    return salesReturnLock!.result!.isEmpty?Container(child: Center(child: Text("No Data Available",style: TextStyle(fontSize: font_Size),),),): SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(

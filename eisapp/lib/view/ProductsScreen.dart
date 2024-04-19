@@ -3,12 +3,15 @@ import 'dart:convert';
 import 'package:eisapp/view/CreateCatelog.dart';
 import 'package:eisapp/view/ScanContact.dart';
 import 'package:eisapp/view/design_consts/DecorationMixin.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helper/pref_data.dart';
 import '../model/LoginResponeModel.dart';
 import 'DashboardScreen.dart';
+import 'LoginScreen.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
@@ -62,9 +65,17 @@ class _ProductsScreenState extends State<ProductsScreen> with BackgroundDecorati
                       Container(
                           margin: EdgeInsets.only(left: 8),
                           child: Image.asset("assets/images/logo.png",width: MediaQuery.of(context).size.width/4.5,)),
-                      Padding(
-                        padding:  const EdgeInsets.symmetric(horizontal: 20),
-                        child: Icon(Icons.logout,size: 6.w,color: Colors.white,),
+                      GestureDetector(
+                        onTap: () async {
+                          SharedPreferences pref = await SharedPreferences.getInstance();
+                          pref.clear();
+                          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                              LoginScreen()), (Route<dynamic> route) => false);
+                        },
+                        child: Padding(
+                          padding:  const EdgeInsets.symmetric(horizontal: 20),
+                          child: Icon(Icons.logout,size: 6.w,color: Colors.white,),
+                        ),
                       ) ],
                   ),
 

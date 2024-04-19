@@ -1,8 +1,17 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:eisapp/model/ShareModel.dart';
+import 'package:eisapp/view/loader/loader.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 
 import 'package:flutter_sizer/flutter_sizer.dart';
+import 'package:http/http.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:share_plus/share_plus.dart';
 
 
 import '../helper/pref_data.dart';
@@ -11,9 +20,11 @@ import '../model/GetBarCodeContactColumnRequired.dart';
 import '../model/GetBarcodeCatelogListNameModel.dart';
 import '../model/LoginResponeModel.dart';
 import '../network/ApiService.dart';
+import '../network/api_consts.dart';
 import 'CreateCatelog.dart';
 import 'SingleCatelogScreen.dart';
 import 'design_consts/DecorationMixin.dart';
+import 'download_progress_dialog.dart';
 
 
 class CatelogListScreen extends StatefulWidget {
@@ -52,6 +63,11 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
     // TODO: implement initState
     super.initState();
     getSelectCatelogData();
+    setPermission();
+  }
+
+  setPermission() async {
+    _permissionRequest();
   }
 
   @override
@@ -153,6 +169,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                                   ),
                                   GestureDetector(
                                     onTap: (){
+                                      shareDetails(context,data);
                                      // Share.share('check out my website https://example.com', subject: 'Look what I made!');
                                     },
                                     child: Padding(
@@ -190,6 +207,18 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
   TextEditingController controller = TextEditingController();
   List gender=["PDF","Excel"];
   String? select="PDF";
+  
+  shareDetails(BuildContext context,GetBarCodeCatalogNameList getCatalogReqColumn){
+    showLoaderDialog(context);
+    ApiService.getData("rfid/TA/result/getBarCodeCatalogShare/-1/-1/-1/-1/${getCatalogReqColumn.value}/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1").then((value){
+      if(value.statusCode==200){
+          ShareModel shareModel = ShareModel.fromJson(jsonDecode(value.body));
+          print("Data : ${shareModel.toJson()}");
+          Navigator.pop(context);
+          Share.share(shareModel.getBarCodeCatalogShare!.first.msg!);
+      }
+    });
+  }
 
   openUpdateCatelog(BuildContext context,GetBarCodeCatalogNameList getCatalogReqColumn){
 
@@ -373,14 +402,49 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: const Color(0xff5f1e80),width: 1)
+                      GestureDetector(
+                        onTap: () async {
+                          LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(jsonDecode((await PreferenceHelper().getStringValuesSF("data")).toString()));
+
+                          if(select=="PDF"){
+                            showDialog(
+                                context: context,
+                                builder: (dialogcontext) {
+                                  return DownloadProgressDialog(url: "http://10.20.1.41:2910/kgk/report/wsrprintapi.htm?reportName=PrestoBarcodeScan.jasper&digitalCatalogueId=${getBarCodeCatalogNameList.value.toString()}&cscId=${loginResponseModel.data!.first.cscId}&reporttype=pdf",pdf: true,);
+                                });
+                          }
+                          else
+                            {
+                              showDialog(
+                                  context: context,
+                                  builder: (dialogcontext) {
+                                    print("http://10.20.1.41:2910/kgk/report/wsrprintapi.htm?reportName=PrestoBarcodeScan.jasper&digitalCatalogueId=${getBarCodeCatalogNameList.value.toString()}&cscId=${loginResponseModel.data!.first.cscId}&reporttype=xlsx");
+                                    return DownloadProgressDialog(url: "http://10.20.1.41:2910/kgk/report/wsrprintapi.htm?reportName=PrestoBarcodeScan.jasper&digitalCatalogueId=${getBarCodeCatalogNameList.value.toString()}&cscId=${loginResponseModel.data!.first.cscId}&reporttype=xlsx",pdf: false,);
+                                  });
+                            }
+
+                          // bool result = await _permissionRequest();
+                          // if (result) {
+                          //   showDialog(
+                          //       context: context,
+                          //       builder: (dialogcontext) {
+                          //         return DownloadProgressDialog();
+                          //       });
+                          // } else {
+                          //   print("No permission to read and write.");
+                          // }
+
+                          //downloadPdf(context,getBarCodeCatalogNameList.value.toString());
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: const Color(0xff5f1e80),width: 1)
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 40,vertical: 4),
+                          alignment: Alignment.center,
+                          child: Text("Print",style: TextStyle(fontSize: 12.sp,color:  const Color(0xff5f1e80),fontWeight: FontWeight.w500),),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 40,vertical: 4),
-                        alignment: Alignment.center,
-                        child: Text("Print",style: TextStyle(fontSize: 12.sp,color:  const Color(0xff5f1e80),fontWeight: FontWeight.w500),),
                       ),
                       const SizedBox(width: 20,),
                       GestureDetector(
@@ -407,6 +471,52 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
         }
       );
     });}
+
+
+  static Future<bool> _permissionRequest() async {
+    PermissionStatus result;
+    result = await Permission.storage.request();
+    if (result.isGranted) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  downloadPdf(BuildContext context,String id) async {
+
+
+    LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(jsonDecode((await PreferenceHelper().getStringValuesSF("data")).toString()));
+    print("Url : ");
+    print("http://10.20.1.41:2910/kgk/report/wsrprintapi.htm?reportName=PrestoBarcodeScan.jasper&digitalCatalogueId=$id&cscId=${loginResponseModel.data!.first.cscId}&reporttype=pdf");
+    final taskId = await FlutterDownloader.enqueue(
+      url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+      headers: {},fileName: "abc.pdf",
+      savedDir: '/storage/emulated/0/Download/',
+      showNotification: true, // show download progress in status bar (for Android)
+      openFileFromNotification: true, // click on notification to open downloaded file (for Android)
+    );
+    print("Task iD $taskId");
+    //
+    // var file = File('');
+    //
+    // // Platform.isIOS comes from dart:io
+    // if (Platform.isIOS) {
+    //   final dir = await getApplicationDocumentsDirectory();
+    //   //file = File('${dir.path}/$fileName');
+    // }
+    // if (Platform.isAndroid) {
+    //   var status = await Permission.storage.status;
+    //   if (status != PermissionStatus.granted) {
+    //     status = await Permission.storage.request();
+    //   }
+    //   if (status.isGranted) {
+    //     const downloadsFolderPath = '/storage/emulated/0/Download/';
+    //     Directory dir = Directory(downloadsFolderPath);
+    //    // file = File('${dir.path}/$fileName');
+    //   }
+    // }
+  }
   
   }
 

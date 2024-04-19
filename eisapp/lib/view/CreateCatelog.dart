@@ -153,7 +153,7 @@ class _CreateCatelogState extends State<CreateCatelog>
                               children: [
                                 Icon(
                                   Icons.search,
-                                  color: Colors.white,
+                                  color: Colors.transparent,
                                   size: userMobile(context) ? 22.sp : 27.sp,
                                 ),
                                 const SizedBox(

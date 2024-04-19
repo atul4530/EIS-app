@@ -13,11 +13,13 @@ import 'package:eisapp/view/vf_stage/melting_lock.dart';
 import 'package:eisapp/view/vf_stage/pp_to_jcp_lock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../helper/pref_data.dart';
 import '../../model/GetVfStageDetaulsModel.dart';
 import '../../model/LoginResponeModel.dart';
 import '../CreateCatelog.dart';
+import '../LoginScreen.dart';
 import '../SingleApprovalScreen.dart';
 
 
@@ -244,8 +246,10 @@ class _VfStageDetailsState extends State<VfStageDetails>
                                 )),
                             GestureDetector(
                               onTap: () async {
-                                // await getSelectCatelogData();
-                                // openOptions(context);
+                                SharedPreferences pref = await SharedPreferences.getInstance();
+                                pref.clear();
+                                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                                    LoginScreen()), (Route<dynamic> route) => false);
                               },
                               child:  Icon(Icons.logout,color: Colors.white,),
                             )

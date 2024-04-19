@@ -1,14 +1,17 @@
 import 'dart:convert';
 
 import 'package:eisapp/view/SingleApprovalScreen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helper/pref_data.dart';
 import '../model/GetAllBcCountModel.dart';
 import '../model/LoginResponeModel.dart';
 import '../network/ApiService.dart';
 import 'CreateCatelog.dart';
+import 'LoginScreen.dart';
 import 'design_consts/DecorationMixin.dart';
 
 class ApprovalScreen extends StatefulWidget {
@@ -80,7 +83,7 @@ class _ApprovalScreenState extends State<ApprovalScreen>
                 children: [
                   Container(
                     //color: Colors.black,
-                    height: MediaQuery.of(context).size.height / 9,
+                    height: MediaQuery.of(context).size.height / 7,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -109,13 +112,21 @@ class _ApprovalScreenState extends State<ApprovalScreen>
                                             MediaQuery.of(context).size.width /
                                                 4.5,
                                       )),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: Icon(
-                                Icons.logout,
-                                size: 6.w,
-                                color: Colors.white,
+                            GestureDetector(
+                              onTap: () async {
+                                SharedPreferences pref = await SharedPreferences.getInstance();
+                                pref.clear();
+                                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                                    LoginScreen()), (Route<dynamic> route) => false);
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Icon(
+                                  Icons.logout,
+                                  size: 6.w,
+                                  color: Colors.white,
+                                ),
                               ),
                             )
                           ],
@@ -261,4 +272,7 @@ class _ApprovalScreenState extends State<ApprovalScreen>
             ),
     );
   }
+
+
+
 }

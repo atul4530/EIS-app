@@ -53,9 +53,9 @@ class _PoTypeState extends State<PoType> {
     double font_Size = userMobile(context) ? 18.sp : 22.sp;
     print("-> PO Type $dataLoading");
     if(dataLoading){
-      return Container();
+      return Container(child: Center(child: CircularProgressIndicator(),),);
     }
-    return poTypeModel!.result!.isEmpty?Container(): SingleChildScrollView(
+    return poTypeModel!.result!.isEmpty?Container(child: Center(child: Text("No Data Available",style: TextStyle(fontSize: font_Size),),),): SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(

@@ -43,6 +43,16 @@
 	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key><true/>
+    </dict>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+    <true/>
+    <key>FDAllFilesDownloadedMessage</key>
+    <string>All files have been downloaded</string>
+    <key>UIFileSharingEnabled</key>
+    <true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 </dict>
