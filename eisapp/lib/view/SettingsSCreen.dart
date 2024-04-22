@@ -124,7 +124,7 @@ class _SettingScreenState extends State<SettingScreen>
                 ],
               ),
             ),
-            Container(
+            loginResponseModel==null?Container():   Container(
               decoration: BoxDecoration(
                   color: Colors.white,
                   gradient: LinearGradient(
