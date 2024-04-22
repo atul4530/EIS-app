@@ -137,7 +137,7 @@ class _ApprovalScreenState extends State<ApprovalScreen>
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: userMobile(context) ? 14.sp : 22.sp,
-                                fontWeight: FontWeight.w500),
+                                fontWeight: FontWeight.w700),
                           ),
                         )
 
@@ -146,23 +146,7 @@ class _ApprovalScreenState extends State<ApprovalScreen>
                     ),
                   ),
                   Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        gradient: LinearGradient(
-                            colors: [
-                              Color(0xFF9F9AAF).withOpacity(0.7),
-                              Color(0xFFFFFFFF),
-                            ],
-                            begin: FractionalOffset(0.0, 0.0),
-                            end: FractionalOffset(0.0, 0.9),
-                            stops: [
-                              0.0,
-                              0.35,
-                            ],
-                            tileMode: TileMode.clamp),
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20))),
+                    decoration: decorationCommon(),
                     height: MediaQuery.of(context).size.height -
                         MediaQuery.of(context).size.height /
                             (userMobile(context) ? 4.3 : 5.6),
@@ -240,7 +224,7 @@ class _ApprovalScreenState extends State<ApprovalScreen>
                                                               ? 14.sp
                                                               : 19.sp,
                                                       fontWeight:
-                                                          FontWeight.w500),
+                                                          FontWeight.w700),
                                                 ),
                                                 SizedBox(
                                                   width: 8,
@@ -248,7 +232,7 @@ class _ApprovalScreenState extends State<ApprovalScreen>
                                                 Text(
                                                   "${getAllBcAccountModel!.result![index].bcCount!}",
                                                   style: TextStyle(
-                                                      color: Color(0xff71f306),
+                                                      color: Color(0xff71f306),fontWeight: FontWeight.w600,
                                                       fontSize: 14.sp),
                                                 ),
                                               ],

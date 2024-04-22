@@ -116,7 +116,7 @@ class _SettingScreenState extends State<SettingScreen>
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: userMobile(context) ? 14.sp : 22.sp,
-                          fontWeight: FontWeight.w500),
+                          fontWeight: FontWeight.w600),
                     ),
                   )
 
@@ -125,23 +125,7 @@ class _SettingScreenState extends State<SettingScreen>
               ),
             ),
             loginResponseModel==null?Container():   Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  gradient: LinearGradient(
-                      colors: [
-                        Color(0xFF9F9AAF).withOpacity(0.7),
-                        Color(0xFFFFFFFF),
-                      ],
-                      begin: FractionalOffset(0.0, 0.0),
-                      end: FractionalOffset(0.0, 0.9),
-                      stops: [
-                        0.0,
-                        0.35,
-                      ],
-                      tileMode: TileMode.clamp),
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20))),
+              decoration: decorationCommon(),
               height: MediaQuery.of(context).size.height -
                   MediaQuery.of(context).size.height /
                       (userMobile(context) ? 4.3 : 5.6),
@@ -192,7 +176,8 @@ class _SettingScreenState extends State<SettingScreen>
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(Icons.logout,color: Colors.white,),
-                            Text("Logout",style: TextStyle(fontSize: 20.sp,color: Colors.white),)
+                            SizedBox(width: 10,),
+                            Text("Logout",style: TextStyle(fontSize: 17.sp,color: Colors.white),)
                           ],
                         ),
                       ),

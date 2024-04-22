@@ -54,8 +54,10 @@ class _DashboardScreenState extends State<DashboardScreen> with BackgroundDecora
           selectedItemColor: Color(0xff3B1CAD),
           unselectedItemColor: Color(0xff7882A9),
           selectedLabelStyle: TextStyle(
-            color: Color(0xff3B1CAD)
+            color: Color(0xff3B1CAD),
+            fontWeight: FontWeight.w700
           ),
+          unselectedLabelStyle: TextStyle( fontWeight: FontWeight.w700),
           type: BottomNavigationBarType.fixed,
           items:  <BottomNavigationBarItem>[
             BottomNavigationBarItem(icon: Image.asset(selectedIndex==0?"assets/images/dashboard.png":"assets/images/dashboard_black.png",height: 22.sp,width: 22.sp,fit: BoxFit.fill,), label: "Dashboard"),
@@ -110,11 +112,11 @@ class _DashboardScreenState extends State<DashboardScreen> with BackgroundDecora
                       )
                     ],
                   ),
-                  SizedBox(height: 30,),
+                  SizedBox(height: 60,),
                   Column(
                     children: [
-                      Text("Welcome",style: TextStyle(color: Colors.white,fontSize: useMobileLayout?16.sp:22.sp),),
-                      Text("Kathigeyan M",style: TextStyle(color: Colors.white,fontSize: useMobileLayout?18.sp:26.sp),),
+                      Text("Welcome",style: TextStyle(color: Colors.white,fontSize: useMobileLayout?16.sp:22.sp,fontWeight: FontWeight.w400),),
+                      Text("Kathigeyan M",style: TextStyle(color: Colors.white,fontSize: useMobileLayout?20.sp:28.sp,fontWeight: FontWeight.w800),),
                     ],
                   ),
                   // SizedBox(height: 30,),
@@ -123,20 +125,7 @@ class _DashboardScreenState extends State<DashboardScreen> with BackgroundDecora
             ),
             Container(
 
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  gradient: LinearGradient(
-                      colors: [
-                        Color(0xFF9F9AAF).withOpacity(0.7),
-                        Color(0xFFFFFFFF),
-                      ],
-
-                      begin:  FractionalOffset(0.0, 0.0),
-                      end:  FractionalOffset(0.0, 0.9),
-                      stops: [0.0, 0.35,],
-                      tileMode: TileMode.clamp),
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight:  Radius.circular(20))
-              ),
+              decoration: decorationCommon(),
               height: MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/4,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -207,7 +196,7 @@ Widget buttonTile(BuildContext context,String image,String name,dynamic onTap){
           children: [
             Image.asset("assets/images/"+image,height: 10.w,),
             SizedBox(height: 8,),
-            Text(name,style: TextStyle(fontSize: useMobileLayout?16.sp:20.sp),textAlign: TextAlign.center,)
+            Text(name,style: TextStyle(fontSize: useMobileLayout?16.sp:20.sp,fontWeight: FontWeight.w500),textAlign: TextAlign.center,)
           ],
         ),
       ),

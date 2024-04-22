@@ -24,8 +24,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  FlutterSizer(
         builder: (context, orientation, screenType) {
-        return  const MaterialApp(
-          home: SplashScreen(),
+        return   MaterialApp(
+          home: const SplashScreen(),
+          theme: ThemeData(fontFamily: 'Mulish',primaryColor: Color(0xff5338B4)),
         );
       }
     );

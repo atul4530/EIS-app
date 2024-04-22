@@ -66,6 +66,7 @@ class _LoginScreenState extends State<LoginScreen> with BackgroundDecoration {
                             fontStyle: FontStyle.normal,
                             fontSize: useMobileLayout ? 15.sp : 17.sp,
                           ),
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             contentPadding: const EdgeInsets.only(left: 6),
                             hintText: "Username*",
@@ -114,11 +115,11 @@ class _LoginScreenState extends State<LoginScreen> with BackgroundDecoration {
                           borderRadius: BorderRadius.circular(12),
                           gradient: const LinearGradient(
                               colors: [
-                                Color(0xFF3366FF),
-                                Color(0xFF00CCFF),
+                                Color(0xFF6D287B),
+                                Color(0xFF584AEF),
                               ],
-                              begin: FractionalOffset(0.0, 0.0),
-                              end: FractionalOffset(1.0, 0.0),
+                              begin: FractionalOffset(1.0, 0.0),
+                              end: FractionalOffset(0.0, 0.0),
                               stops: [0.0, 1.0],
                               tileMode: TileMode.clamp),
                         ),

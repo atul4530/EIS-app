@@ -30,8 +30,8 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
 
   ];
   String result = "";
-  String selected_catelog = "Select Catelog";
-  String selected_catelog_id = "Select Catelog";
+  String selected_catelog = "Select Catalog";
+  String selected_catelog_id = "Select Catalog";
 
   @override
   void initState() {
@@ -241,7 +241,7 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                     ),
                     listBarcode.isEmpty? Container(
                       margin: const EdgeInsets.only(top: 30),
-                      child: Text("Scan Barcode of Contact number\n to Create Catelog",textAlign: TextAlign.center,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: userMobile(context)?  15.sp:20.sp),),):  Expanded(
+                      child: Text("Scan Barcode of Contact number\n to Create Catalog",textAlign: TextAlign.center,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: userMobile(context)?  15.sp:20.sp),),):  Expanded(
                       child: ListView.builder(
                         itemCount: listBarcode.length,
                         itemBuilder: (BuildContext context, int index) {

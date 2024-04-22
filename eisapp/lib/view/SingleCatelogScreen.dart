@@ -110,23 +110,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
                   ),
                 ),
                 dataLoading?const Center(child: CircularProgressIndicator(),):getCatelogListModelById==null?Center(child: Text("Something Went Wrong"),):   Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      gradient: LinearGradient(
-                          colors: [
-                            const Color(0xFF9F9AAF).withOpacity(0.7),
-                            const Color(0xFFFFFFFF),
-                          ],
-                          begin: const FractionalOffset(0.0, 0.0),
-                          end: const FractionalOffset(0.0, 0.9),
-                          stops: const [
-                            0.0,
-                            0.35,
-                          ],
-                          tileMode: TileMode.clamp),
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20))),
+                  decoration: decorationCommon(),
                   height: MediaQuery.of(context).size.height -
                       MediaQuery.of(context).size.height / 5.8,
                   width: MediaQuery.of(context).size.width,

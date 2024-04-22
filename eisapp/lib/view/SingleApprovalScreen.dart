@@ -134,7 +134,7 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
 
                 var data = getVfStageDetailsModel!.result![index];
                 print("-------${data.vfStageId}");
-                double font_Size = userMobile(context) ? 16.sp : 20.sp;
+                double font_Size = userMobile(context) ? 15.sp : 20.sp;
                 if(searchController.text.trim().length>0){
                   if(!data.approverName!.toString().toLowerCase().contains(searchController.text.trim())){
                     return Container();
@@ -162,13 +162,14 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
                               Text(
                                 "${data.vfInvId}-${data.vfInvNo}",
                                 style: TextStyle(
-                                    color: const Color(0xff6a208f),
+                                    color: const Color(0xff6a208f),fontWeight: FontWeight.w600,
                                     fontSize: font_Size),
                               ),
                               Text(
                                 "${data.cscCode}",
                                 style: TextStyle(
                                     color: Colors.black.withOpacity(0.2),
+                                    fontWeight: FontWeight.w600,
                                     fontSize: font_Size),
                               ),
                             ],
@@ -211,7 +212,7 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
                           Row(
                             children: [
                               Text(
-                                "Remarks:.",
+                                "Remarks:",
                                 style: TextStyle(
                                     color: const Color(0xff000000),
                                     fontSize: font_Size - 3.sp,
@@ -242,7 +243,7 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
                               Text("View More",
                                   style: TextStyle(
                                       fontSize: font_Size,
-                                      fontWeight: FontWeight.w400,
+                                      fontWeight: FontWeight.w600,
                                       color: const Color(0xff6a208f),
                                       decoration: TextDecoration.underline)),
                               const SizedBox(
@@ -261,6 +262,7 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
                                   child: Text(
                                     "APPROVE",
                                     style: TextStyle(
+                                        fontWeight: FontWeight.w600,
                                         color: Colors.white, fontSize: font_Size),
                                   ),
                                 ),

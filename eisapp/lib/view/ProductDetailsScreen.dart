@@ -43,8 +43,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
 
   DateTime selectedDate = DateTime.now();
   String expiry = "";
-  String selected_catelog = "Select Catelog";
-  String selected_catelog_id = "Select Catelog";
+  String selected_catelog = "Select Catalog";
+  String selected_catelog_id = "Select Catalog";
 
   Future<void> _selectDate(BuildContext context) async {
     await showDatePicker(
@@ -208,23 +208,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                             ),
                           ),
                           Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                gradient: LinearGradient(
-                                    colors: [
-                                      const Color(0xFF9F9AAF).withOpacity(0.7),
-                                      const Color(0xFFFFFFFF),
-                                    ],
-                                    begin: const FractionalOffset(0.0, 0.0),
-                                    end: const FractionalOffset(0.0, 0.9),
-                                    stops: const [
-                                      0.0,
-                                      0.35,
-                                    ],
-                                    tileMode: TileMode.clamp),
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(20),
-                                    topRight: Radius.circular(20))),
+                            decoration:decorationCommon(),
                             height: MediaQuery.of(context).size.height -
                                 MediaQuery.of(context).size.height / 8,
                             width: MediaQuery.of(context).size.width,
@@ -260,9 +244,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                                       ),
                                       Container(
                                         height: 8.h,
-                                        width: 60.w,
+                                        width: 65.w,
                                         alignment: Alignment.center,
                                         child: ListView(
+                                          padding: EdgeInsets.zero,
                                           scrollDirection: Axis.horizontal,
                                           children: [
                                             GestureDetector(
@@ -283,6 +268,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                                                     width: 7.h,
                                                   )),
                                             ),
+                                            SizedBox(width: 5,),
                                             GestureDetector(
                                               onTap: () {
                                                 setState(() {
@@ -301,6 +287,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                                                     width: 7.h,
                                                   )),
                                             ),
+                                            SizedBox(width: 5,),
                                             GestureDetector(
                                               onTap: () {
                                                 setState(() {
@@ -319,6 +306,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                                                     width: 7.h,
                                                   )),
                                             ),
+                                            SizedBox(width: 5,),
                                             GestureDetector(
                                               onTap: () {
                                                 setState(() {

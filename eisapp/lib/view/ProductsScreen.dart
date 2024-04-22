@@ -5,6 +5,7 @@ import 'package:eisapp/view/ScanContact.dart';
 import 'package:eisapp/view/design_consts/DecorationMixin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -48,57 +49,56 @@ class _ProductsScreenState extends State<ProductsScreen> with BackgroundDecorati
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height,
+      //height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       decoration: bgDecoration(),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              //color: Colors.black,
-              height: MediaQuery.of(context).size.height/9,
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                          margin: EdgeInsets.only(left: 8),
-                          child: Image.asset("assets/images/logo.png",width: MediaQuery.of(context).size.width/4.5,)),
-                      GestureDetector(
-                        onTap: () async {
-                          SharedPreferences pref = await SharedPreferences.getInstance();
-                          pref.clear();
-                          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                              LoginScreen()), (Route<dynamic> route) => false);
-                        },
-                        child: Padding(
-                          padding:  const EdgeInsets.symmetric(horizontal: 20),
-                          child: Icon(Icons.logout,size: 6.w,color: Colors.white,),
-                        ),
-                      ) ],
+      child: Column(
+        children: [
+          Container(
+            //color: Colors.black,
+            height: MediaQuery.of(context).size.height/9,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Image.asset("assets/images/logo.png",width: MediaQuery.of(context).size.width/4.5,)),
+                    GestureDetector(
+                      onTap: () async {
+                        SharedPreferences pref = await SharedPreferences.getInstance();
+                        pref.clear();
+                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                            LoginScreen()), (Route<dynamic> route) => false);
+                      },
+                      child: Padding(
+                        padding:  const EdgeInsets.symmetric(horizontal: 20),
+                        child: Icon(Icons.logout,size: 6.w,color: Colors.white,),
+                      ),
+                    ) ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, bottom: 8),
+                  child: Text(
+                    "Products",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: userMobile(context) ? 14.sp : 22.sp,
+                        fontWeight: FontWeight.w700),
                   ),
+                )
 
-                  // SizedBox(height: 30,),
-                ],
-              ),
+                // SizedBox(height: 30,),
+              ],
             ),
-            Container(
+          ),
+          Expanded(
+            child: Container(
 
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  gradient: LinearGradient(
-                      colors: [
-                        Color(0xFF9F9AAF).withOpacity(0.7),
-                        Color(0xFFFFFFFF),
-                      ],
-
-                      begin:  FractionalOffset(0.0, 0.0),
-                      end:  FractionalOffset(0.0, 0.9),
-                      stops: [0.0, 0.35,],
-                      tileMode: TileMode.clamp),
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight:  Radius.circular(20))
-              ),
+              decoration: decorationCommon(),
               height: MediaQuery.of(context).size.height,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -107,7 +107,7 @@ class _ProductsScreenState extends State<ProductsScreen> with BackgroundDecorati
                   showCatelog?   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                     buttonTile(context,"catalog.jpg","Catelog",(){
+                     buttonTile(context,"catalog.jpg","Catalog",(){
                         Navigator.push(context, MaterialPageRoute(builder: (context)=> CreateCatelog()));
                       }),
                       buttonTile(context,"barcode-scan.png","Barcode\nScan",(){
@@ -131,10 +131,10 @@ class _ProductsScreenState extends State<ProductsScreen> with BackgroundDecorati
                   ),
                 ],
               ),
-            )
+            ),
+          )
 
-          ],
-        ),
+        ],
       ),
     );
   }

@@ -9,6 +9,7 @@ import 'package:eisapp/model/GetBarcodeCatelogListNameModel.dart';
 import 'package:eisapp/view/ProductDetailsScreen.dart';
 import 'package:eisapp/view/design_consts/DecorationMixin.dart';
 import 'package:eisapp/view/loader/loader.dart';
+import 'package:flutter/cupertino.dart';
 
 
 import 'package:flutter/material.dart';
@@ -146,6 +147,7 @@ class _CreateCatelogState extends State<CreateCatelog>
                               "Create Catelog",
                               style: TextStyle(
                                   color: Colors.white,
+                                  fontWeight: FontWeight.w600,
                                   fontSize:
                                       userMobile(context) ? 16.sp : 20.sp),
                             ),
@@ -181,23 +183,7 @@ class _CreateCatelogState extends State<CreateCatelog>
                   ),
                 ),
                 Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      gradient: LinearGradient(
-                          colors: [
-                            const Color(0xFF9F9AAF).withOpacity(0.7),
-                            const Color(0xFFFFFFFF),
-                          ],
-                          begin: const FractionalOffset(0.0, 0.0),
-                          end: const FractionalOffset(0.0, 0.9),
-                          stops: const [
-                            0.0,
-                            0.35,
-                          ],
-                          tileMode: TileMode.clamp),
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20))),
+                  decoration: decorationCommon(),
                   height: MediaQuery.of(context).size.height -
                       MediaQuery.of(context).size.height / 5.8,
                   width: MediaQuery.of(context).size.width,
@@ -248,6 +234,7 @@ class _CreateCatelogState extends State<CreateCatelog>
                                     "CONTRACT",
                                     style: TextStyle(
                                         color: Colors.black,
+                                        fontWeight: FontWeight.w600,
                                         fontSize: userMobile(context)
                                             ? 15.sp
                                             : 20.sp),
@@ -261,6 +248,7 @@ class _CreateCatelogState extends State<CreateCatelog>
                                   "In Stock",
                                   style: TextStyle(
                                       color: Colors.black,
+                                      fontWeight: FontWeight.w600,
                                       fontSize:
                                           userMobile(context) ? 15.sp : 20.sp),
                                 ),
@@ -368,10 +356,10 @@ class _CreateCatelogState extends State<CreateCatelog>
                         alignment: Alignment.center,
                         padding: const EdgeInsets.all(3),
                         decoration: BoxDecoration(
-                            color: const Color(0xff8953a8).withOpacity(0.5)),
+                            color:Color(0xFFD1C6FE)),
                         child: Text(
                           getBarCodeCatalogList.contTypeNo!,
-                          style: TextStyle(
+                          style: TextStyle(fontWeight: FontWeight.w600,
                               fontSize: userMobile(context) ? 13.sp : 20.sp),
                         ),
                       )
@@ -484,10 +472,10 @@ class _CreateCatelogState extends State<CreateCatelog>
           width: 3,
         ),
         Text(
-          name,
+          name.length>25?name.substring(0,25):name,
           style: TextStyle(
               fontSize: userMobile(context) ? 11.sp : 18.sp,
-              fontWeight: FontWeight.w500),
+              fontWeight: FontWeight.w600),
         )
       ],
     );

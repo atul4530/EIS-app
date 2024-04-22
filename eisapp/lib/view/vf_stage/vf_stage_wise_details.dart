@@ -199,17 +199,16 @@ class _VfStageDetailsState extends State<VfStageDetails>
             padding: EdgeInsets.symmetric(
                 horizontal: 15, vertical: 3),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              gradient: LinearGradient(
+              borderRadius: BorderRadius.circular(12),
+              gradient: const LinearGradient(
                   colors: [
-                    Color(0xFF562162),
-                    Color(0xFF553BDF),
+                    Color(0xFF6D287B),
+                    Color(0xFF584AEF),
                   ],
-
-                  begin:  FractionalOffset(1.0, 0.0),
-                  end:  FractionalOffset(0.0, 0.5),
-                  stops: [0.0, 1.0,],
-                  tileMode: TileMode.mirror),
+                  begin: FractionalOffset(1.0, 0.0),
+                  end: FractionalOffset(0.0, 0.0),
+                  stops: [0.0, 1.0],
+                  tileMode: TileMode.clamp),
             ),
             child: Center(
               child: Text(
@@ -265,6 +264,7 @@ class _VfStageDetailsState extends State<VfStageDetails>
                               "Business Control Approval",
                               style: TextStyle(
                                   color: Colors.white,
+                                  fontWeight: FontWeight.w600,
                                   fontSize:
                                   userMobile(context) ? 16.sp : 20.sp),
                             ),
@@ -276,23 +276,7 @@ class _VfStageDetailsState extends State<VfStageDetails>
                   ),
                 ),
                 Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      gradient: LinearGradient(
-                          colors: [
-                            const Color(0xFF9F9AAF).withOpacity(0.7),
-                            const Color(0xFFFFFFFF),
-                          ],
-                          begin: const FractionalOffset(0.0, 0.0),
-                          end: const FractionalOffset(0.0, 0.7  ),
-                          stops: const [
-                            0.0,
-                            0.28,
-                          ],
-                          tileMode: TileMode.clamp),
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20))),
+                  decoration: decorationCommon(),
                   height: MediaQuery.of(context).size.height -
                       MediaQuery.of(context).size.height /3.8,
                   width: MediaQuery.of(context).size.width,
