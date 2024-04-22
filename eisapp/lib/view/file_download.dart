@@ -37,7 +37,17 @@ class FileDownload {
     if (isSuccess) {
       Navigator.pop(context);
       Navigator.pop(context);
-      OpenFilex.open(path);
+      if(pdf){
+        var snackBar = SnackBar(content: Text('Downloaded Succesfully'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        OpenFilex.open(path);
+      }
+      else
+        {
+          var snackBar = SnackBar(content: Text('Downloaded Succesfully'));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+
 
     }
   }

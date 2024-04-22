@@ -418,7 +418,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                               showDialog(
                                   context: context,
                                   builder: (dialogcontext) {
-                                    print("http://10.20.1.41:2910/kgk/report/wsrprintapi.htm?reportName=PrestoBarcodeScan.jasper&digitalCatalogueId=${getBarCodeCatalogNameList.value.toString()}&cscId=${loginResponseModel.data!.first.cscId}&reporttype=xlsx");
+                                    print("http://10.20.1.41:2910/kgk/report/wsrprintapi.htm?reportName=PrestoBarcodeScan.jasper&digitalCatalogueId=${getBarCodeCatalogNameList.value.toString()}&cscId=${loginResponseModel.data!.first.cscId}&reporttype=xls");
                                     return DownloadProgressDialog(url: "http://10.20.1.41:2910/kgk/report/wsrprintapi.htm?reportName=PrestoBarcodeScan.jasper&digitalCatalogueId=${getBarCodeCatalogNameList.value.toString()}&cscId=${loginResponseModel.data!.first.cscId}&reporttype=xlsx",pdf: false,);
                                   });
                             }

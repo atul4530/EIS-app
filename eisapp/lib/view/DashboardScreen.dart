@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../helper/pref_data.dart';
 import 'LoginScreen.dart';
 import 'ProductsScreen.dart';
+import 'SettingsSCreen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -46,7 +47,7 @@ class _DashboardScreenState extends State<DashboardScreen> with BackgroundDecora
     final bool useMobileLayout = shortestSide < 600;
     return SafeArea(
       child: Scaffold(
-        body: selectedIndex==1?ProductsScreen():selectedIndex==2?ApprovalScreen():selectedIndex==3?Container(): dashBoardView(),
+        body: selectedIndex==1?ProductsScreen():selectedIndex==2?ApprovalScreen():selectedIndex==3?SettingScreen(): dashBoardView(),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.white,
           elevation: 5,
