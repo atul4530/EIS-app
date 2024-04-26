@@ -96,9 +96,10 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              widget.catelog.label!,
+                              widget.catelog.label!.split(" ").first,
                               style: TextStyle(
                                   color: Colors.white,
+                                  fontWeight: FontWeight.w600,
                                   fontSize:
                                       userMobile(context) ? 16.sp : 25.sp),
                             ),
@@ -109,18 +110,21 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
                     ],
                   ),
                 ),
-                dataLoading? Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),):getCatelogListModelById==null?Center(child: Text("Something Went Wrong"),):   Container(
+             Container(
                   decoration: decorationCommon(),
                   height: MediaQuery.of(context).size.height -
                       MediaQuery.of(context).size.height / 5.8,
                   width: MediaQuery.of(context).size.width,
-                  child:getCatelogListModelById!.getBarCodeCatalogListById!.isEmpty?Center(child: Text("No Data Found"),): GridView.builder(
+                  child:   dataLoading? Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),):getCatelogListModelById==null?Center(child: Text("No Data Found"),): getCatelogListModelById!.getBarCodeCatalogListById!.isEmpty?Center(child: Text("No Data Found"),): GridView.builder(
                     // physics: NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: userMobile(context) ? 2 : 10,
-                        childAspectRatio: userMobile(context) ? .84 : 1,
-                        crossAxisSpacing: userMobile(context) ? 2 : 10),
+                    gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: userMobile(context) ? 2 :3,
+                        mainAxisSpacing:
+                        userMobile(context) ? 2 : 10,
+                        childAspectRatio:
+                        userMobile(context) ? .82 : 0.50,
+                        crossAxisSpacing:
+                        userMobile(context) ? 2 : 10),
                     padding: const EdgeInsets.only(top: 10, left: 4, right: 4),
                     // padding around the grid
                     itemCount: getCatelogListModelById!.getBarCodeCatalogListById!.length,
@@ -139,10 +143,17 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
     );
   }
 
-  Widget gridItem(BuildContext context,GetBarCodeCatalogListById getBarCodeCatalogListById) {
+  Widget gridItem(
+      BuildContext context, GetBarCodeCatalogListById getBarCodeCatalogList) {
+  //  print("----Stock : ${getBarCodeCatalogList.stockQty!}");
     return GestureDetector(
       onTap: () {
-        //Navigator.push(context, MaterialPageRoute(builder: (context)=> ProductDetailsScreen()));
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) => ProductDetailsScreen(
+        //             cont_id: getBarCodeCatalogList.contId.toString(),
+        //             data:getBarCodeCatalogList)));
       },
       child: Card(
         elevation: 6,
@@ -172,7 +183,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
                                   topLeft: Radius.circular(12),
                                   topRight: Radius.circular(12)),
                               child: Image.network(
-                                getBarCodeCatalogListById.img ?? '',
+                                getBarCodeCatalogList.img!,
                                 height: MediaQuery.of(context).size.width / 5.5,
                                 width: MediaQuery.of(context).size.width / 6.5,
                                 fit: BoxFit.cover,
@@ -182,11 +193,11 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
                         alignment: Alignment.center,
                         padding: const EdgeInsets.all(3),
                         decoration: BoxDecoration(
-                            color: const Color(0xff8953a8).withOpacity(0.5)),
+                            color:Color(0xFFD1C6FE)),
                         child: Text(
-                          getBarCodeCatalogListById.contTypeNo!,
-                          style: TextStyle(
-                              fontSize: userMobile(context) ? 13.sp : 18.sp),
+                          getBarCodeCatalogList.contTypeNo!,
+                          style: TextStyle(fontWeight: FontWeight.w600,
+                              fontSize: userMobile(context) ? 13.sp : 20.sp),
                         ),
                       )
                     ],
@@ -196,12 +207,21 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
                         left: 4, right: 4, bottom: 8, top: 3),
                     child: Column(
                       children: [
-                        detailedWidget("${getBarCodeCatalogListById.contId!}"),
-                        detailedWidget(getBarCodeCatalogListById.jewelleryTypeName!),
-                        detailedWidget(getBarCodeCatalogListById.collection1!),
-                        detailedWidget(getBarCodeCatalogListById.businessCategoryName!),
-                        detailedWidget(getBarCodeCatalogListById.stoneDesc!.length>19?getBarCodeCatalogListById.stoneDesc!.substring(0,20):getBarCodeCatalogListById.stoneDesc!),
-                        detailedWidget(getBarCodeCatalogListById.metalDesc!),
+                        detailedWidget("${getBarCodeCatalogList.contId!}"),
+                        detailedWidget(
+                            getBarCodeCatalogList.jewelleryTypeName!),
+                        detailedWidget(getBarCodeCatalogList.collection1!),
+                        detailedWidget(
+                            getBarCodeCatalogList.businessCategoryName!),
+                        getBarCodeCatalogList.stoneDesc ==null?Container(): detailedWidget((getBarCodeCatalogList.stoneDesc ?? '').length >
+                            19
+                            ? getBarCodeCatalogList.stoneDesc!.substring(0, 20)
+                            : getBarCodeCatalogList.stoneDesc ?? ''),
+                        detailedWidget(getBarCodeCatalogList.metalDesc!.length >
+                            19
+                            ? getBarCodeCatalogList.metalDesc!.substring(0, 20)
+                            : getBarCodeCatalogList.metalDesc!),
+                        // detailedWidget(getBarCodeCatalogList.metalDesc!),
                       ],
                     ),
                   ),
@@ -210,7 +230,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
               GestureDetector(
                 onTap: () {
                   //openDigitalCatelog(context);
-                  deleteData(context,getBarCodeCatalogListById);
+                  deleteData(context,getBarCodeCatalogList);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -228,6 +248,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
     );
   }
 
+
   deleteData(BuildContext context,GetBarCodeCatalogListById getBarCodeCatalogListById) async {
     showLoaderDialog(context);
     var response = await get(Uri.parse('http://10.20.1.41:2910/kgkapi/rfid/TA/getBarCodeCatalogListById/{"catalogId":"-1","catalogDetId":"${getBarCodeCatalogListById.digitalCatalogueDetId}"}'));
@@ -238,6 +259,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
         content: Text(
             "Deleted Successfully"),
       );
+      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       getBarcodeCatelogListData();
     } else {
@@ -249,22 +271,26 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
 
   }
 
+
   Widget detailedWidget(String name) {
     return Row(
       children: [
-        const Icon(
+        Icon(
           Icons.circle_outlined,
           color: Colors.black,
-          size: 12,
+          size:userMobile(context)? 12:20,
         ),
         const SizedBox(
           width: 3,
         ),
-        Text(
-          name,
-          style: TextStyle(
-              fontSize: userMobile(context) ? 11.sp : 18.sp,
-              fontWeight: FontWeight.w500),
+        SizedBox(
+          width: userMobile(context) ?40.w:25.w,
+          child: Text(
+            name,
+            style: TextStyle(
+                fontSize: userMobile(context) ? 11.sp : 18.sp,
+                fontWeight: FontWeight.w600),
+          ),
         )
       ],
     );

@@ -376,6 +376,16 @@ class _CreateCatelogState extends State<CreateCatelog>
                                   itemBuilder: (context, index) {
                                     var details = getBarCodeCatalogListModel!
                                         .getBarCodeCatalogList![index];
+                                    print("-----${details.stockQty}");
+                                    if(light){
+                                      if(details.stockQty==0){
+                                        return Container();
+                                      }
+                                      else
+                                        {
+                                          return gridItem(context, details);
+                                        }
+                                    }
                                     return gridItem(context, details);
                                   },
                                 ),
