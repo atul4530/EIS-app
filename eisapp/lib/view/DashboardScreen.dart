@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:eisapp/model/LoginResponeModel.dart';
 import 'package:eisapp/view/ApprovalScreen.dart';
+import 'package:eisapp/view/CreateCatelog.dart';
 import 'package:eisapp/view/design_consts/DecorationMixin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helper/pref_data.dart';
@@ -30,12 +32,20 @@ class _DashboardScreenState extends State<DashboardScreen> with BackgroundDecora
     super.initState();
     getData(context);
   }
+  LoginResponseModel? loginResponseModel;
+  String app_version = "";
 
-  getData(BuildContext context){
+  getData(BuildContext context) async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
     PreferenceHelper().getStringValuesSF("data").then((value) {
       print("---Value----$value");
-      LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(jsonDecode(value!));
-      print("------${loginResponseModel.data!.first.digitalCatalogueReg}");
+
+      //print("------${loginResponseModel!.data!.first.digitalCatalogueReg}");
+      setState(() {
+        loginResponseModel = LoginResponseModel.fromJson(jsonDecode(value!));
+        app_version = packageInfo.version;
+      });
 
     });
   }
@@ -98,25 +108,14 @@ class _DashboardScreenState extends State<DashboardScreen> with BackgroundDecora
                       Container(
                           margin: EdgeInsets.only(left: 8),
                           child: Image.asset("assets/images/logo.png",width: MediaQuery.of(context).size.width/4.5,)),
-                      GestureDetector(
-                        onTap: () async {
-                          SharedPreferences pref = await SharedPreferences.getInstance();
-                          pref.clear();
-                          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                              LoginScreen()), (Route<dynamic> route) => false);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Icon(Icons.logout,size: 6.w,color: Colors.white,),
-                        ),
-                      )
+                      logout_icon(context)
                     ],
                   ),
                   SizedBox(height: 60,),
                   Column(
                     children: [
                       Text("Welcome",style: TextStyle(color: Colors.white,fontSize: useMobileLayout?16.sp:22.sp,fontWeight: FontWeight.w400),),
-                      Text("Kathigeyan M",style: TextStyle(color: Colors.white,fontSize: useMobileLayout?20.sp:28.sp,fontWeight: FontWeight.w800),),
+                      loginResponseModel==null?Container(): Text("${loginResponseModel!.data!.first.fullName}",style: TextStyle(color: Colors.white,fontSize: useMobileLayout?20.sp:28.sp,fontWeight: FontWeight.w800),),
                     ],
                   ),
                   // SizedBox(height: 30,),
@@ -126,7 +125,7 @@ class _DashboardScreenState extends State<DashboardScreen> with BackgroundDecora
             Container(
 
               decoration: decorationCommon(),
-              height: MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/4,
+              height: MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/(userMobile(context)?2.9: 3.2),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -161,7 +160,7 @@ class _DashboardScreenState extends State<DashboardScreen> with BackgroundDecora
                       ),
                     ],
                   ),
-                  Text("V 1.3.dev",style: TextStyle(color:  Color(0xff7882A9)),)
+                  Text(app_version,style: TextStyle(color:  Color(0xff7882A9),fontSize: userMobile(context)?14.sp:20.sp),)
                 ],
               ),
             )
@@ -196,7 +195,9 @@ Widget buttonTile(BuildContext context,String image,String name,dynamic onTap){
           children: [
             Image.asset("assets/images/"+image,height: 10.w,),
             SizedBox(height: 8,),
-            Text(name,style: TextStyle(fontSize: useMobileLayout?16.sp:20.sp,fontWeight: FontWeight.w500),textAlign: TextAlign.center,)
+            Container(
+                margin: EdgeInsets.only(bottom: name.contains("Catalog")? 17:0),
+                child: Text(name,style: TextStyle(fontSize: useMobileLayout?16.sp:20.sp,fontWeight: FontWeight.w500),textAlign: TextAlign.center,))
           ],
         ),
       ),

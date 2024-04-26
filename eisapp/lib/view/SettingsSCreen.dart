@@ -53,141 +53,118 @@ class _SettingScreenState extends State<SettingScreen>
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
       decoration: bgDecoration(),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              //color: Colors.black,
-              height: MediaQuery.of(context).size.height / 7,
+      child: Column(
+        children: [
+          Container(
+            //color: Colors.black,
+            height: MediaQuery.of(context).size.height / 8.5,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                        margin: EdgeInsets.only(
+                            left: 8, top: 4),
+                        child: singleApprove
+                            ? GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                singleApprove = false;
+                              });
+                            },
+                            child: Icon(
+                              Icons.arrow_back,
+                              color: Colors.white,
+                              size: 25.sp,
+                            ))
+                            : Image.asset(
+                          "assets/images/logo.png",
+                          width:
+                          MediaQuery.of(context).size.width /
+                              4.5,
+                        )),
+                    logout_icon(context),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, bottom: 8),
+                  child: Text(
+                    "Settings",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: userMobile(context) ? 16.sp : 22.sp,
+                        fontWeight: FontWeight.w600),
+                  ),
+                )
+
+                // SizedBox(height: 30,),
+              ],
+            ),
+          ),
+          loginResponseModel==null?Container():   Container(
+            decoration: decorationCommon(),
+            height: MediaQuery.of(context).size.height -
+                MediaQuery.of(context).size.height /
+                    (userMobile(context) ? 4.7 : 5.6),
+            width: 100.w,
+            child: Padding(
+              padding: const EdgeInsets.all(15),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                          margin: EdgeInsets.only(
-                              left: 8, top: singleApprove ? 10 : 0),
-                          child: singleApprove
-                              ? GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  singleApprove = false;
-                                });
-                              },
-                              child: Icon(
-                                Icons.arrow_back,
-                                color: Colors.white,
-                                size: 25.sp,
-                              ))
-                              : Image.asset(
-                            "assets/images/logo.png",
-                            width:
-                            MediaQuery.of(context).size.width /
-                                4.5,
-                          )),
-                      GestureDetector(
-                        onTap: () async {
-                          SharedPreferences pref = await SharedPreferences.getInstance();
-                          pref.clear();
-                          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                              LoginScreen()), (Route<dynamic> route) => false);
-                        },
-                        child: Padding(
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 20),
-                          child: Icon(
-                            Icons.logout,
-                            size: 6.w,
-                            color: Colors.white,
-                          ),
-                        ),
-                      )
+                      Text("Name ",style: TextStyle(fontSize: 18.sp,fontWeight: FontWeight.w700),),
+                      Text(loginResponseModel!.data!.first.fullName ?? '',style: TextStyle(fontSize: 18.sp,fontWeight: FontWeight.w500,color: Color(0xff696969)),),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0, bottom: 8),
-                    child: Text(
-                      "Settings",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: userMobile(context) ? 14.sp : 22.sp,
-                          fontWeight: FontWeight.w600),
+                  Row(
+                    children: [
+                      Text("Id ",style: TextStyle(fontSize: 18.sp,fontWeight: FontWeight.w700),),
+                      Text(loginResponseModel!.data!.first.empId!.toString(),style: TextStyle(fontSize: 18.sp,fontWeight: FontWeight.w500,color: Color(0xff696969)),),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text("CSC Name ",style: TextStyle(fontSize: 18.sp,fontWeight: FontWeight.w700),),
+                      Text(loginResponseModel!.data!.first.cscName ?? '',style: TextStyle(fontSize: 18.sp,fontWeight: FontWeight.w500,color: Color(0xff696969)),),
+                    ],
+                  ),
+                  SizedBox(height: 30,),
+                  GestureDetector(
+                    onTap: () async {
+                      SharedPreferences pref = await SharedPreferences.getInstance();
+                      pref.clear();
+                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                          LoginScreen()), (Route<dynamic> route) => false);
+
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      alignment: Alignment.center,
+                      width: userMobile(context)? 35.w:20.w,
+                      padding: EdgeInsets.symmetric(vertical: 7),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.logout,color: Colors.white,),
+                          SizedBox(width: userMobile(context)?10: 10,),
+                          Text("Logout",style: TextStyle(fontSize: 17.sp,color: Colors.white),)
+                        ],
+                      ),
                     ),
                   )
-
-                  // SizedBox(height: 30,),
                 ],
               ),
             ),
-            loginResponseModel==null?Container():   Container(
-              decoration: decorationCommon(),
-              height: MediaQuery.of(context).size.height -
-                  MediaQuery.of(context).size.height /
-                      (userMobile(context) ? 4.3 : 5.6),
-              width: 100.w,
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Name",style: TextStyle(fontSize: 18.sp),),
-                            Text("Id",style: TextStyle(fontSize: 18.sp),),
-                            Text("CSC Name",style: TextStyle(fontSize: 18.sp),),
-                          ],
-                        ),
-                        SizedBox(width: 10,),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(loginResponseModel!.data!.first.fullName ?? '',style: TextStyle(fontSize: 18.sp,fontWeight: FontWeight.w700),),
-                            Text(loginResponseModel!.data!.first.empId!.toString(),style: TextStyle(fontSize: 18.sp,fontWeight: FontWeight.w700),),
-                            Text(loginResponseModel!.data!.first.cscName ?? '',style: TextStyle(fontSize: 18.sp,fontWeight: FontWeight.w700),),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 30,),
-                    GestureDetector(
-                      onTap: () async {
-                        SharedPreferences pref = await SharedPreferences.getInstance();
-                        pref.clear();
-                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                            LoginScreen()), (Route<dynamic> route) => false);
-
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        alignment: Alignment.center,
-                        width: 40.w,
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.logout,color: Colors.white,),
-                            SizedBox(width: 10,),
-                            Text("Logout",style: TextStyle(fontSize: 17.sp,color: Colors.white),)
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
+          )
+        ],
       ),
     );
   }

@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 
 import '../../model/GetVfStageDetaulsModel.dart' as e;
 import '../CreateCatelog.dart';
+import '../design_consts/DecorationMixin.dart';
 import 'details_call.dart';
 
 class PPToJCPLock extends StatefulWidget {
@@ -17,7 +18,7 @@ class PPToJCPLock extends StatefulWidget {
   State<PPToJCPLock> createState() => _PPToJCPLockState();
 }
 
-class _PPToJCPLockState extends State<PPToJCPLock> {
+class _PPToJCPLockState extends State<PPToJCPLock> with BackgroundDecoration {
   bool dataLoading = false;
   PpToJcpModel? ppToJcpModel;
   
@@ -53,7 +54,7 @@ class _PPToJCPLockState extends State<PPToJCPLock> {
     double font_Size = userMobile(context) ? 18.sp : 22.sp;
     print("-> PO Type $dataLoading");
     if(dataLoading){
-      return Container(child: Center(child: CircularProgressIndicator(),),);
+      return loader_center(context);
     }
     return ppToJcpModel!.result!.isEmpty?Container(child: Center(child: Text("No Data Available",style: TextStyle(fontSize: font_Size),),),): SingleChildScrollView(
       child: Padding(

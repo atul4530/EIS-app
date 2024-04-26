@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:eisapp/model/ExpenseBudgetModel.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:eisapp/view/design_consts/DecorationMixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:http/http.dart';
@@ -18,7 +18,7 @@ class ExpensesBudget extends StatefulWidget {
   State<ExpensesBudget> createState() => _ExpensesBudgetState();
 }
 
-class _ExpensesBudgetState extends State<ExpensesBudget> {
+class _ExpensesBudgetState extends State<ExpensesBudget> with BackgroundDecoration{
   bool dataLoading = false;
   ExpenseBudgetModel? expenseBudgetModel;
 
@@ -54,7 +54,7 @@ class _ExpensesBudgetState extends State<ExpensesBudget> {
     double font_Size = userMobile(context) ? 18.sp : 22.sp;
     print("-> PO Type $dataLoading");
     if(dataLoading){
-      return Container(child: Center(child: CircularProgressIndicator(),),);
+      return loader_center(context);
     }
     return expenseBudgetModel!.result!.isEmpty?Container(child: Center(child: Text("No Data Available",style: TextStyle(fontSize: font_Size),),),): SingleChildScrollView(
       child: Padding(

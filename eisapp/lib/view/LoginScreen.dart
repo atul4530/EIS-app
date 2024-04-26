@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:eisapp/helper/pref_data.dart';
 import 'package:eisapp/network/ApiService.dart';
+import 'package:eisapp/view/CreateCatelog.dart';
 import 'package:eisapp/view/DashboardScreen.dart';
 import 'package:eisapp/view/design_consts/DecorationMixin.dart';
 import 'package:eisapp/view/loader/loader.dart';
@@ -65,6 +66,7 @@ class _LoginScreenState extends State<LoginScreen> with BackgroundDecoration {
                             color: Colors.black.withOpacity(0.5),
                             fontStyle: FontStyle.normal,
                             fontSize: useMobileLayout ? 15.sp : 17.sp,
+                              fontWeight: FontWeight.w700
                           ),
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
@@ -74,11 +76,13 @@ class _LoginScreenState extends State<LoginScreen> with BackgroundDecoration {
                               color: Colors.black.withOpacity(0.5),
                               fontSize: useMobileLayout ? 15.sp : 17.sp,
                               fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.bold
                             ),
                           ),
                         ),
                       ),
                     ),
+                    userMobile(context)?SizedBox(height: 0,):SizedBox(height: 25,),
                     Center(
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width / 1.8,
@@ -88,6 +92,7 @@ class _LoginScreenState extends State<LoginScreen> with BackgroundDecoration {
                             color: Colors.black.withOpacity(0.5),
                             fontStyle: FontStyle.normal,
                             fontSize: useMobileLayout ? 15.sp : 17.sp,
+                              fontWeight: FontWeight.w700
                           ),
                           obscureText: true,
                           decoration: InputDecoration(
@@ -97,11 +102,13 @@ class _LoginScreenState extends State<LoginScreen> with BackgroundDecoration {
                               color: Colors.black.withOpacity(0.5),
                               fontStyle: FontStyle.normal,
                               fontSize: useMobileLayout ? 15.sp : 17.sp,
+                                fontWeight: FontWeight.bold
                             ),
                           ),
                         ),
                       ),
                     ),
+                    userMobile(context)?SizedBox(height: 0,):SizedBox(height: 15,),
                     GestureDetector(
                       onTap: () {
                         loginData(context, userNameController.text.trim(),

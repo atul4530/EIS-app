@@ -44,11 +44,11 @@ class _ViewImageScreenState extends State<ViewImageScreen> with BackgroundDecora
                       ),
                     ),
                     Padding(
-                      padding:  EdgeInsets.all(userMobile(context)? 8.0:16),
+                      padding:  EdgeInsets.symmetric(horizontal:  userMobile(context)? 12:16,vertical: 12),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("View Image",style: TextStyle(color: Colors.white,fontSize:  userMobile(context)?16.sp:22.sp),),
+                          Text("View Image",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600,fontSize:  userMobile(context)?16.sp:22.sp),),
                           Container()
                         ],
                       ),

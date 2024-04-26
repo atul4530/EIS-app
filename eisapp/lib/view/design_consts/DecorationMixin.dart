@@ -1,6 +1,11 @@
+import 'package:eisapp/view/CreateCatelog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_sizer/flutter_sizer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../LoginScreen.dart';
 
 mixin BackgroundDecoration{
   BoxDecoration bgDecoration(){
@@ -43,5 +48,24 @@ mixin BackgroundDecoration{
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20)));
+  }
+
+  Widget logout_icon(BuildContext context){
+    return GestureDetector(
+      onTap: () async {
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        pref.clear();
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+            LoginScreen()), (Route<dynamic> route) => false);
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Icon(Icons.logout,size: userMobile(context)?6.w: 5.w,color: Colors.white,),
+      ),
+    );
+  }
+
+  Widget loader_center(BuildContext context){
+    return Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),);
   }
 }

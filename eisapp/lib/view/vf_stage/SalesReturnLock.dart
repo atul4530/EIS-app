@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 
 import '../../model/GetVfStageDetaulsModel.dart' as e;
 import '../CreateCatelog.dart';
+import '../design_consts/DecorationMixin.dart';
 import 'details_call.dart';
 
 class SalesReturnLock extends StatefulWidget {
@@ -17,7 +18,7 @@ class SalesReturnLock extends StatefulWidget {
   State<SalesReturnLock> createState() => _SalesReturnLockState();
 }
 
-class _SalesReturnLockState extends State<SalesReturnLock> {
+class _SalesReturnLockState extends State<SalesReturnLock> with BackgroundDecoration{
   bool dataLoading = false;
 
   @override
@@ -54,7 +55,7 @@ class _SalesReturnLockState extends State<SalesReturnLock> {
     double font_Size = userMobile(context) ? 18.sp : 22.sp;
     print("-> PO Type $dataLoading");
     if(dataLoading){
-      return Container(child: Center(child: CircularProgressIndicator(),),);
+      return loader_center(context);
     }
     return salesReturnLock!.result!.isEmpty?Container(child: Center(child: Text("No Data Available",style: TextStyle(fontSize: font_Size),),),): SingleChildScrollView(
       child: Padding(

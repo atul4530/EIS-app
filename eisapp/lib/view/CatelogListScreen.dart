@@ -129,7 +129,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                 ),
                 height: MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/4,
                 width: MediaQuery.of(context).size.width,
-                child: dataLoading?Center(child: CircularProgressIndicator(),):ListView.builder(
+                child: dataLoading?Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),):ListView.builder(
                   itemCount: getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.length,
                   padding: const EdgeInsets.only(top: 20),
                   itemBuilder: (BuildContext context, int index) {

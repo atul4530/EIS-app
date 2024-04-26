@@ -7,9 +7,10 @@ import 'package:http/http.dart';
 
 import '../../model/GetVfStageDetaulsModel.dart' as r;
 import '../CreateCatelog.dart';
+import '../design_consts/DecorationMixin.dart';
 import 'details_call.dart';
 
-class DebtorAgingLock extends StatefulWidget {
+class DebtorAgingLock extends StatefulWidget{
   r.Result result;
   DebtorAgingLock({super.key,required this.result});
 
@@ -17,7 +18,7 @@ class DebtorAgingLock extends StatefulWidget {
   State<DebtorAgingLock> createState() => _DebtorAgingLockState();
 }
 
-class _DebtorAgingLockState extends State<DebtorAgingLock> {
+class _DebtorAgingLockState extends State<DebtorAgingLock>  with BackgroundDecoration {
   bool dataLoading = false;
   DebtorAgeignLockModel? debtorAgeignLockModel;
 
@@ -52,7 +53,7 @@ class _DebtorAgingLockState extends State<DebtorAgingLock> {
     double font_Size = userMobile(context) ? 18.sp : 22.sp;
     print("-> PO Type $dataLoading");
     if(dataLoading){
-      return Container(child: Center(child: CircularProgressIndicator(),),);
+      return loader_center(context);
     }
     return debtorAgeignLockModel!.result!.isEmpty?Container(child: Center(child: Text("No Data Available",style: TextStyle(fontSize: font_Size),),),): SingleChildScrollView(
       child: Padding(

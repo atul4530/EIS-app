@@ -109,7 +109,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
                     ],
                   ),
                 ),
-                dataLoading?const Center(child: CircularProgressIndicator(),):getCatelogListModelById==null?Center(child: Text("Something Went Wrong"),):   Container(
+                dataLoading? Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),):getCatelogListModelById==null?Center(child: Text("Something Went Wrong"),):   Container(
                   decoration: decorationCommon(),
                   height: MediaQuery.of(context).size.height -
                       MediaQuery.of(context).size.height / 5.8,

@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 
 import '../../model/GetVfStageDetaulsModel.dart' as r;
 import '../CreateCatelog.dart';
+import '../design_consts/DecorationMixin.dart';
 import 'details_call.dart';
 
 class MemoAgeignLock extends StatefulWidget {
@@ -17,7 +18,7 @@ class MemoAgeignLock extends StatefulWidget {
   State<MemoAgeignLock> createState() => _MemoAgeignLockState();
 }
 
-class _MemoAgeignLockState extends State<MemoAgeignLock> {
+class _MemoAgeignLockState extends State<MemoAgeignLock> with BackgroundDecoration{
   bool dataLoading = false;
   MemoAgeignLockModel? memoAgeignLockModel;
 
@@ -53,7 +54,7 @@ class _MemoAgeignLockState extends State<MemoAgeignLock> {
     double font_Size = userMobile(context) ? 18.sp : 22.sp;
     print("-> PO Type $dataLoading");
     if(dataLoading){
-      return Container(child: Center(child: CircularProgressIndicator(),),);
+      return loader_center(context);
     }
     return memoAgeignLockModel!.result!.isEmpty?Container(child: Center(child: Text("No Data Available",style: TextStyle(fontSize: font_Size),),),): SingleChildScrollView(
       child: Padding(

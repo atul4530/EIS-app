@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 
 import '../../model/GetVfStageDetaulsModel.dart' as r;
 import '../CreateCatelog.dart';
+import '../design_consts/DecorationMixin.dart';
 import 'details_call.dart';
 
 class POGpLock extends StatefulWidget {
@@ -17,7 +18,7 @@ class POGpLock extends StatefulWidget {
   State<POGpLock> createState() => _POGpLockState();
 }
 
-class _POGpLockState extends State<POGpLock> {
+class _POGpLockState extends State<POGpLock> with BackgroundDecoration{
   bool dataLoading = false;
 
   @override
@@ -54,7 +55,7 @@ class _POGpLockState extends State<POGpLock> {
     double font_Size = userMobile(context) ? 18.sp : 22.sp;
     print("-> PO Type $dataLoading");
     if(dataLoading){
-      return Container(child: Center(child: CircularProgressIndicator(),),);
+      return loader_center(context);
     }
     return poGpLockModel!.result!.isEmpty?Container(child: Center(child: Text("No Data Available",style: TextStyle(fontSize: font_Size),),),): SingleChildScrollView(
       child: Padding(

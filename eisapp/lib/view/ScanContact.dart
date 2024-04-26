@@ -7,8 +7,10 @@ import 'package:eisapp/view/design_consts/DecorationMixin.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_sizer/flutter_sizer.dart';
+import 'package:get/get.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
+import '../helper/SelectCatelogHelper.dart';
 import '../helper/pref_data.dart';
 
 import '../model/GetBarcodeCatelogListNameModel.dart';
@@ -40,6 +42,8 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
      getSelectCatelogData();
   }
 
+  SelectCatalogHelper selectCatalogHelper = Get.put(SelectCatalogHelper());
+
   @override
   Widget build(BuildContext context) {
 
@@ -55,38 +59,84 @@ class _ScanContactState extends State<ScanContact>  with BackgroundDecoration {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Padding(
-                      padding:  EdgeInsets.all(userMobile(context)? 8.0:16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                              onTap: (){
-                                Navigator.pop(context);
-                              },
-                              child: const Icon(Icons.arrow_back,color: Colors.white,)),
-                          GestureDetector(
-                            onTap: () async {
-
-                              openOptions(context);
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(35)
-                              ),
-                              child:  Row(
-                                children: [
-                                  Text(selected_catelog,style: TextStyle(color: Colors.black,fontSize:  userMobile(context)?13.sp:16.sp),),
-                                  const SizedBox(width: 5,),
-                                  Icon(Icons.arrow_drop_down,color: Colors.black,size: 15.sp,),
-                                ],
-                              ),
+                    GetBuilder<SelectCatalogHelper>(
+                        builder: (controller) {
+                          return Padding(
+                            padding: EdgeInsets.all(userMobile(context) ? 8.0 : 16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Icon(
+                                      Icons.arrow_back,
+                                      color: Colors.white,
+                                    )),
+                                controller.catalog_loading?Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),):    Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(50)
+                                  ),
+                                  height: 30,
+                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  child: DropdownButton<GetBarCodeCatalogNameList>(
+                                    hint: Text(controller.selected_value,style: TextStyle(color: Colors.black,fontSize: userMobile(context)?12.sp:16.sp),),
+                                    borderRadius: BorderRadius.circular(12),
+                                    padding: EdgeInsets.zero,
+                                    elevation: 0,
+                                    icon: Container(margin: EdgeInsets.only(left: 10),child: Icon(Icons.arrow_drop_down_sharp)),
+                                    items: controller.getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.map((GetBarCodeCatalogNameList value) {
+                                      return DropdownMenuItem<GetBarCodeCatalogNameList>(
+                                        value: value,
+                                        child: Text(value.label!),
+                                      );
+                                    }).toList(),
+                                    onChanged: (_) {
+                                      controller.selected_value = _!.label ?? '';
+                                      controller.selected_catalog_id = _.value.toString();
+                                      controller.update();
+                                    },
+                                  ),
+                                )
+                                // GestureDetector(
+                                //   onTap: () async {
+                                //     await getSelectCatelogData();
+                                //     openOptions(context);
+                                //   },
+                                //   child: Container(
+                                //     padding: const EdgeInsets.symmetric(
+                                //         horizontal: 10, vertical: 5),
+                                //     decoration: BoxDecoration(
+                                //         color: Colors.white,
+                                //         borderRadius: BorderRadius.circular(35)),
+                                //     child: Row(
+                                //       children: [
+                                //         Text(
+                                //           selected_catelog,
+                                //           style: TextStyle(
+                                //               color: Colors.black,
+                                //               fontSize: userMobile(context)
+                                //                   ? 13.sp
+                                //                   : 16.sp),
+                                //         ),
+                                //         const SizedBox(
+                                //           width: 5,
+                                //         ),
+                                //         Icon(
+                                //           Icons.arrow_drop_down,
+                                //           color: Colors.black,
+                                //           size: 15.sp,
+                                //         ),
+                                //       ],
+                                //     ),
+                                //   ),
+                                // )
+                              ],
                             ),
-                          )
-                        ],
-                      ),
+                          );
+                        }
                     ),
                     Padding(
                       padding:  EdgeInsets.all(userMobile(context)? 8.0:16),

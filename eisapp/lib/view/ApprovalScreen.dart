@@ -111,23 +111,7 @@ class _ApprovalScreenState extends State<ApprovalScreen>
                                             MediaQuery.of(context).size.width /
                                                 4.5,
                                       )),
-                            GestureDetector(
-                              onTap: () async {
-                                SharedPreferences pref = await SharedPreferences.getInstance();
-                                pref.clear();
-                                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                                    LoginScreen()), (Route<dynamic> route) => false);
-                              },
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: Icon(
-                                  Icons.logout,
-                                  size: 6.w,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            )
+                            logout_icon(context)
                           ],
                         ),
                         Padding(
@@ -153,7 +137,7 @@ class _ApprovalScreenState extends State<ApprovalScreen>
                     width: 100.w,
                     child: dataLoading
                         ? Center(
-                      child: CircularProgressIndicator(),
+                      child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),
                     )
                         :getAllBcAccountModel==null?Center(
                       child: Text(

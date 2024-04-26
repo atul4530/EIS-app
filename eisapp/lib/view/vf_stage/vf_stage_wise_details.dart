@@ -45,7 +45,7 @@ class _VfStageDetailsState extends State<VfStageDetails>
 
   TextEditingController controller = TextEditingController();
 
-  approveDialogue(BuildContext context) {
+  approveDialogue(BuildContext context,String id) {
     controller.clear();
     Dialog errorDialog = Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
@@ -130,7 +130,7 @@ class _VfStageDetailsState extends State<VfStageDetails>
                             jsonDecode(
                                 (await PreferenceHelper().getStringValuesSF("data")).toString()));
 
-                        approveCall(context,"catalog/vfapprove/a/${widget.result.vfStageId}/${await loginResponseModel.data!.first.empId}?comment=${controller.text.trim()}");
+                        approveCall(context,"catalog/vfapprove/a/$id/${await loginResponseModel.data!.first.empId}?comment=${controller.text.trim()}");
                       }
                     },
                     child: Container(
@@ -193,7 +193,7 @@ class _VfStageDetailsState extends State<VfStageDetails>
           margin: EdgeInsets.all(12),
           child: GestureDetector(
           onTap: () {
-            approveDialogue(context);
+            approveDialogue(context,widget.result.vfId.toString());
           },
           child: Container(
             padding: EdgeInsets.symmetric(

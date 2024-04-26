@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
+import 'package:get/get.dart';
 
 import 'view/SplashScreen.dart';
 
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  FlutterSizer(
         builder: (context, orientation, screenType) {
-        return   MaterialApp(
+        return   GetMaterialApp(
           home: const SplashScreen(),
           theme: ThemeData(fontFamily: 'Mulish',primaryColor: Color(0xff5338B4)),
         );

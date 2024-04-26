@@ -126,7 +126,7 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
           ),
           Container(
             height: userMobile(context) ? 63.h : 70.h,
-            child:dataLoading?const Center(child: CircularProgressIndicator(),): ListView.builder(
+            child:dataLoading? Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),): ListView.builder(
               itemCount: getVfStageDetailsModel!.result!.length,
               //physics: NeverScrollableScrollPhysics(),
               padding: const EdgeInsets.only(top: 20),
@@ -251,7 +251,7 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  approveDialogue(context);
+                                  approveDialogue(context,data.vfId.toString());
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
@@ -284,7 +284,7 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
 
   TextEditingController controller = TextEditingController();
 
-  approveDialogue(BuildContext context) {
+  approveDialogue(BuildContext context,String id) {
     controller.clear();
     Dialog errorDialog = Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
@@ -369,7 +369,7 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
                             jsonDecode(
                                 (await PreferenceHelper().getStringValuesSF("data")).toString()));
 
-                        approveCall(context,"catalog/vfapprove/a/${widget.result.vfStageId}/${await loginResponseModel.data!.first.empId}?comment=${controller.text.trim()}");
+                        approveCall(context,"catalog/vfapprove/a/$id/${await loginResponseModel.data!.first.empId}?comment=${controller.text.trim()}");
                       }
                     },
                     child: Container(

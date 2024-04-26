@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 
 import '../../model/GetVfStageDetaulsModel.dart' as r;
 import '../CreateCatelog.dart';
+import '../design_consts/DecorationMixin.dart';
 import 'details_call.dart';
 
 class PoType extends StatefulWidget {
@@ -17,7 +18,7 @@ class PoType extends StatefulWidget {
   State<PoType> createState() => _PoTypeState();
 }
 
-class _PoTypeState extends State<PoType> {
+class _PoTypeState extends State<PoType> with BackgroundDecoration{
   bool dataLoading = false;
   PoTypeModel? poTypeModel;
 
@@ -53,7 +54,7 @@ class _PoTypeState extends State<PoType> {
     double font_Size = userMobile(context) ? 18.sp : 22.sp;
     print("-> PO Type $dataLoading");
     if(dataLoading){
-      return Container(child: Center(child: CircularProgressIndicator(),),);
+      return loader_center(context);
     }
     return poTypeModel!.result!.isEmpty?Container(child: Center(child: Text("No Data Available",style: TextStyle(fontSize: font_Size),),),): SingleChildScrollView(
       child: Padding(

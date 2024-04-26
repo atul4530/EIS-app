@@ -10,6 +10,7 @@ import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:http/http.dart';
 
 import '../CreateCatelog.dart';
+import '../design_consts/DecorationMixin.dart';
 
 
 class GpLock extends StatefulWidget {
@@ -20,7 +21,7 @@ class GpLock extends StatefulWidget {
   State<GpLock> createState() => _GpLockState();
 }
 
-class _GpLockState extends State<GpLock> {
+class _GpLockState extends State<GpLock> with BackgroundDecoration {
   bool dataLoading = false;
 
   @override
@@ -57,7 +58,7 @@ class _GpLockState extends State<GpLock> {
     double font_Size = userMobile(context) ? 18.sp : 22.sp;
     print("-> PO Type $dataLoading");
     if(dataLoading){
-      return Container(child: Center(child: CircularProgressIndicator(),),);
+      return loader_center(context);
     }
     return gpLockModel!.result!.isEmpty?Container(child: Center(child: Text("No Data Available",style: TextStyle(fontSize: font_Size),),),): SingleChildScrollView(
       child: Padding(

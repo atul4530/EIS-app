@@ -8,6 +8,7 @@ import 'package:http/http.dart';
 
 import '../../model/GetVfStageDetaulsModel.dart'as r;
 import '../CreateCatelog.dart';
+import '../design_consts/DecorationMixin.dart';
 import 'details_call.dart';
 
 class MeltingLock extends StatefulWidget {
@@ -18,7 +19,7 @@ class MeltingLock extends StatefulWidget {
   State<MeltingLock> createState() => _MeltingLockState();
 }
 
-class _MeltingLockState extends State<MeltingLock> {
+class _MeltingLockState extends State<MeltingLock> with BackgroundDecoration {
   bool dataLoading = false;
   MeltingLockModel? meltingLockModel;
 
@@ -54,7 +55,7 @@ class _MeltingLockState extends State<MeltingLock> {
     double font_Size = userMobile(context) ? 18.sp : 22.sp;
     print("-> Melting Lock $dataLoading");
     if(dataLoading){
-      return Container(child: Center(child: CircularProgressIndicator(),),);
+      return loader_center(context);
     }
     return meltingLockModel!.result!.isEmpty?Container(child: Center(child: Text("No Data Available",style: TextStyle(fontSize: font_Size),),),): SingleChildScrollView(
       child: Padding(
