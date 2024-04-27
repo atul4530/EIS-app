@@ -58,7 +58,7 @@ class _SettingScreenState extends State<SettingScreen>
         children: [
           Container(
             //color: Colors.black,
-            height: MediaQuery.of(context).size.height / 8.5,
+            height: MediaQuery.of(context).size.height /(userMobile(context)? 10:7.8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -109,7 +109,7 @@ class _SettingScreenState extends State<SettingScreen>
             decoration: decorationCommon(),
             height: MediaQuery.of(context).size.height -
                 MediaQuery.of(context).size.height /
-                    (userMobile(context) ? 4.7 : 5.6),
+                    (userMobile(context) ? 5.2 : 5.6),
             width: 100.w,
             child: Padding(
               padding: const EdgeInsets.all(15),

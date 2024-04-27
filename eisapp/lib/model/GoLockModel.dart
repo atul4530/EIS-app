@@ -39,7 +39,7 @@ class Result {
   String? ocpgm;
   String? spAmt;
   String? chargeAmt;
-  int? markup;
+  String? markup;
 
   Result({
     this.pricingNo,
@@ -70,7 +70,7 @@ class Result {
     ocpgm: json["OCPGM"],
     spAmt: json["SP_AMT"],
     chargeAmt: json["CHARGE_AMT"],
-    markup: json["MARKUP"],
+    markup: json["MARKUP"].toString(),
   );
 
   Map<String, dynamic> toJson() => {

@@ -64,79 +64,77 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
       child: Scaffold(
         body: Container(
           decoration: bgDecoration(),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(
-                  //color: Colors.black,
-                  height: MediaQuery.of(context).size.height / 9,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(userMobile(context) ? 8.0 : 16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Icon(
-                                  Icons.arrow_back,
-                                  color: Colors.white,
-                                  size: userMobile(context) ? 22.sp : 27.sp,
-                                )),
-                          ],
-                        ),
+          child: Column(
+            children: [
+              SizedBox(
+                //color: Colors.black,
+                height: MediaQuery.of(context).size.height /(userMobile(context)? 10:7.7),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(userMobile(context) ? 8.0 : 12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Icon(
+                                Icons.arrow_back,
+                                color: Colors.white,
+                                size: userMobile(context) ? 22.sp : 27.sp,
+                              )),
+                        ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(userMobile(context) ? 8.0 : 16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              widget.catelog.label!.split(" ").first,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize:
-                                      userMobile(context) ? 16.sp : 25.sp),
-                            ),
-                            Container()
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(userMobile(context) ? 8.0 : 12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            widget.catelog.label!.split(" ").first,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize:
+                                    userMobile(context) ? 16.sp : 25.sp),
+                          ),
+                          Container()
+                        ],
+                      ),
+                    )
+                  ],
                 ),
+              ),
              Container(
-                  decoration: decorationCommon(),
-                  height: MediaQuery.of(context).size.height -
-                      MediaQuery.of(context).size.height / 5.8,
-                  width: MediaQuery.of(context).size.width,
-                  child:   dataLoading? Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),):getCatelogListModelById==null?Center(child: Text("No Data Found"),): getCatelogListModelById!.getBarCodeCatalogListById!.isEmpty?Center(child: Text("No Data Found"),): GridView.builder(
-                    // physics: NeverScrollableScrollPhysics(),
-                    gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: userMobile(context) ? 2 :3,
-                        mainAxisSpacing:
-                        userMobile(context) ? 2 : 10,
-                        childAspectRatio:
-                        userMobile(context) ? .82 : 0.50,
-                        crossAxisSpacing:
-                        userMobile(context) ? 2 : 10),
-                    padding: const EdgeInsets.only(top: 10, left: 4, right: 4),
-                    // padding around the grid
-                    itemCount: getCatelogListModelById!.getBarCodeCatalogListById!.length,
-                    // total number of items
-                    itemBuilder: (context, index) {
-                      var data = getCatelogListModelById!.getBarCodeCatalogListById![index];
-                      return gridItem(context,data);
-                    },
-                  ),
-                )
-              ],
-            ),
+                decoration: decorationCommon(),
+                height: MediaQuery.of(context).size.height -
+                    MediaQuery.of(context).size.height / (userMobile(context)? 5.8:6.45),
+                width: MediaQuery.of(context).size.width,
+                child:   dataLoading? Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),):getCatelogListModelById==null?Center(child: Text("No Data Found"),): getCatelogListModelById!.getBarCodeCatalogListById!.isEmpty?Center(child: Text("No Data Found"),): GridView.builder(
+                  // physics: NeverScrollableScrollPhysics(),
+                  gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: userMobile(context) ? 2 :3,
+                      mainAxisSpacing:
+                      userMobile(context) ? 2 : 10,
+                      childAspectRatio:
+                      userMobile(context) ? .82 : 0.50,
+                      crossAxisSpacing:
+                      userMobile(context) ? 2 : 10),
+                  padding: const EdgeInsets.only(top: 10, left: 4, right: 4),
+                  // padding around the grid
+                  itemCount: getCatelogListModelById!.getBarCodeCatalogListById!.length,
+                  // total number of items
+                  itemBuilder: (context, index) {
+                    var data = getCatelogListModelById!.getBarCodeCatalogListById![index];
+                    return gridItem(context,data);
+                  },
+                ),
+              )
+            ],
           ),
         ),
       ),

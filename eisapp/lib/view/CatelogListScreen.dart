@@ -82,12 +82,12 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
             children: [
               SizedBox(
                 //color: Colors.black,
-                height: MediaQuery.of(context).size.height/9,
+                height: MediaQuery.of(context).size.height /(userMobile(context)? 10:7.8),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Padding(
-                      padding:  EdgeInsets.all(userMobile(context)? 8.0:16),
+                      padding:  EdgeInsets.all(userMobile(context)? 8.0:12),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -101,7 +101,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                       ),
                     ),
                     Padding(
-                      padding:  EdgeInsets.all(userMobile(context)? 8.0:16),
+                      padding:  EdgeInsets.all(userMobile(context)? 8.0:12),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -115,75 +115,83 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
               ),
               Container(
                 decoration: decorationCommon(),
-                height: MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/4,
+                height: MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/(userMobile(context)?4: 6),
                 width: MediaQuery.of(context).size.width,
-                child: dataLoading?Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),):ListView.builder(
-                  itemCount: getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.length,
-                  padding: const EdgeInsets.only(top: 20),
-                  itemBuilder: (BuildContext context, int index) {
-                    var data = getBarCodeCatelogNameList!.getBarCodeCatalogNameList![index];
-                    return GestureDetector(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>SingleCatelogScreen(catelog: data,))).then((value) {
-                          getSelectCatelogData();
-                        });
-                      },
-                      child: Card(
-                        elevation: 6,
-                        margin: const EdgeInsets.only(bottom: 8,left: 8,right: 8),
+                child: dataLoading?Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),):Column(
+                  children: [
+                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: (MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/(userMobile(context)?4: 6))-10,
+                      child: ListView.builder(
+                        itemCount: getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.length,
+                        padding: const EdgeInsets.only(top: 20),
+                        itemBuilder: (BuildContext context, int index) {
+                          var data = getBarCodeCatelogNameList!.getBarCodeCatalogNameList![index];
+                          return GestureDetector(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>SingleCatelogScreen(catelog: data,))).then((value) {
+                                getSelectCatelogData();
+                              });
+                            },
+                            child: Card(
+                              elevation: 6,
+                              margin: const EdgeInsets.only(bottom: 8,left: 8,right: 8),
 
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 8),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 8),
 
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(5)
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("   "+data.label!,style: TextStyle(color: Colors.black,fontSize: userMobile(context)? 15.sp:20.sp,fontWeight: FontWeight.w600),),
-                              Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: (){
-                                      controller.clear();
-                                      controller.text = data.label!.split(" ").first;
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(5)
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("   "+data.label!,style: TextStyle(color: Colors.black,fontSize: userMobile(context)? 15.sp:20.sp,fontWeight: FontWeight.w600),),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: (){
+                                            controller.clear();
+                                            controller.text = data.label!.split(" ").first;
 
-                                      openUpdateCatelog(context,data);
-                                    },
-                                    child: Padding(
-                                      padding:  EdgeInsets.symmetric(horizontal: 2.5.sp),
-                                      child: Icon(Icons.edit_note_sharp,color: const Color(0xff5f1e80),size: userMobile(context)?20.sp:30.sp,),
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: (){
-                                      shareDetails(context,data);
-                                     // Share.share('check out my website https://example.com', subject: 'Look what I made!');
-                                    },
-                                    child: Padding(
-                                      padding:  EdgeInsets.symmetric(horizontal: 5.sp),
-                                      child: Icon(Icons.share,color: const Color(0xff5f1e80),size:  userMobile(context)?20.sp:30.sp,),
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap:(){
-                                      printCatelog(context,data);
-                                     },
-                                    child: Padding(
-                                      padding:  EdgeInsets.symmetric(horizontal: 5.sp),
-                                      child: Text("Print",style: TextStyle(color: const Color(0xff5f1e80),fontSize: userMobile(context)? 15.sp:18.sp,fontWeight: FontWeight.w800),),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
+                                            openUpdateCatelog(context,data);
+                                          },
+                                          child: Padding(
+                                            padding:  EdgeInsets.symmetric(horizontal: 2.5.sp),
+                                            child: Icon(Icons.edit_note_sharp,color: const Color(0xff5f1e80),size: userMobile(context)?20.sp:30.sp,),
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: (){
+                                            shareDetails(context,data);
+                                           // Share.share('check out my website https://example.com', subject: 'Look what I made!');
+                                          },
+                                          child: Padding(
+                                            padding:  EdgeInsets.symmetric(horizontal: 5.sp),
+                                            child: Icon(Icons.share,color: const Color(0xff5f1e80),size:  userMobile(context)?20.sp:30.sp,),
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap:(){
+                                            printCatelog(context,data);
+                                           },
+                                          child: Padding(
+                                            padding:  EdgeInsets.symmetric(horizontal: 5.sp),
+                                            child: Text("Print",style: TextStyle(color: const Color(0xff5f1e80),fontSize: userMobile(context)? 15.sp:18.sp,fontWeight: FontWeight.w800),),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
+                    ),
+                  ],
                 ),
               )
 

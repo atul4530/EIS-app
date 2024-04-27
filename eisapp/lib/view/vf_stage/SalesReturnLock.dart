@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:http/http.dart';
 
+import '../../helper/ApproveLoaderHelper.dart';
 import '../../model/GetVfStageDetaulsModel.dart' as e;
 import '../CreateCatelog.dart';
 import '../design_consts/DecorationMixin.dart';
 import 'details_call.dart';
+import 'package:get/get.dart' as getter;
 
 class SalesReturnLock extends StatefulWidget {
   e.Result result;
@@ -20,6 +22,9 @@ class SalesReturnLock extends StatefulWidget {
 
 class _SalesReturnLockState extends State<SalesReturnLock> with BackgroundDecoration{
   bool dataLoading = false;
+
+  ApproveoaderHelper approveoaderHelper = getter.Get.find();
+
 
   @override
   void initState() {
@@ -33,6 +38,8 @@ class _SalesReturnLockState extends State<SalesReturnLock> with BackgroundDecora
   sales_return_lock_call(BuildContext context) async {
     setState(() {
       dataLoading=true;
+      approveoaderHelper.approveLoading=true;
+      approveoaderHelper.update();
     });
     Response response = await details_call("api/a/sql/get_vf_sales_return_details/csc/${widget.result.vfId}/");
     if(response.statusCode==200){
@@ -40,12 +47,18 @@ class _SalesReturnLockState extends State<SalesReturnLock> with BackgroundDecora
       salesReturnLock= SalesReturnLockModel.fromJson(jsonDecode(response.body));
       setState(() {
         dataLoading=false;
+        if(salesReturnLock!.result!.isNotEmpty){
+          approveoaderHelper.approveLoading=false;
+          approveoaderHelper.update();
+        }
       });
     }
     else
     {
       setState(() {
         dataLoading=false;
+        approveoaderHelper.approveLoading=true;
+        approveoaderHelper.update();
       });
     }
   }
@@ -68,13 +81,15 @@ class _SalesReturnLockState extends State<SalesReturnLock> with BackgroundDecora
             detailsLabeling("Invoice Date", salesReturnLock!.result!.first.invDt?? '-',context),
             detailsLabeling("Party Name", salesReturnLock!.result!.first.invPartyName?? '-',context),
             detailsLabeling("Location", salesReturnLock!.result!.first.locationName?? '-',context),
+            SizedBox(height: 10,),
             ListView.builder(
                 itemCount: salesReturnLock!.result!.length,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context,index){
                   return orderCard(context,salesReturnLock!.result![index]);
-                })
+                }),
+            SizedBox(height: 60,),
           ],
         ),
       ),
@@ -82,10 +97,14 @@ class _SalesReturnLockState extends State<SalesReturnLock> with BackgroundDecora
   }
 
   Widget orderCard(BuildContext context,Result result){
-    double font_Size = userMobile(context) ? 16.sp : 20.sp;
+    double font_Size = userMobile(context) ? 15.sp : 19.sp;
     return Card(
       color: Colors.white,
-      elevation: 2,
+      elevation: 4,
+      shadowColor: Colors.black,
+      surfaceTintColor: Colors.white,
+      margin: EdgeInsets.symmetric(vertical: 10),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       child: Container(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -107,39 +126,44 @@ class _SalesReturnLockState extends State<SalesReturnLock> with BackgroundDecora
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Product Code",style: TextStyle(fontSize: font_Size-2.sp,color: Colors.black.withOpacity(0.4)),),
-                      Text(result.productCode.toString(),style: TextStyle(fontSize: font_Size-2.sp,color: Colors.black),)
-                    ],
+                  Container(
+                    width: 30.w,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Product Code",style: TextStyle(fontSize: font_Size-2.sp,color: Color(0xff9DA5BC),fontWeight: FontWeight.w600),),
+                        Text(result.productCode.toString(),style: TextStyle(fontSize: font_Size-2.sp,color: Colors.black,fontWeight: FontWeight.w600),)
+                      ],
+                    ),
                   ),
                   Container(
+                    width: 30.w,
                     decoration: BoxDecoration(
-                        border: Border(left: BorderSide(width: 1,color: Colors.black.withOpacity(0.4)))
+                        border: Border(left: BorderSide(width: 1,color: Color(0xff9DA5BC)))
                     ),
                     child: Container(
                       margin: EdgeInsets.only(left: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Rate",style: TextStyle(fontSize: font_Size-2.sp,color: Colors.black.withOpacity(0.4)),),
-                          Text(result.mcpRateIntl.toString(),style: TextStyle(fontSize: font_Size-2.sp,color: Colors.black),)
+                          Text("Rate",style: TextStyle(fontSize: font_Size-2.sp,color: Color(0xff9DA5BC),fontWeight: FontWeight.w600),),
+                          Text(result.mcpRateIntl.toString(),style: TextStyle(fontSize: font_Size-2.sp,color: Colors.black,fontWeight: FontWeight.w600),)
                         ],
                       ),
                     ),
                   ),
                   Container(
+                    width: 30.w,
                     decoration: BoxDecoration(
-                        border: Border(left: BorderSide(width: 1,color: Colors.black.withOpacity(0.4)))
+                        border: Border(left: BorderSide(width: 1,color: Color(0xff9DA5BC)))
                     ),
                     child: Container(
                       margin: EdgeInsets.only(left: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Amount",style: TextStyle(fontSize: font_Size-2.sp,color: Colors.black.withOpacity(0.4)),),
-                          Text(result.mcpAmtIntl.toString(),style: TextStyle(fontSize: font_Size-2.sp,color: Colors.black),)
+                          Text("Amount",style: TextStyle(fontSize: font_Size-2.sp,color: Color(0xff9DA5BC),fontWeight: FontWeight.w600),),
+                          Text(result.mcpAmtIntl.toString(),style: TextStyle(fontSize: font_Size-2.sp,color: Colors.black,fontWeight: FontWeight.w600),)
                         ],
                       ),
                     ),

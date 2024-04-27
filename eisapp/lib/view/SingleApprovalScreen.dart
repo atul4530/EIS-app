@@ -73,14 +73,14 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
             child: Text(
               widget.result.vfCode!,
               style: TextStyle(
-                  color: const Color(0xff6a208f),
+                  color: const Color(0xff5338B4),
                   fontSize: userMobile(context) ? 16.sp : 20.sp,
-                  fontWeight: FontWeight.w500),
+                  fontWeight: FontWeight.w600),
             ),
           ),
           Card(
             elevation: 1,
-            margin: EdgeInsets.zero,
+            margin: EdgeInsets.only(bottom: 8),
             shape: BeveledRectangleBorder(
               borderRadius: BorderRadius.circular(9.w),
             ),
@@ -97,11 +97,9 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
                 child: TextField(
                   controller: searchController,
                   onChanged: (val){
-                    if(val.trim().length>0){
-                      setState(() {
+                    setState(() {
 
-                      });
-                    }
+                    });
                   },
                   decoration: InputDecoration(
                       border: InputBorder.none,
@@ -116,7 +114,7 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
                             size: userMobile(context) ? 20.sp : 35.sp,
                           )),
                       contentPadding:
-                          const EdgeInsets.only(bottom: 11, left: 0),
+                          const EdgeInsets.only(bottom: 11, left: 0,top: 5),
                       hintStyle: TextStyle(
                           fontSize: userMobile(context) ? 16.sp : 21.sp,
                           color: Colors.black.withOpacity(0.3))),
@@ -125,7 +123,7 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
             ),
           ),
           Container(
-            height: userMobile(context) ? 63.h : 70.h,
+            height: userMobile(context) ? 68.h : 66.h,
             child:dataLoading? Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),): ListView.builder(
               itemCount: getVfStageDetailsModel!.result!.length,
               //physics: NeverScrollableScrollPhysics(),
@@ -134,16 +132,18 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
 
                 var data = getVfStageDetailsModel!.result![index];
                 print("-------${data.vfStageId}");
-                double font_Size = userMobile(context) ? 15.sp : 20.sp;
+                double font_Size = userMobile(context) ? 15.sp : 19.sp;
                 if(searchController.text.trim().length>0){
-                  if(!data.approverName!.toString().toLowerCase().contains(searchController.text.trim())){
+                  if(!data.toJson().toString().toLowerCase().contains(searchController.text.trim().toLowerCase())){
                     return Container();
                   }
                 }
 
                 return GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=> VfStageDetails(result: data,name: widget.result.vfCode!,)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> VfStageDetails(result: data,name: widget.result.vfCode!,))).then((value) {
+                      get_bc_vf_stage_details(context);
+                    });
                   },
                   child: Card(
                     elevation: 6,
@@ -160,7 +160,7 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "${data.vfInvId}-${data.vfInvNo}",
+                                "${data.vfInvType}-${data.vfInvNo}",
                                 style: TextStyle(
                                     color: const Color(0xff6a208f),fontWeight: FontWeight.w600,
                                     fontSize: font_Size),
@@ -178,10 +178,10 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
                             height: 4,
                           ),
                           Text(
-                            "${data.subject}",
+                            "${data.subject.toString()=="null"?"-":data.subject.toString()}",
                             style: TextStyle(
                                 color: Colors.black.withOpacity(0.3),
-                                fontSize: font_Size - 2.sp,
+                                fontSize: font_Size - 1.sp,
                                 fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(
@@ -191,17 +191,17 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                "Approver Name:",
+                                "Approver Name :  ",
                                 style: TextStyle(
                                     color: const Color(0xff000000),
-                                    fontSize: font_Size - 3.sp,
+                                    fontSize: font_Size - 1.sp,
                                     fontWeight: FontWeight.w600),
                               ),
                               Text(
                                 "${data.approverName}",
                                 style: TextStyle(
                                     color: const Color(0xff6a208f),
-                                    fontSize: font_Size - 3.sp,
+                                    fontSize: font_Size - 1.sp,
                                     fontWeight: FontWeight.w600),
                               ),
                             ],
@@ -212,17 +212,17 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
                           Row(
                             children: [
                               Text(
-                                "Remarks:",
+                                "Remarks : ",
                                 style: TextStyle(
                                     color: const Color(0xff000000),
-                                    fontSize: font_Size - 3.sp,
+                                    fontSize: font_Size - 1.sp,
                                     fontWeight: FontWeight.w600),
                               ),
                               Text(
                                 "${data.remarks == "null"?"-":data.remarks}",
                                 style: TextStyle(
                                     color: const Color(0xff6a208f),
-                                    fontSize: font_Size - 3.sp,
+                                    fontSize: font_Size - 1.sp,
                                     fontWeight: FontWeight.w600),
                               ),
                             ],
@@ -255,7 +255,7 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 3),
+                                      horizontal: 25, vertical: 3),
                                   decoration: BoxDecoration(
                                       color: Color(0xff0fd587),
                                       borderRadius: BorderRadius.circular(4)),
@@ -263,7 +263,7 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
                                     "APPROVE",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
-                                        color: Colors.white, fontSize: font_Size),
+                                        color: Colors.white, fontSize: font_Size-3.sp),
                                   ),
                                 ),
                               )
@@ -290,9 +290,10 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       //this right here
       child: Container(
-        height: userMobile(context) ? 51.w : 30.w,
-        width: userMobile(context) ? 75.w : 60.w,
+        height: userMobile(context) ? 51.w : 43.w,
+        width: userMobile(context) ? 75.w : 65.w,
         color: Colors.white,
+        padding: EdgeInsets.all(userMobile(context) ?0:4.w),
         child: Column(
           children: <Widget>[
             Padding(
@@ -347,7 +348,7 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
                       Navigator.pop(context);
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                      padding: EdgeInsets.symmetric(horizontal: userMobile(context) ?15:25, vertical: 8),
                       decoration: BoxDecoration(
                           color: Color(0xffff402a),
                           borderRadius: BorderRadius.circular(4)),
@@ -355,6 +356,7 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
                         "CANCEL",
                         style: TextStyle(
                             color: Color(0xffffffff),
+                            fontWeight: FontWeight.w600,
                             fontSize: userMobile(context) ? 13.sp : 18.sp),
                       ),
                     ),
@@ -364,16 +366,15 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      if(controller.text.trim().length>0){
-                        LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(
-                            jsonDecode(
-                                (await PreferenceHelper().getStringValuesSF("data")).toString()));
+                      LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(
+                          jsonDecode(
+                              (await PreferenceHelper().getStringValuesSF("data")).toString()));
 
-                        approveCall(context,"catalog/vfapprove/a/$id/${await loginResponseModel.data!.first.empId}?comment=${controller.text.trim()}");
-                      }
+                      approveCall(context,"catalog/vfapprove/a/$id/${await loginResponseModel.data!.first.empId}?comment=${controller.text.trim()}");
+
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                      padding: EdgeInsets.symmetric(horizontal: userMobile(context) ?15:25, vertical: 8),
                       decoration: BoxDecoration(
                           color: Color(0xff0fd587),
                           borderRadius: BorderRadius.circular(4)),
@@ -381,6 +382,7 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
                         "APPROVE",
                         style: TextStyle(
                             color: Colors.white,
+                            fontWeight: FontWeight.w600,
                             fontSize: userMobile(context) ? 13.sp : 18.sp),
                       ),
                     ),
@@ -394,9 +396,8 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
     );
     showDialog(context: context, builder: (BuildContext context) => errorDialog);
   }
-}
 
-approveCall(BuildContext context,String url) async {
+  approveCall(BuildContext context,String url) async {
     Navigator.pop(context);
     showLoaderDialog(context);
     var response = await ApiService.getData(url);
@@ -406,9 +407,10 @@ approveCall(BuildContext context,String url) async {
     if (response.body.contains("SUCCESS")) {
       var snackBar =  SnackBar(
         content: Text(
-            "Approved!!!!",style: TextStyle(color: Colors.white,fontSize: 16.sp,fontWeight: FontWeight.w800),),
+          "Approved!!!!",style: TextStyle(color: Colors.white,fontSize: 16.sp,fontWeight: FontWeight.w800),),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      get_bc_vf_stage_details(context);
     } else {
       const snackBar = SnackBar(
         content: Text("Something Went Wrong!!"),
@@ -416,6 +418,8 @@ approveCall(BuildContext context,String url) async {
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
 
+  }
 }
+
 
 

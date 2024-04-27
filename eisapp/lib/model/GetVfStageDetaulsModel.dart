@@ -132,4 +132,35 @@ class Result {
         keyValue: json["KEY_VALUE"].toString(),
       );
 
+  Map<String, dynamic> toJson() => {
+    "VF_ID": vfId,
+    "VF_INV_ID": vfInvId,
+    "VF_INV_TYPE": vfInvType,
+    "VF_INV_NO": vfInvNo,
+    "ACTION_BY": actionBy,
+    "VF_STAGE_ID": vfStageId,
+    "VF_CODE": vfInvType,
+    "IS_REQUIRED": isRequired,
+    "IS_VERIFIED": isVerified,
+    "IS_PASSED_TO_MAIL": isPassedToMail,
+    "SUBJECT": subject,
+    "APPROVER_EIS_ID": approverEisId,
+    "APPROVER_EMAIL_OFF": approverEmailOff,
+    "APPROVER_MOBILE_NO": approverMobileNo,
+    "CC_MAIL_IDS": ccMailIds,
+    "BCC_MAIL_IDS": bccMailIds,
+    "REMARKS": remarks,
+    "VF_ACTION": vfAction,
+    "IS_APP_MOBILE": isAppMobile,
+    "USER_COMMENTS": userComments,
+    "IS_LOCKED": isLocked,
+    "SYSTEM_REMARKS": systemRemarks,
+    "IS_DELETED": isDeleted,
+    "CSC_ID": cscId,
+    "CSC_CODE": cscCode,
+    "CUSTOMER_ALIAS_NAME": customerAliasName,
+    "APPROVER_NAME": approverName,
+    "KEY_VALUE": keyValue,
+  };
+
 }

@@ -24,17 +24,15 @@ Future<Response> details_call(String url) async {
 
 Widget detailsLabeling(String label,String value,BuildContext context){
   double font_Size = userMobile(context) ? 15.sp : 20.sp;
-  return Padding(
+  return Container(
     padding: const EdgeInsets.symmetric(vertical: 1.0),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text(label+":  ",style: TextStyle(color: Colors.black.withOpacity(0.5),fontSize: font_Size,fontWeight: FontWeight.w600),),
         Container(
-            width: 30.w,
-            child: Text(label+":  ",style: TextStyle(color: Colors.black.withOpacity(0.5),fontSize: font_Size),)),
-        Container(
-            width: 60.w,
-            child: Text(value,style: TextStyle(color: Colors.black,fontSize: 16),maxLines: null,)),
+            width: 65.w,
+            child: Text(value,style: TextStyle(color: Colors.black,fontSize: font_Size,fontWeight: FontWeight.w600),maxLines: null,)),
       ],
     ),
   );

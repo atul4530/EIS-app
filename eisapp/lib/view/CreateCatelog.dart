@@ -137,13 +137,13 @@ class _CreateCatelogState extends State<CreateCatelog>
               children: [
                 SizedBox(
                   //color: Colors.black,
-                  height: MediaQuery.of(context).size.height / 9,
+                  height: MediaQuery.of(context).size.height / (userMobile(context)? 10:7.8),
                   child: Column(
                     children: [
                       GetBuilder<SelectCatalogHelper>(
                         builder: (controller) {
                           return Padding(
-                            padding: EdgeInsets.all(userMobile(context) ? 8.0 : 16),
+                            padding: EdgeInsets.all(userMobile(context) ? 8.0 : 12),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -363,11 +363,11 @@ class _CreateCatelogState extends State<CreateCatelog>
                                       SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: userMobile(context) ? 2 :3,
                                           mainAxisSpacing:
-                                              userMobile(context) ? 2 : 10,
+                                              userMobile(context) ? 2 : 4,
                                           childAspectRatio:
                                               userMobile(context) ? .82 : 0.50,
                                           crossAxisSpacing:
-                                              userMobile(context) ? 2 : 10),
+                                              userMobile(context) ? 2 : 4),
                                   padding: const EdgeInsets.all(0),
                                   // padding around the grid
                                   itemCount: getBarCodeCatalogListModel!
@@ -383,10 +383,10 @@ class _CreateCatelogState extends State<CreateCatelog>
                                       }
                                       else
                                         {
-                                          return gridItem(context, details);
+                                          return userMobile(context)? gridItem(context, details):gridItemTab(context, details);
                                         }
                                     }
-                                    return gridItem(context, details);
+                                    return userMobile(context)? gridItem(context, details):gridItemTab(context, details);
                                   },
                                 ),
                               ),
@@ -404,6 +404,115 @@ class _CreateCatelogState extends State<CreateCatelog>
   }
 
   Widget gridItem(
+      BuildContext context, GetBarCodeCatalogList getBarCodeCatalogList) {
+    print("----Stock : ${getBarCodeCatalogList.stockQty!}");
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProductDetailsScreen(
+                    cont_id: getBarCodeCatalogList.contId.toString(),
+                    data:getBarCodeCatalogList)));
+      },
+      child: Card(
+        elevation: 6,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: Container(
+          width: MediaQuery.of(context).size.width / 2.2,
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(12)),
+          child: Stack(
+            alignment: Alignment.topRight,
+            children: [
+              Column(
+                children: [
+                  Column(
+                    children: [
+                      Container(
+                          width: MediaQuery.of(context).size.width / 2.1,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(12),
+                                topRight: Radius.circular(12)),
+                          ),
+                          alignment: Alignment.center,
+                          child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12)),
+                              child: Image.network(
+                                getBarCodeCatalogList.img!,
+                                height: MediaQuery.of(context).size.width / 5.5,
+                                width: MediaQuery.of(context).size.width / 6.5,
+                                fit: BoxFit.cover,
+                              ))),
+                      Container(
+                        width: MediaQuery.of(context).size.width / 2.1,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                            color:Color(0xFFD1C6FE)),
+                        child: Text(
+                          getBarCodeCatalogList.contTypeNo!,
+                          style: TextStyle(fontWeight: FontWeight.w600,
+                              fontSize: userMobile(context) ? 13.sp : 20.sp),
+                        ),
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 4, right: 4, bottom: 8, top: 3),
+                    child: Column(
+                      children: [
+                        detailedWidget("${getBarCodeCatalogList.contId!}"),
+                        detailedWidget(
+                            getBarCodeCatalogList.jewelleryTypeName!),
+                        detailedWidget(getBarCodeCatalogList.collection1!),
+                        detailedWidget(
+                            getBarCodeCatalogList.businessCategoryName!),
+                        getBarCodeCatalogList.stoneDesc ==null?Container(): detailedWidget((getBarCodeCatalogList.stoneDesc ?? '').length >
+                                19
+                            ? getBarCodeCatalogList.stoneDesc!.substring(0, 20)
+                            : getBarCodeCatalogList.stoneDesc ?? ''),
+                        detailedWidget(getBarCodeCatalogList.metalDesc!.length >
+                                19
+                            ? getBarCodeCatalogList.metalDesc!.substring(0, 20)
+                            : getBarCodeCatalogList.metalDesc!),
+                        // detailedWidget(getBarCodeCatalogList.metalDesc!),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              GestureDetector(
+                onTap: () async {
+                  if (selectCatalogHelper.selected_value == "Select Catalog") {
+                    await getBarcodeCatelogNameListModel();
+                    openDigitalCatelog(context, getBarCodeCatalogList);
+                  } else {
+                    submitData(context, getBarCodeCatalogList);
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.add_shopping_cart_outlined,
+                    color: const Color(0xff5338b4),
+                    size: userMobile(context) ? 24.sp : 27.sp,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget gridItemTab(
       BuildContext context, GetBarCodeCatalogList getBarCodeCatalogList) {
     print("----Stock : ${getBarCodeCatalogList.stockQty!}");
     return GestureDetector(

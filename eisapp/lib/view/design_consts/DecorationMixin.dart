@@ -1,7 +1,6 @@
 import 'package:eisapp/view/CreateCatelog.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -68,4 +67,5 @@ mixin BackgroundDecoration{
   Widget loader_center(BuildContext context){
     return Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),);
   }
+
 }

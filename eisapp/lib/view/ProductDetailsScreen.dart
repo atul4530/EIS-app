@@ -117,12 +117,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
             children: [
               SizedBox(
                 //color: Colors.black,
-                height: MediaQuery.of(context).size.height / 9,
+                height: MediaQuery.of(context).size.height / (userMobile(context)?10: 9),
                 child: Column(
                   children: [
                     GetBuilder<SelectCatalogHelper>(builder: (controller) {
                       return Padding(
-                        padding: EdgeInsets.all(userMobile(context) ? 8.0 : 16),
+                        padding: EdgeInsets.all(userMobile(context) ? 8.0 : 12),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -246,7 +246,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
               Container(
                 decoration: decorationCommon(),
                 height: MediaQuery.of(context).size.height -
-                    MediaQuery.of(context).size.height /(userMobile(context)?7.2: 7.6),
+                    MediaQuery.of(context).size.height /(userMobile(context)?7.2: 7.3),
                 width: MediaQuery.of(context).size.width,
                 child: dataLoading
                     ? loader_center(context)
@@ -758,11 +758,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                                   ),
                                   GestureDetector(
                                     onTap: () async {
-                                      if (selected_catelog ==
-                                          "Select Catelog") {
+                                      if (selectCatalogHelper.selected_value ==
+                                          "Select Catalog") {
                                         await getBarcodeCatelogNameListModel();
-                                        openDigitalCatelog(
-                                            context, widget.data);
+                                        openDigitalCatelog(context,widget.data);
                                       } else {
                                         submitData(context, widget.data);
                                       }
@@ -795,6 +794,40 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
   List<GetBarCodeCatalogNameList> selectedData = [];
   List<GetCatalogReqColumn> selectedDataContract = [];
 
+  getBarcodeCatelogNameListModel() async {
+    LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(
+        jsonDecode(
+            (await PreferenceHelper().getStringValuesSF("data")).toString()));
+    showLoaderDialog(context);
+    selectedColumnDataContract.clear();
+    var response = await ApiService.getData(selectedContact
+        ? "rfid/TA/result/getCatalogReqColumns/-1/${loginResponseModel.data!.first.cscId}/-1/-1/'CONTRACT'/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1"
+        : "rfid/TA/result/getBarCodeCatalogNameList/-1/${loginResponseModel.data!.first.cscId!}/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1");
+    if (selectedContact) {
+      GetBarCodeCatelogRequriedColumnListModel
+      getBarCodeCatelogRequriedColumnListModel =
+      GetBarCodeCatelogRequriedColumnListModel.fromJson(
+          jsonDecode(response.body));
+      if (getBarCodeCatelogRequriedColumnListModel.result ?? false) {
+        Navigator.pop(context);
+        setState(() {
+          selectedColumnDataContract.addAll(
+              getBarCodeCatelogRequriedColumnListModel.getCatalogReqColumns!);
+        });
+      } else {}
+    } else {
+      GetBarCodeCatelogNameListModel getBarCodeCatelogNameListModel =
+      GetBarCodeCatelogNameListModel.fromJson(jsonDecode(response.body));
+      if (getBarCodeCatelogNameListModel.result ?? false) {
+        Navigator.pop(context);
+        setState(() {
+          selectedColumnData.addAll(
+              getBarCodeCatelogNameListModel.getBarCodeCatalogNameList!);
+        });
+      } else {}
+    }
+  }
+
   TextEditingController catelogNameController = TextEditingController();
   TextEditingController remarksController = TextEditingController();
 
@@ -811,6 +844,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
             "Added Successfully ${(jsonDecode(response.body))["BarCodeCatalogId"].first["digital_catalogue_name"]}"),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      selectCatalogHelper.getBarCodeCatelogNameList = GetBarCodeCatelogNameListModel(getBarCodeCatalogNameList: [GetBarCodeCatalogNameList(label: (jsonDecode(response.body))["BarCodeCatalogId"].first["digital_catalogue_name"],value: int.parse((jsonDecode(response.body))["BarCodeCatalogId"].first["digital_catalogue_id"].toString()))]);
+      selectCatalogHelper.update();
+      selectCatalogHelper.getSelectCatelogData();
     } else {
       const snackBar = SnackBar(
         content: Text("Something Went Wrong!!"),
@@ -819,39 +855,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     }
   }
 
-  getBarcodeCatelogNameListModel() async {
-    LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(
-        jsonDecode(
-            (await PreferenceHelper().getStringValuesSF("data")).toString()));
-    showLoaderDialog(context);
-    selectedColumnDataContract.clear();
-    var response = await ApiService.getData(selectedContact
-        ? "rfid/TA/result/getCatalogReqColumns/-1/${loginResponseModel.data!.first.cscId}/-1/-1/'CONTRACT'/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1"
-        : "rfid/TA/result/getBarCodeCatalogNameList/-1/${loginResponseModel.data!.first.cscId!}/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1");
-    if (selectedContact) {
-      GetBarCodeCatelogRequriedColumnListModel
-          getBarCodeCatelogRequriedColumnListModel =
-          GetBarCodeCatelogRequriedColumnListModel.fromJson(
-              jsonDecode(response.body));
-      if (getBarCodeCatelogRequriedColumnListModel.result ?? false) {
-        Navigator.pop(context);
-        setState(() {
-          selectedColumnDataContract.addAll(
-              getBarCodeCatelogRequriedColumnListModel.getCatalogReqColumns!);
-        });
-      } else {}
-    } else {
-      GetBarCodeCatelogNameListModel getBarCodeCatelogNameListModel =
-          GetBarCodeCatelogNameListModel.fromJson(jsonDecode(response.body));
-      if (getBarCodeCatelogNameListModel.result ?? false) {
-        Navigator.pop(context);
-        setState(() {
-          selectedColumnData.addAll(
-              getBarCodeCatelogNameListModel.getBarCodeCatalogNameList!);
-        });
-      } else {}
-    }
-  }
+
 
   openDigitalCatelog(
       BuildContext context, GetBarCodeCatalogList getBarCodeCatalogList) {

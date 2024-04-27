@@ -13,14 +13,18 @@ import 'package:eisapp/view/vf_stage/melting_lock.dart';
 import 'package:eisapp/view/vf_stage/pp_to_jcp_lock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../helper/ApproveLoaderHelper.dart';
 import '../../helper/pref_data.dart';
 import '../../model/GetVfStageDetaulsModel.dart';
 import '../../model/LoginResponeModel.dart';
+import '../../network/ApiService.dart';
 import '../CreateCatelog.dart';
 import '../LoginScreen.dart';
 import '../SingleApprovalScreen.dart';
+import '../loader/loader.dart';
 
 
 
@@ -37,6 +41,8 @@ class VfStageDetails extends StatefulWidget {
 
 class _VfStageDetailsState extends State<VfStageDetails>
     with BackgroundDecoration {
+
+  ApproveoaderHelper approveoaderHelper = Get.put(ApproveoaderHelper());
   @override
   void initState() {
     // TODO: implement initState
@@ -51,9 +57,10 @@ class _VfStageDetailsState extends State<VfStageDetails>
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       //this right here
       child: Container(
-        height: userMobile(context) ? 51.w : 30.w,
-        width: userMobile(context) ? 75.w : 60.w,
+        height: userMobile(context) ? 51.w : 43.w,
+        width: userMobile(context) ? 75.w : 65.w,
         color: Colors.white,
+        padding: EdgeInsets.all(userMobile(context) ?0:4.w),
         child: Column(
           children: <Widget>[
             Padding(
@@ -108,7 +115,7 @@ class _VfStageDetailsState extends State<VfStageDetails>
                       Navigator.pop(context);
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                      padding: EdgeInsets.symmetric(horizontal: userMobile(context) ?15:25, vertical: 8),
                       decoration: BoxDecoration(
                           color: Color(0xffff402a),
                           borderRadius: BorderRadius.circular(4)),
@@ -116,6 +123,7 @@ class _VfStageDetailsState extends State<VfStageDetails>
                         "CANCEL",
                         style: TextStyle(
                             color: Color(0xffffffff),
+                            fontWeight: FontWeight.w600,
                             fontSize: userMobile(context) ? 13.sp : 18.sp),
                       ),
                     ),
@@ -123,28 +131,34 @@ class _VfStageDetailsState extends State<VfStageDetails>
                   SizedBox(
                     width: 10,
                   ),
-                  GestureDetector(
-                    onTap: () async {
-                      if(controller.text.trim().length>0){
-                        LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(
-                            jsonDecode(
-                                (await PreferenceHelper().getStringValuesSF("data")).toString()));
+                  GetBuilder(
+                    init: ApproveoaderHelper(),
+                    builder: (cn) {
 
-                        approveCall(context,"catalog/vfapprove/a/$id/${await loginResponseModel.data!.first.empId}?comment=${controller.text.trim()}");
-                      }
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                      decoration: BoxDecoration(
-                          color: Color(0xff0fd587),
-                          borderRadius: BorderRadius.circular(4)),
-                      child: Text(
-                        "APPROVE",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: userMobile(context) ? 13.sp : 18.sp),
-                      ),
-                    ),
+                      return GestureDetector(
+                        onTap: () async {
+                          LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(
+                              jsonDecode(
+                                  (await PreferenceHelper().getStringValuesSF("data")).toString()));
+
+                          approveCall(context,"catalog/vfapprove/a/$id/${await loginResponseModel.data!.first.empId}?comment=${controller.text.trim()}");
+
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: userMobile(context) ?15:25, vertical: 8),
+                          decoration: BoxDecoration(
+                              color: Color(0xff0fd587),
+                              borderRadius: BorderRadius.circular(4)),
+                          child: Text(
+                            "APPROVE",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: userMobile(context) ? 13.sp : 18.sp),
+                          ),
+                        ),
+                      );
+                    }
                   ),
                 ],
               ),
@@ -187,109 +201,138 @@ class _VfStageDetailsState extends State<VfStageDetails>
     print("Vf Stage Id : ${widget.result.vfStageId}");
     return SafeArea(
       child: Scaffold(
-        bottomNavigationBar: Container(
-          height: 50,
-          color: Colors.transparent,
-          margin: EdgeInsets.all(12),
-          child: GestureDetector(
-          onTap: () {
-            approveDialogue(context,widget.result.vfId.toString());
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(
-                horizontal: 15, vertical: 3),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF6D287B),
-                    Color(0xFF584AEF),
-                  ],
-                  begin: FractionalOffset(1.0, 0.0),
-                  end: FractionalOffset(0.0, 0.0),
-                  stops: [0.0, 1.0],
-                  tileMode: TileMode.clamp),
-            ),
-            child: Center(
-              child: Text(
-                "APPROVE",
-                style: TextStyle(
-                    color: Colors.white, fontSize: font_Size),
-              ),
-            ),
-          ),
-        ),),
         body: Container(
           decoration: bgDecoration(),
-          child: SingleChildScrollView(
-            physics: const NeverScrollableScrollPhysics(),
-            child: Column(
-              children: [
-                SizedBox(
-                  //color: Colors.black,
-                  height: MediaQuery.of(context).size.height / 9,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(userMobile(context) ? 8.0 : 16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Icon(
-                                  Icons.arrow_back,
-                                  color: Colors.white,
-                                )),
-                            GestureDetector(
-                              onTap: () async {
-                                SharedPreferences pref = await SharedPreferences.getInstance();
-                                pref.clear();
-                                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                                    LoginScreen()), (Route<dynamic> route) => false);
+          child: Column(
+            children: [
+              SizedBox(
+                //color: Colors.black,
+                height: MediaQuery.of(context).size.height /(userMobile(context)? 10:7.1),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: userMobile(context) ? 8.0 : 16,top: userMobile(context) ? 8.0 : 16,bottom: userMobile(context) ? 8.0 : 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
                               },
-                              child:  Icon(Icons.logout,color: Colors.white,),
-                            )
-                          ],
-                        ),
+                              child: const Icon(
+                                Icons.arrow_back,
+                                color: Colors.white,
+                              )),
+                          logout_icon(context)
+                        ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(userMobile(context) ? 8.0 : 16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Business Control Approval",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize:
-                                  userMobile(context) ? 16.sp : 20.sp),
-                            ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(userMobile(context) ? 8.0 : 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Business Control Approval",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize:
+                                userMobile(context) ? 16.sp : 20.sp),
+                          ),
 
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                        ],
+                      ),
+                    )
+                  ],
                 ),
-                Container(
-                  decoration: decorationCommon(),
-                  height: MediaQuery.of(context).size.height -
-                      MediaQuery.of(context).size.height /3.8,
-                  width: MediaQuery.of(context).size.width,
-                  child: VfStageDetails(context,widget.name),
-                )
-              ],
-            ),
+              ),
+              Container(
+                decoration: decorationCommon(),
+                alignment: Alignment.topCenter,
+                height: (MediaQuery.of(context).size.height -
+                    MediaQuery.of(context).size.height /(userMobile(context)? 8:5.96)),
+                width: MediaQuery.of(context).size.width,
+                child: Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    SizedBox(
+                        height:  (MediaQuery.of(context).size.height -
+                            MediaQuery.of(context).size.height /(userMobile(context)? 8:5.96)),
+                        child: VfStageDetails(context,widget.name)),
+                    GetBuilder(
+                        init: ApproveoaderHelper(),
+                        builder: (cn) {
+                          if(cn.approveLoading){
+                            return Container();
+                          }
+                        return Container(
+                          height: 50,
+                          color: Colors.transparent,
+                          margin: EdgeInsets.symmetric(horizontal: 24,vertical: 12),
+                          child: GestureDetector(
+                            onTap: () {
+                              approveDialogue(context,widget.result.vfId.toString());
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 3),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                gradient: const LinearGradient(
+                                    colors: [
+                                      Color(0xFF6D287B),
+                                      Color(0xFF584AEF),
+                                    ],
+                                    begin: FractionalOffset(1.0, 0.0),
+                                    end: FractionalOffset(0.0, 0.0),
+                                    stops: [0.0, 1.0],
+                                    tileMode: TileMode.clamp),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "APPROVE",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: font_Size,fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                            ),
+                          ),);
+                      }
+                    )
+                  ],
+                ),
+              ),
+
+            ],
           ),
         ),
       ),
     );
   }
 
+  approveCall(BuildContext context,String url) async {
+    Navigator.pop(context);
+    showLoaderDialog(context);
+    var response = await ApiService.getData(url);
+    print("Reponse : ${response.body}");
+    Navigator.pop(context);
+
+    if (response.body.contains("SUCCESS")) {
+      var snackBar =  SnackBar(
+        content: Text(
+          "Approved!!!!",style: TextStyle(color: Colors.white,fontSize: 16.sp,fontWeight: FontWeight.w800),),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+     // get_bc_vf_stage_details(context);
+    } else {
+      const snackBar = SnackBar(
+        content: Text("Something Went Wrong!!"),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+
+  }
 
 
 

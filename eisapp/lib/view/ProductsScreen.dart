@@ -60,7 +60,7 @@ class _ProductsScreenState extends State<ProductsScreen> with BackgroundDecorati
         children: [
           Container(
             //color: Colors.black,
-            height: MediaQuery.of(context).size.height/9,
+            height: MediaQuery.of(context).size.height /(userMobile(context)? 10:7.8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

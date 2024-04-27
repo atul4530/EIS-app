@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> with BackgroundDecoration {
                         ),
                       ),
                     ),
-                    userMobile(context)?SizedBox(height: 0,):SizedBox(height: 25,),
+                    userMobile(context)?SizedBox(height: 0,):SizedBox(height: 15,),
                     Center(
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width / 1.8,
