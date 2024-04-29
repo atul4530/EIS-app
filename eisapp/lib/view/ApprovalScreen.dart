@@ -85,7 +85,7 @@ class _ApprovalScreenState extends State<ApprovalScreen>
                 children: [
                   Container(
                     //color: Colors.black,
-                    height: MediaQuery.of(context).size.height /(userMobile(context)? 10:(dataTablet>700?10:7.8)),
+                    height: MediaQuery.of(context).size.height /(userMobile(context)? 10:7.8),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

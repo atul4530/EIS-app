@@ -831,6 +831,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
 
   TextEditingController catelogNameController = TextEditingController();
   TextEditingController remarksController = TextEditingController();
+  TextEditingController columnController = TextEditingController();
 
   submitFormData(BuildContext context, String url) async {
     showLoaderDialog(context);
@@ -867,135 +868,257 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     showDialog<void>(
         context: context,
         builder: (context) => StatefulBuilder(builder: (context, setState) {
-              return AlertDialog(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4)),
-                contentPadding: EdgeInsets.zero,
-                content: Container(
-                  height: 75.h,
-                  width: 98.w,
-                  color: Colors.white,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Digital Catelog",
-                                style: TextStyle(
-                                    color: const Color(0xff5338b4),
-                                    fontSize: 22.sp,
-                                    fontWeight: FontWeight.bold),
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4)),
+            contentPadding: EdgeInsets.zero,
+            content: Container(
+              height: 75.h,
+              width: 98.w,
+              color: Colors.white,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Digital Catelog",
+                            style: TextStyle(
+                                color: const Color(0xff5338b4),
+                                fontSize: 22.sp,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              // ignore: prefer_is_empty
+                              if (catelogNameController.text.trim().length >
+                                  0 &&
+                                  remarksController.text.trim().length >
+                                      0 &&
+                                  selectedDataContract.length > 0 &&
+                                  expiry != "") {
+                                LoginResponseModel loginResponseModel =
+                                LoginResponseModel.fromJson(jsonDecode(
+                                    (await PreferenceHelper()
+                                        .getStringValuesSF("data"))
+                                        .toString()));
+                                List columnData = [];
+                                for (int i = 0;
+                                i < selectedDataContract.length;
+                                i++) {
+                                  columnData
+                                      .add(selectedDataContract[i].value!);
+                                }
+                                String url =
+                                    'rfid/TA/kciSaveBarCodeScan/{"catalogId":"-1","catalogName":"${catelogNameController.text.trim()}","cscId":"${loginResponseModel.data!.first.cscId}","catalogFor":"CONTRACT","reqColumns":"${columnData.toString().replaceAll("[", "").replaceAll("]", "")}","contractNo":"${getBarCodeCatalogList.contTypeNo!.replaceAll("/", "-")}","contractId":"${getBarCodeCatalogList.contId}","userId":"${await loginResponseModel.data!.first.empId}","remarks":"${remarksController.text.trim()}","expirydate":"$expiry"}';
+                                submitFormData(context, url);
+                              } else {
+                                var snackBar = const SnackBar(
+                                    content: Text('"Enter Value!!'));
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.circular(5),
                               ),
-                              GestureDetector(
-                                onTap: () async {
-                                  // ignore: prefer_is_empty
-                                  if (catelogNameController.text.trim().length >
-                                          0 &&
-                                      remarksController.text.trim().length >
-                                          0 &&
-                                      selectedDataContract.length > 0 &&
-                                      expiry != "") {
-                                    LoginResponseModel loginResponseModel =
-                                        LoginResponseModel.fromJson(jsonDecode(
-                                            (await PreferenceHelper()
-                                                    .getStringValuesSF("data"))
-                                                .toString()));
-                                    List columnData = [];
-                                    for (int i = 0;
-                                        i < selectedDataContract.length;
-                                        i++) {
-                                      columnData
-                                          .add(selectedDataContract[i].value!);
-                                    }
-                                    String url =
-                                        'rfid/TA/kciSaveBarCodeScan/{"catalogId":"-1","catalogName":"${catelogNameController.text.trim()}","cscId":"${loginResponseModel.data!.first.cscId}","catalogFor":"CONTRACT","reqColumns":"${columnData.toString().replaceAll("[", "").replaceAll("]", "")}","contractNo":"${getBarCodeCatalogList.contTypeNo!.replaceAll("/", "-")}","contractId":"${getBarCodeCatalogList.contId}","userId":"${await loginResponseModel.data!.first.empId}","remarks":"${remarksController.text.trim()}","expirydate":"$expiry"}';
-                                    submitFormData(context, url);
-                                  } else {
-                                    var snackBar = const SnackBar(
-                                        content: Text('"Enter Value!!'));
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
-                                  }
-                                },
+                              child: Text(
+                                "SAVE",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 16.sp),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 12),
+                              child: Text(
+                                "Catelog Name*",
+                                style: TextStyle(
+                                    color: Colors.black.withOpacity(0.5),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 13.sp),
+                                textAlign: TextAlign.start,
+                              )),
+                          Container(
+                            height: 30.sp,
+                            margin:
+                            const EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Colors.black.withOpacity(0.5),
+                                    width: 0.5),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: TextField(
+                              controller: catelogNameController,
+                              decoration: const InputDecoration(
+                                  border: InputBorder.none),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            margin:
+                            const EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                              "Expiry Date",
+                              style: TextStyle(
+                                  color: Colors.black.withOpacity(0.5),
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 13.sp),
+                              textAlign: TextAlign.start,
+                            )),
+                        Container(
+                          margin:
+                          const EdgeInsets.symmetric(horizontal: 20),
+                          child: GestureDetector(
+                            onTap: () {
+                              _selectDate(context).then((value) {
+                                setState(() {});
+                              });
+                            },
+                            child: SizedBox(
+                              height: 5.h,
+                              child: Card(
+                                elevation: 1,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(10)),
+                                margin:
+                                const EdgeInsets.symmetric(vertical: 3),
+                                color: Colors.white,
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: Text(
-                                    "SAVE",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 16.sp),
+                                  padding: const EdgeInsets.all(8),
+                                  child: Container(
+                                    height: 30.sp,
+                                    width: 100.w,
+                                    //color: selectedData.contains(data)?Colors.deepPurple.withOpacity(0.5):Colors.white,
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding:
+                                      const EdgeInsets.only(left: 8.0),
+                                      child: Text(
+                                        expiry,
+                                        style: TextStyle(
+                                            fontSize: 13.5.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black
+                                                .withOpacity(0.5)),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              )
-                            ],
+                              ),
+                            ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 12),
-                                  child: Text(
-                                    "Catelog Name*",
-                                    style: TextStyle(
-                                        color: Colors.black.withOpacity(0.5),
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 13.sp),
-                                    textAlign: TextAlign.start,
-                                  )),
-                              Container(
-                                height: 30.sp,
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 12),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Colors.black.withOpacity(0.5),
-                                        width: 0.5),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: TextField(
-                                  controller: catelogNameController,
-                                  decoration: const InputDecoration(
-                                      border: InputBorder.none),
-                                ),
-                              )
-                            ],
-                          ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 12),
+                              child: Text(
+                                "Remarks",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black.withOpacity(0.5),
+                                    fontSize: 13.sp),
+                                textAlign: TextAlign.start,
+                              )),
+                          Container(
+                            height: 30.sp,
+                            margin:
+                            const EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Colors.black.withOpacity(0.5),
+                                    width: 0.5),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: TextField(
+                              controller: remarksController,
+                              decoration: const InputDecoration(
+                                  border: InputBorder.none),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: 30.sp,
+                        margin:
+                        const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Colors.black.withOpacity(0.5),
+                                width: 0.5),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: TextField(
+                          controller: columnController,
+                          onChanged: (val){
+                            setState((){});
+                          },
+                          decoration: const InputDecoration(
+                              hintText: 'Select Column Required',
+                              contentPadding: EdgeInsets.only(left: 12,bottom: 10),
+
+                              border: InputBorder.none),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: Text(
-                                  "Expiry Date",
-                                  style: TextStyle(
-                                      color: Colors.black.withOpacity(0.5),
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 13.sp),
-                                  textAlign: TextAlign.start,
-                                )),
-                            Container(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: GestureDetector(
+                      ),
+                    ),
+                    SizedBox(
+                      height: 34.h,
+                      child: ListView.builder(
+                          itemCount: selectedContact
+                              ? selectedColumnDataContract.length
+                              : selectedColumnData.length,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 8),
+                          itemBuilder: (context, index) {
+                            var data = selectedContact
+                                ? GetBarCodeCatalogNameList()
+                                : selectedColumnData[index];
+                            var dataC = selectedContact
+                                ? selectedColumnDataContract[index]
+                                : GetCatalogReqColumn();
+                            if(selectedContact? (dataC.label!.toLowerCase().contains(columnController.text.trim().toLowerCase())):data.label!.toLowerCase().contains(columnController.text.trim().toLowerCase())){
+                              return GestureDetector(
                                 onTap: () {
-                                  _selectDate(context).then((value) {
-                                    setState(() {});
-                                  });
+                                  if (selectedDataContract.contains(dataC)) {
+                                    selectedDataContract.remove(dataC);
+                                  } else {
+                                    selectedDataContract.add(dataC);
+                                  }
+
+                                  print("------- $selectedDataContract");
+                                  setState(() {});
                                 },
                                 child: SizedBox(
                                   height: 5.h,
@@ -1003,10 +1126,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                                     elevation: 1,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            BorderRadius.circular(10)),
-                                    margin:
-                                        const EdgeInsets.symmetric(vertical: 3),
-                                    color: Colors.white,
+                                        BorderRadius.circular(10)),
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 3),
+                                    color: selectedContact
+                                        ? (selectedDataContract
+                                        .contains(dataC)
+                                        ? Color(0xffd1c6fe)
+                                        : Colors.white)
+                                        : (selectedData.contains(data)
+                                        ? Color(0xffd1c6fe)
+                                        : Colors.white),
                                     child: Container(
                                       padding: const EdgeInsets.all(8),
                                       child: Container(
@@ -1015,10 +1145,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                                         //color: selectedData.contains(data)?Colors.deepPurple.withOpacity(0.5):Colors.white,
                                         alignment: Alignment.centerLeft,
                                         child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 8.0),
+                                          padding: const EdgeInsets.only(
+                                              left: 8.0),
                                           child: Text(
-                                            expiry,
+                                            selectedContact
+                                                ? dataC.label!
+                                                : data.label!,
                                             style: TextStyle(
                                                 fontSize: 13.5.sp,
                                                 fontWeight: FontWeight.w600,
@@ -1030,153 +1162,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 12),
-                                  child: Text(
-                                    "Remarks",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black.withOpacity(0.5),
-                                        fontSize: 13.sp),
-                                    textAlign: TextAlign.start,
-                                  )),
-                              Container(
-                                height: 30.sp,
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 12),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Colors.black.withOpacity(0.5),
-                                        width: 0.5),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: TextField(
-                                  controller: remarksController,
-                                  decoration: const InputDecoration(
-                                      border: InputBorder.none),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Card(
-                            elevation: 1,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(
-                                    width: 1, color: Color(0xffffffff))),
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 3),
-                            color: Color(0xffffffff),
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              child: Container(
-                                height: 30.sp,
-                                width: 100.w,
-                                //color: selectedData.contains(data)?Colors.deepPurple.withOpacity(0.5):Colors.white,
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  child: Text(
-                                    "Select Column Required*",
-                                    style: TextStyle(
-                                        fontSize: 13.5.sp,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black.withOpacity(0.5)),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 34.h,
-                          child: ListView.builder(
-                              itemCount: selectedContact
-                                  ? selectedColumnDataContract.length
-                                  : selectedColumnData.length,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0, vertical: 8),
-                              itemBuilder: (context, index) {
-                                var data = selectedContact
-                                    ? GetBarCodeCatalogNameList()
-                                    : selectedColumnData[index];
-                                var dataC = selectedContact
-                                    ? selectedColumnDataContract[index]
-                                    : GetCatalogReqColumn();
-                                return GestureDetector(
-                                  onTap: () {
-                                    if (selectedDataContract.contains(dataC)) {
-                                      selectedDataContract.remove(dataC);
-                                    } else {
-                                      selectedDataContract.add(dataC);
-                                    }
+                              );
+                            }
+                            return Container();
 
-                                    print("------- $selectedDataContract");
-                                    setState(() {});
-                                  },
-                                  child: SizedBox(
-                                    height: 5.h,
-                                    child: Card(
-                                      elevation: 1,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 12, vertical: 3),
-                                      color: selectedContact
-                                          ? (selectedDataContract
-                                                  .contains(dataC)
-                                              ? Color(0xffd1c6fe)
-                                              : Colors.white)
-                                          : (selectedData.contains(data)
-                                              ? Color(0xffd1c6fe)
-                                              : Colors.white),
-                                      child: Container(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Container(
-                                          height: 30.sp,
-                                          width: 100.w,
-                                          //color: selectedData.contains(data)?Colors.deepPurple.withOpacity(0.5):Colors.white,
-                                          alignment: Alignment.centerLeft,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 8.0),
-                                            child: Text(
-                                              selectedContact
-                                                  ? dataC.label!
-                                                  : data.label!,
-                                              style: TextStyle(
-                                                  fontSize: 13.5.sp,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.black
-                                                      .withOpacity(0.5)),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }),
-                        ),
-                      ],
+                          }),
                     ),
-                  ),
+                  ],
                 ),
-              );
-            })).then((value) {
+              ),
+            ),
+          );
+        })).then((value) {
       //   Navigator.pop(context);
     });
   }

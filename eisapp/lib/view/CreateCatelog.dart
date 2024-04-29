@@ -11,6 +11,7 @@ import 'package:eisapp/view/loader/loader.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:get/get.dart';
@@ -822,6 +823,7 @@ class _CreateCatelogState extends State<CreateCatelog>
 
   TextEditingController catelogNameController = TextEditingController();
   TextEditingController remarksController = TextEditingController();
+  TextEditingController columnController = TextEditingController();
 
   DateTime selectedDate = DateTime.now().add(const Duration(days: 15));
   String expiry = "";
@@ -1059,34 +1061,26 @@ class _CreateCatelogState extends State<CreateCatelog>
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Card(
-                            elevation: 1,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(
-                                    width: 1, color: Color(0xffffffff))),
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 3),
-                            color: Color(0xffffffff),
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              child: Container(
-                                height: 30.sp,
-                                width: 100.w,
-                                //color: selectedData.contains(data)?Colors.deepPurple.withOpacity(0.5):Colors.white,
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  child: Text(
-                                    "Select Column Required*",
-                                    style: TextStyle(
-                                        fontSize: 13.5.sp,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black.withOpacity(0.5)),
-                                  ),
-                                ),
-                              ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            height: 30.sp,
+                            margin:
+                            const EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Colors.black.withOpacity(0.5),
+                                    width: 0.5),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: TextField(
+                              controller: columnController,
+                              onChanged: (val){
+                                setState((){});
+                              },
+                              decoration: const InputDecoration(
+                               hintText: 'Select Column Required',
+                                  contentPadding: EdgeInsets.only(left: 12,bottom: 10),
+
+                                  border: InputBorder.none),
                             ),
                           ),
                         ),
@@ -1105,60 +1099,64 @@ class _CreateCatelogState extends State<CreateCatelog>
                                 var dataC = selectedContact
                                     ? selectedColumnDataContract[index]
                                     : GetCatalogReqColumn();
-                                return GestureDetector(
-                                  onTap: () {
-                                    if (selectedDataContract.contains(dataC)) {
-                                      selectedDataContract.remove(dataC);
-                                    } else {
-                                      selectedDataContract.add(dataC);
-                                    }
+                                if(selectedContact? (dataC.label!.toLowerCase().contains(columnController.text.trim().toLowerCase())):data.label!.toLowerCase().contains(columnController.text.trim().toLowerCase())){
+                                  return GestureDetector(
+                                    onTap: () {
+                                      if (selectedDataContract.contains(dataC)) {
+                                        selectedDataContract.remove(dataC);
+                                      } else {
+                                        selectedDataContract.add(dataC);
+                                      }
 
-                                    print("------- $selectedDataContract");
-                                    setState(() {});
-                                  },
-                                  child: SizedBox(
-                                    height: 5.h,
-                                    child: Card(
-                                      elevation: 1,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 12, vertical: 3),
-                                      color: selectedContact
-                                          ? (selectedDataContract
-                                                  .contains(dataC)
-                                              ? Color(0xffd1c6fe)
-                                              : Colors.white)
-                                          : (selectedData.contains(data)
-                                              ? Color(0xffd1c6fe)
-                                              : Colors.white),
-                                      child: Container(
-                                        padding: const EdgeInsets.all(8),
+                                      print("------- $selectedDataContract");
+                                      setState(() {});
+                                    },
+                                    child: SizedBox(
+                                      height: 5.h,
+                                      child: Card(
+                                        elevation: 1,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(10)),
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 3),
+                                        color: selectedContact
+                                            ? (selectedDataContract
+                                            .contains(dataC)
+                                            ? Color(0xffd1c6fe)
+                                            : Colors.white)
+                                            : (selectedData.contains(data)
+                                            ? Color(0xffd1c6fe)
+                                            : Colors.white),
                                         child: Container(
-                                          height: 30.sp,
-                                          width: 100.w,
-                                          //color: selectedData.contains(data)?Colors.deepPurple.withOpacity(0.5):Colors.white,
-                                          alignment: Alignment.centerLeft,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 8.0),
-                                            child: Text(
-                                              selectedContact
-                                                  ? dataC.label!
-                                                  : data.label!,
-                                              style: TextStyle(
-                                                  fontSize: 13.5.sp,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.black
-                                                      .withOpacity(0.5)),
+                                          padding: const EdgeInsets.all(8),
+                                          child: Container(
+                                            height: 30.sp,
+                                            width: 100.w,
+                                            //color: selectedData.contains(data)?Colors.deepPurple.withOpacity(0.5):Colors.white,
+                                            alignment: Alignment.centerLeft,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8.0),
+                                              child: Text(
+                                                selectedContact
+                                                    ? dataC.label!
+                                                    : data.label!,
+                                                style: TextStyle(
+                                                    fontSize: 13.5.sp,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.black
+                                                        .withOpacity(0.5)),
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                );
+                                  );
+                                }
+                                return Container();
+
                               }),
                         ),
                       ],
