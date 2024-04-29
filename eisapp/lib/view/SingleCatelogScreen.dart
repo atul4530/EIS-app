@@ -58,6 +58,8 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
     getBarcodeCatelogListData();
   }
 
+  var dataTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.shortestSide;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -68,7 +70,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
             children: [
               SizedBox(
                 //color: Colors.black,
-                height: MediaQuery.of(context).size.height /(userMobile(context)? 10:7.7),
+                height: MediaQuery.of(context).size.height /(userMobile(context)? 10:(dataTablet>700?10:7.7)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -112,7 +114,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
              Container(
                 decoration: decorationCommon(),
                 height: MediaQuery.of(context).size.height -
-                    MediaQuery.of(context).size.height / (userMobile(context)? 5.8:6.45),
+                    MediaQuery.of(context).size.height / (userMobile(context)? 5.8:(dataTablet>700? 8.3:6.5)),
                 width: MediaQuery.of(context).size.width,
                 child:   dataLoading? Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),):getCatelogListModelById==null?Center(child: Text("No Data Found"),): getCatelogListModelById!.getBarCodeCatalogListById!.isEmpty?Center(child: Text("No Data Found"),): GridView.builder(
                   // physics: NeverScrollableScrollPhysics(),
@@ -121,7 +123,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
                       mainAxisSpacing:
                       userMobile(context) ? 2 : 10,
                       childAspectRatio:
-                      userMobile(context) ? .82 : 0.50,
+                      userMobile(context) ? .82 :(dataTablet>700?0.55: 0.41),
                       crossAxisSpacing:
                       userMobile(context) ? 2 : 10),
                   padding: const EdgeInsets.only(top: 10, left: 4, right: 4),
@@ -130,10 +132,114 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
                   // total number of items
                   itemBuilder: (context, index) {
                     var data = getCatelogListModelById!.getBarCodeCatalogListById![index];
-                    return gridItem(context,data);
+                    return userMobile(context)? gridItem(context,data):gridItemTab(context, data);
                   },
                 ),
               )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget gridItemTab(
+      BuildContext context, GetBarCodeCatalogListById getBarCodeCatalogList) {
+   // print("----Stock : ${getBarCodeCatalogList.stockQty!}");
+    return GestureDetector(
+      onTap: () {
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) => ProductDetailsScreen(
+        //             cont_id: getBarCodeCatalogList.contId.toString(),
+        //             data:getBarCodeCatalogList)));
+      },
+      child: Card(
+        elevation: 6,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: Container(
+          width: MediaQuery.of(context).size.width / 2.2,
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(12)),
+          child: Stack(
+            alignment: Alignment.topRight,
+            children: [
+              Column(
+                children: [
+                  Column(
+                    children: [
+                      Container(
+                          width: MediaQuery.of(context).size.width / 2.1,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(12),
+                                topRight: Radius.circular(12)),
+                          ),
+                          alignment: Alignment.center,
+                          child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12)),
+                              child: Image.network(
+                                getBarCodeCatalogList.img!,
+                                height: 15.h,
+                                fit: BoxFit.cover,
+                              ))),
+                      Container(
+                        width: MediaQuery.of(context).size.width / 2.1,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                            color:Color(0xFFD1C6FE)),
+                        child: Text(
+                          getBarCodeCatalogList.contTypeNo!,
+                          style: TextStyle(fontWeight: FontWeight.w600,
+                              fontSize: 18.sp),
+                        ),
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 4, right: 4, bottom: 8, top: 3),
+                    child: Column(
+                      children: [
+                        detailedWidget("${getBarCodeCatalogList.contId!}"),
+                        detailedWidget(
+                            getBarCodeCatalogList.jewelleryTypeName!),
+                        detailedWidget(getBarCodeCatalogList.collection1!),
+                        detailedWidget(
+                            getBarCodeCatalogList.businessCategoryName!),
+                        getBarCodeCatalogList.stoneDesc ==null?Container(): detailedWidget((getBarCodeCatalogList.stoneDesc ?? '').length >
+                            19
+                            ? getBarCodeCatalogList.stoneDesc!.substring(0, 20)
+                            : getBarCodeCatalogList.stoneDesc ?? ''),
+                        detailedWidget(getBarCodeCatalogList.metalDesc!.length >
+                            19
+                            ? getBarCodeCatalogList.metalDesc!.substring(0, 20)
+                            : getBarCodeCatalogList.metalDesc!),
+                        // detailedWidget(getBarCodeCatalogList.metalDesc!),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              GestureDetector(
+                onTap: () {
+                  //openDigitalCatelog(context);
+                  deleteData(context,getBarCodeCatalogList);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.delete,
+                    color: const Color(0xffc93828),
+                    size: userMobile(context) ? 24.sp : 27.sp,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -276,7 +382,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
         Icon(
           Icons.circle_outlined,
           color: Colors.black,
-          size:userMobile(context)? 12:20,
+          size:userMobile(context)? 12:16,
         ),
         const SizedBox(
           width: 3,
@@ -286,7 +392,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
           child: Text(
             name,
             style: TextStyle(
-                fontSize: userMobile(context) ? 11.sp : 18.sp,
+                fontSize: userMobile(context) ? 11.sp : 16.sp,
                 fontWeight: FontWeight.w600),
           ),
         )

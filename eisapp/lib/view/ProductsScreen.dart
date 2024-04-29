@@ -98,30 +98,36 @@ class _ProductsScreenState extends State<ProductsScreen> with BackgroundDecorati
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(height: 20,),
-                  showCatelog?   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                     buttonTile(context,"catalog.jpg","Catalog",(){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> CreateCatelog()));
-                      }),
-                      buttonTile(context,"barcode-scan.png","Barcode\nScan",(){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> ScanContact()));
-                      }),
-                      Container(
-                        height: MediaQuery.of(context).size.width/3.4,
-                        width: MediaQuery.of(context).size.width/3.4,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Colors.transparent,
-                        ),
-                      )
-                    ],
-                  ):Row(
-                    children: [
-                      buttonTile(context,"barcode-scan.png","Barcode\nScan",(){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> ScanContact()));
-                      })
-                    ],
+                  showCatelog?   Container(
+
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                       buttonTile(context,"catalog.jpg","Catalog",(){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=> CreateCatelog()));
+                        }),
+                        buttonTile(context,"barcode-scan.png","Barcode\nScan",(){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=> ScanContact()));
+                        }),
+                        Container(
+                          height: MediaQuery.of(context).size.width/3.4,
+                          width: MediaQuery.of(context).size.width/3.4,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.transparent,
+                          ),
+                        )
+                      ],
+                    ),
+                  ):Container(
+                    margin: EdgeInsets.only(left: 20),
+                    child: Row(
+                      children: [
+                        buttonTile(context,"barcode-scan.png","Barcode\nScan",(){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=> ScanContact()));
+                        })
+                      ],
+                    ),
                   ),
                 ],
               ),

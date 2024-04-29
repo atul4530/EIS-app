@@ -61,6 +61,9 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
 
   TextEditingController searchController = TextEditingController();
 
+  var dataTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.shortestSide;
+
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -123,7 +126,7 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
             ),
           ),
           Container(
-            height: userMobile(context) ? 68.h : 66.h,
+            height: userMobile(context) ? 68.h : (dataTablet>700? 71.h:66.h),
             child:dataLoading? Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),): ListView.builder(
               itemCount: getVfStageDetailsModel!.result!.length,
               //physics: NeverScrollableScrollPhysics(),

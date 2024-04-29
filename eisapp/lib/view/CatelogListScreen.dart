@@ -71,6 +71,9 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
     _permissionRequest();
   }
 
+  var dataTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.shortestSide;
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -82,7 +85,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
             children: [
               SizedBox(
                 //color: Colors.black,
-                height: MediaQuery.of(context).size.height /(userMobile(context)? 10:7.8),
+                height: MediaQuery.of(context).size.height /(userMobile(context)? 10:(dataTablet>700?10:7.8)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -115,7 +118,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
               ),
               Container(
                 decoration: decorationCommon(),
-                height: MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/(userMobile(context)?4: 6),
+                height: MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/(userMobile(context)?4: 7),
                 width: MediaQuery.of(context).size.width,
                 child: dataLoading?Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),):Column(
                   children: [
@@ -223,7 +226,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
     Dialog errorDialog = Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)), //this right here
       child: Container(
-        height: 42.w,
+        height: userMobile(context)? 42.w:(dataTablet>700?20.h: 24.h),
         width: 85.w,
         color: Colors.white,
 
@@ -317,7 +320,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
           return Dialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)), //this right here
             child: Container(
-              height: 55.w,
+              height: userMobile(context)? 55.w:(dataTablet>700?24.h: 28.h),
               width: 85.w,
               color: Colors.white,
 
@@ -329,7 +332,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Report Format",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 16.sp),),
+                        Text("Report Format",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: userMobile(context) ?16.sp:18.sp),),
                         GestureDetector(
                             onTap: (){
                               Navigator.pop(context);
@@ -350,13 +353,13 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("${getBarCodeCatalogNameList.label}",style: TextStyle(fontSize: 14.sp,color: Colors.black,fontWeight: FontWeight.w500),),
+                          Text("${getBarCodeCatalogNameList.label}",style: TextStyle(fontSize: userMobile(context)? 14.sp:16.sp,color: Colors.black,fontWeight: FontWeight.w500),),
                           Icon(Icons.arrow_drop_down_outlined,size: 22.sp,color: Colors.black,)
                         ],
                       ),
                     ),
                   ),
-                  Text("Output",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 16.sp),),
+                  Text("Output",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: userMobile(context)? 16.sp:19.sp),),
                   Row(
                     children: [
                       Row(
@@ -374,7 +377,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                               });
                             },
                           ),
-                          const Text("PDF")
+                          Text("PDF",style: TextStyle(fontSize: userMobile(context)?14.sp:18.sp),)
                         ],
                       ),
                       Row(
@@ -392,7 +395,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                               });
                             },
                           ),
-                          const Text("Excel")
+                           Text("Excel",style: TextStyle(fontSize: userMobile(context)?14.sp:18.sp),)
                         ],
                       ),
 
@@ -442,7 +445,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                           ),
                           padding: const EdgeInsets.symmetric(horizontal: 40,vertical: 4),
                           alignment: Alignment.center,
-                          child: Text("Print",style: TextStyle(fontSize: 12.sp,color:  const Color(0xff5f1e80),fontWeight: FontWeight.w500),),
+                          child: Text("Print",style: TextStyle(fontSize: userMobile(context) ?12.sp:16.sp,color:  const Color(0xff5f1e80),fontWeight: FontWeight.w500),),
                         ),
                       ),
                       const SizedBox(width: 20,),
@@ -457,7 +460,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                           ),
                           padding: const EdgeInsets.symmetric(horizontal: 40,vertical:4),
                           alignment: Alignment.center,
-                          child: Text("Cancel",style: TextStyle(fontSize: 12.sp,color:  const Color(0xff6b6666),fontWeight: FontWeight.w500),),
+                          child: Text("Cancel",style: TextStyle(fontSize: userMobile(context) ?12.sp:16.sp,color:  const Color(0xff6b6666),fontWeight: FontWeight.w500),),
                         ),
                       ),
                     ],

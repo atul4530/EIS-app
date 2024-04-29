@@ -70,6 +70,9 @@ class _ApprovalScreenState extends State<ApprovalScreen>
     }
   }
 
+  var dataTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.shortestSide;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +85,7 @@ class _ApprovalScreenState extends State<ApprovalScreen>
                 children: [
                   Container(
                     //color: Colors.black,
-                    height: MediaQuery.of(context).size.height /(userMobile(context)? 10:7.8),
+                    height: MediaQuery.of(context).size.height /(userMobile(context)? 10:(dataTablet>700?10:7.8)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -135,7 +138,7 @@ class _ApprovalScreenState extends State<ApprovalScreen>
                     decoration: decorationCommon(),
                     height: MediaQuery.of(context).size.height -
                         MediaQuery.of(context).size.height /
-                            (userMobile(context) ? 5.2 : 5.4),
+                            (userMobile(context) ? 5.2 : 6),
                     width: 100.w,
                     child: dataLoading
                         ? Center(

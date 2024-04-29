@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:eisapp/view/CatelogListScreen.dart';
 import 'package:eisapp/view/design_consts/DecorationMixin.dart';
+import 'package:eisapp/view/vf_stage/debtor_aging_lock.dart';
 
 import 'package:flutter/material.dart';
 
@@ -47,6 +48,8 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
   }
 
   SelectCatalogHelper selectCatalogHelper = Get.find();
+  var dataTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.shortestSide;
+
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +62,7 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
               children: [
                 SizedBox(
                   //color: Colors.black,
-                  height: MediaQuery.of(context).size.height /8,
+                  height: MediaQuery.of(context).size.height /(userMobile(context)? 8:dataTablet>700?8:7),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -184,7 +187,15 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                                 children: [
                                   IconButton(onPressed: (){
                                     setState(() {
-                                      allowMultiple = !allowMultiple;
+
+                                      if(listBarcode.isNotEmpty){
+                                        openAlertBox(context);
+                                      }
+                                      else
+                                        {
+                                          allowMultiple = !allowMultiple;
+                                        }
+
                                     });
                                   }, icon: Icon(allowMultiple?Icons.check_box:Icons.check_box_outline_blank,color: Colors.white,)),
                                   Text(
@@ -452,6 +463,66 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
       ),
     );
   }
+
+
+  openAlertBox(BuildContext context){
+    Dialog errorDialog = Dialog(
+      insetPadding: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      //this right here
+      child: Container(
+        height: 25.w,
+        width: 95.w,
+        color: Colors.white,
+        child: Container(
+          padding: EdgeInsets.all(12),
+          child: Column(
+            children: [
+              Text("To change setting means scanned barcode wil be removed?",style: TextStyle(fontSize: 15.sp,color: Colors.black,fontWeight: FontWeight.w600),),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: Text("CANCEL",style: TextStyle(fontSize: 15.sp,color: label_color,fontWeight: FontWeight.w600)),),
+                  SizedBox(width: 20,),
+                  GestureDetector(
+                    onTap: (){
+                      allowMultiple = !allowMultiple;
+                      if(allowMultiple){
+                        setState(() {
+                          listBarcode=listBarcode.toSet().toList();
+
+                        });
+                        Navigator.pop(context);
+                      }
+                      else
+                        {
+                          setState(() {
+
+                          });
+                          Navigator.pop(context);
+                        }
+
+
+
+                    },
+                    child: Text("OK",style: TextStyle(fontSize: 15.sp,color: label_color,fontWeight: FontWeight.w600)),),
+                  SizedBox(width: 10,),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+    showDialog(
+        context: context, builder: (BuildContext context) => errorDialog);
+  }
+
+
 
   submitFormData(BuildContext context, String url) async {
     showLoaderDialog(context);

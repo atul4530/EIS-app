@@ -78,5 +78,22 @@ class GetBarCodeCatalogList {
     stockQty: json["STOCK_QTY"],
   );
 
+  Map<String, dynamic> toJson() => {
+    "PAGE": page,
+    "NO_OF_PAGES": noOfPages,
+    "TOTAL_RECORDS": totalRecords,
+    "RN": rn,
+    "CONT_ID": contId,
+    "CONT_TYPE_NO": contTypeNo,
+    "COLLECTION1": collection1,
+    "BUSINESS_CATEGORY_NAME":businessCategoryName,
+    "STONE_DESC": stoneDesc,
+    "METAL_DESC": metalDesc,
+    "JEWELLERY_TYPE_NAME": jewelleryTypeName,
+    "STYLE_NO": styleNo,
+    "CUSTOMER_CODE": customerCode,
+    "IMG": img,
+    "STOCK_QTY": stockQty,
+  };
 
 }

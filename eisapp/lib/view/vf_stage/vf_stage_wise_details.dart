@@ -195,6 +195,9 @@ class _VfStageDetailsState extends State<VfStageDetails>
     }
   }
 
+  var dataTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.shortestSide;
+
+
   @override
   Widget build(BuildContext context) {
     double font_Size = userMobile(context) ? 16.sp : 20.sp;
@@ -207,8 +210,9 @@ class _VfStageDetailsState extends State<VfStageDetails>
             children: [
               SizedBox(
                 //color: Colors.black,
-                height: MediaQuery.of(context).size.height /(userMobile(context)? 10:7.1),
+                height: MediaQuery.of(context).size.height /(userMobile(context)? 10:(dataTablet>700?8.8:7.1)),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
                       padding: EdgeInsets.only(left: userMobile(context) ? 8.0 : 16,top: userMobile(context) ? 8.0 : 16,bottom: userMobile(context) ? 8.0 : 16),
@@ -251,7 +255,7 @@ class _VfStageDetailsState extends State<VfStageDetails>
                 decoration: decorationCommon(),
                 alignment: Alignment.topCenter,
                 height: (MediaQuery.of(context).size.height -
-                    MediaQuery.of(context).size.height /(userMobile(context)? 8:5.96)),
+                    MediaQuery.of(context).size.height /(userMobile(context)? 8:dataTablet>700?7.5:5.96)),
                 width: MediaQuery.of(context).size.width,
                 child: Stack(
                   alignment: Alignment.bottomCenter,
