@@ -80,7 +80,12 @@ class _SalesReturnLockState extends State<SalesReturnLock> with BackgroundDecora
             detailsLabeling("Invoice NO", "${salesReturnLock!.result!.first.invNo ?? '-'}",context),
             detailsLabeling("Invoice Date", salesReturnLock!.result!.first.invDt?? '-',context),
             detailsLabeling("Party Name", salesReturnLock!.result!.first.invPartyName?? '-',context),
-            detailsLabeling("Location", salesReturnLock!.result!.first.locationName?? '-',context),
+            detailsLabeling("Shipment", salesReturnLock!.result!.first.shipmentTypeName?? '-',context),
+            detailsLabeling("Current Year Sale", salesReturnLock!.result!.first.cySalesAmtIntl!.trim()?? '-',context),
+            detailsLabeling("Previous Year Sale", salesReturnLock!.result!.first.pySalesAmtIntl!.trim()?? '-',context),
+            detailsLabeling("Current Year Sale Return", salesReturnLock!.result!.first.cySalesReturnAmtIntl!.trim()?? '-',context),
+            detailsLabeling("Previous Year Sale Return", salesReturnLock!.result!.first.pySalesReturnAmtIntl!.trim()?? '-',context),
+            //detailsLabeling("Location", salesReturnLock!.result!.first.locationName?? '-',context),
             SizedBox(height: 10,),
             ListView.builder(
                 itemCount: salesReturnLock!.result!.length,

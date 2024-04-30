@@ -31,10 +31,10 @@ class Result {
   String? invDt;
   String? invPartyName;
   String? shipmentTypeName;
-  dynamic cySalesAmtIntl;
-  dynamic pySalesAmtIntl;
-  dynamic cySalesReturnAmtIntl;
-  dynamic pySalesReturnAmtIntl;
+  String? cySalesAmtIntl;
+  String? pySalesAmtIntl;
+  String? cySalesReturnAmtIntl;
+  String? pySalesReturnAmtIntl;
   String? productCode;
   String? locationName;
   int? invQty1;
@@ -69,10 +69,10 @@ class Result {
     invDt: json["INV_DT"].toString(),
     invPartyName: json["INV_PARTY_NAME"].toString(),
     shipmentTypeName: json["SHIPMENT_TYPE_NAME"].toString(),
-    cySalesAmtIntl: json["CY_SALES_AMT_INTL"],
-    pySalesAmtIntl: json["PY_SALES_AMT_INTL"],
-    cySalesReturnAmtIntl: json["CY_SALES_RETURN_AMT_INTL"],
-    pySalesReturnAmtIntl: json["PY_SALES_RETURN_AMT_INTL"],
+    cySalesAmtIntl: json["CY_SALES_AMT_INTL"].toString()=="null"?"-":json["CY_SALES_AMT_INTL"].toString(),
+    pySalesAmtIntl: json["PY_SALES_AMT_INTL"].toString()=="null"?"-":json["PY_SALES_AMT_INTL"].toString(),
+    cySalesReturnAmtIntl: json["CY_SALES_RETURN_AMT_INTL"].toString()=="null"?"-":json["CY_SALES_RETURN_AMT_INTL"].toString(),
+    pySalesReturnAmtIntl: json["PY_SALES_RETURN_AMT_INTL"].toString()=="null"?"-":json["PY_SALES_RETURN_AMT_INTL"].toString(),
     productCode: json["PRODUCT_CODE"],
     locationName: json["LOCATION_NAME"].toString(),
     invQty1: json["INV_QTY1"],

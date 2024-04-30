@@ -210,52 +210,53 @@ class _VfStageDetailsState extends State<VfStageDetails>
             children: [
               SizedBox(
                 //color: Colors.black,
-                height: MediaQuery.of(context).size.height /(userMobile(context)? 10:(dataTablet>700?8.8:7.1)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: userMobile(context) ? 8.0 : 16,top: userMobile(context) ? 8.0 : 16,bottom: userMobile(context) ? 8.0 : 16),
-                      child: Row(
+                height: MediaQuery.of(context).size.height /(userMobile(context)? 10:(dataTablet>700?8.9:8.9)),
+                child:Container(
+                  //color: Colors.black,
+                  height: MediaQuery.of(context).size.height /(userMobile(context)? 10:(8.9)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Icon(
-                                Icons.arrow_back,
-                                color: Colors.white,
-                              )),
+                          Container(
+                              margin: EdgeInsets.only(left: userMobile(context) ? 8 : 16,top: userMobile(context) ? 10 : 16,bottom: userMobile(context) ? 8.0 : 16),
+                              child: GestureDetector(
+                                  onTap: () {
+
+                                    Navigator.pop(context);
+                                  },
+                                  child: Icon(
+                                    Icons.arrow_back,
+                                    color: Colors.white,
+                                    size: 25.sp,
+                                  ))),
                           logout_icon(context)
                         ],
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(userMobile(context) ? 8.0 : 16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Business Control Approval",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize:
-                                userMobile(context) ? 16.sp : 20.sp),
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0, bottom: 8),
+                        child: Text(
+                          "Business Control Approvals",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: userMobile(context) ? 14.sp : 22.sp,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      )
 
-                        ],
-                      ),
-                    )
-                  ],
+                      // SizedBox(height: 30,),
+                    ],
+                  ),
                 ),
               ),
               Container(
                 decoration: decorationCommon(),
                 alignment: Alignment.topCenter,
                 height: (MediaQuery.of(context).size.height -
-                    MediaQuery.of(context).size.height /(userMobile(context)? 8:dataTablet>700?7.5:5.96)),
+                    MediaQuery.of(context).size.height /(userMobile(context)? 8:dataTablet>700?7.55:7.18)),
                 width: MediaQuery.of(context).size.width,
                 child: Stack(
                   alignment: Alignment.bottomCenter,

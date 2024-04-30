@@ -19,13 +19,12 @@ class ApprovalScreen extends StatefulWidget {
   @override
   State<ApprovalScreen> createState() => _ApprovalScreenState();
 }
+bool singleApprove = false;
 
 class _ApprovalScreenState extends State<ApprovalScreen>
     with BackgroundDecoration {
   GetAllBcAccountModel? getAllBcAccountModel;
   Result? result;
-
-  bool singleApprove = false;
 
   bool dataLoading = true;
   String? is_approval_req = "";
@@ -34,6 +33,9 @@ class _ApprovalScreenState extends State<ApprovalScreen>
   void initState() {
     // TODO: implement initState
     super.initState();
+    setState(() {
+      singleApprove=false;
+    });
     getAllBcAccountData();
   }
 
@@ -85,7 +87,7 @@ class _ApprovalScreenState extends State<ApprovalScreen>
                 children: [
                   Container(
                     //color: Colors.black,
-                    height: MediaQuery.of(context).size.height /(userMobile(context)? 10:7.8),
+                    height: MediaQuery.of(context).size.height /(userMobile(context)? 10:(singleApprove? 8.9:7.8)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -94,8 +96,8 @@ class _ApprovalScreenState extends State<ApprovalScreen>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                                margin: EdgeInsets.only(
-                                    left: 8, top: singleApprove ? 10 : 0),
+                                margin: singleApprove?EdgeInsets.only(left: userMobile(context) ? 8 : 16,top: userMobile(context) ? 10 : 16,bottom: userMobile(context) ? 8.0 : 16): EdgeInsets.only(
+                                    left: 8, top: 0),
                                 child: singleApprove
                                     ? GestureDetector(
                                     onTap: () {
@@ -153,7 +155,7 @@ class _ApprovalScreenState extends State<ApprovalScreen>
                             fontWeight: FontWeight.w500),
                         textAlign: TextAlign.center,
                       ),
-                    ): is_approval_req == "N"
+                    ): is_approval_req!.toLowerCase() == "n"
                         ? Center(
                             child: Text(
                               "Access not Available! \n Contact EIS Team!",

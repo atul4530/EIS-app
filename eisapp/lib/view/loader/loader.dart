@@ -5,7 +5,7 @@ showLoaderDialog(BuildContext context){
   AlertDialog alert=AlertDialog(
     backgroundColor: Colors.transparent,
     elevation: 0,
-    content: Image.asset("assets/images/loader.gif",height: 30.w,width:30.w),
+    content: Image.asset("assets/images/loader.gif",height: 20.w,width:20.w),
   );
   showDialog(barrierDismissible: false,
     context:context,

@@ -12,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
 
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:get/get.dart';
@@ -166,14 +167,7 @@ class _CreateCatelogState extends State<CreateCatelog>
                                     Icons.arrow_back,
                                     color: Colors.white,
                                   )),
-                              controller.catalog_loading
-                                  ? Center(
-                                      child: Image.asset(
-                                        "assets/images/loader.gif",
-                                        height: 30,
-                                      ),
-                                    )
-                                  : Container(
+                             Container(
                                       decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius:
@@ -199,7 +193,8 @@ class _CreateCatelogState extends State<CreateCatelog>
                                             margin: EdgeInsets.only(left: 10),
                                             child: Icon(
                                                 Icons.arrow_drop_down_sharp)),
-                                        items: controller
+                                        items:controller
+                                            .getBarCodeCatelogNameList==null?[]: controller
                                             .getBarCodeCatelogNameList!
                                             .getBarCodeCatalogNameList!
                                             .map((GetBarCodeCatalogNameList
@@ -351,7 +346,7 @@ class _CreateCatelogState extends State<CreateCatelog>
                 Container(
                   decoration: decorationCommon(),
                   height: MediaQuery.of(context).size.height -
-                      MediaQuery.of(context).size.height / 7,
+                      MediaQuery.of(context).size.height / 8.2,
                   width: MediaQuery.of(context).size.width,
                   child: Container(
                     padding: const EdgeInsets.all(8.0),
@@ -612,6 +607,10 @@ class _CreateCatelogState extends State<CreateCatelog>
               GestureDetector(
                 onTap: () async {
                   if (selectCatalogHelper.selected_value == "Select Catalog") {
+                    setState(() {
+                      selectedColumnValidate=false;
+                      catalogNameValidate=false;
+                    });
                     await getBarcodeCatelogNameListModel();
                     openDigitalCatelog(context, getBarCodeCatalogList);
                   } else {
@@ -728,6 +727,10 @@ class _CreateCatelogState extends State<CreateCatelog>
               GestureDetector(
                 onTap: () async {
                   if (selectCatalogHelper.selected_value == "Select Catalog") {
+                    setState(() {
+                      selectedColumnValidate=false;
+                      catalogNameValidate=false;
+                    });
                     await getBarcodeCatelogNameListModel();
                     openDigitalCatelog(context, getBarCodeCatalogList);
                   } else {
@@ -789,6 +792,9 @@ class _CreateCatelogState extends State<CreateCatelog>
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       selectCatalogHelper.getSelectCatelogData();
+      selectCatalogHelper.selected_value=catelogNameController.text.trim();
+      selectCatalogHelper.update();
+
     } else {
       const snackBar = SnackBar(
         content: Text("Something Went Wrong!!"),
@@ -850,6 +856,9 @@ class _CreateCatelogState extends State<CreateCatelog>
     });
   }
 
+  bool selectedColumnValidate=false;
+  bool catalogNameValidate=false;
+
   openDigitalCatelog(
       BuildContext context, GetBarCodeCatalogList getBarCodeCatalogList) {
     selectedData.clear();
@@ -878,7 +887,7 @@ class _CreateCatelogState extends State<CreateCatelog>
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Digital Catelog",
+                                "Digital Catalog",
                                 style: TextStyle(
                                     color: const Color(0xff5338b4),
                                     fontSize: 22.sp,
@@ -887,33 +896,34 @@ class _CreateCatelogState extends State<CreateCatelog>
                               GestureDetector(
                                 onTap: () async {
                                   // ignore: prefer_is_empty
-                                  if (catelogNameController.text.trim().length >
-                                          0 &&
-                                      remarksController.text.trim().length >
-                                          0 &&
-                                      selectedDataContract.length > 0 &&
-                                      expiry != "") {
-                                    LoginResponseModel loginResponseModel =
-                                        LoginResponseModel.fromJson(jsonDecode(
-                                            (await PreferenceHelper()
-                                                    .getStringValuesSF("data"))
-                                                .toString()));
-                                    List columnData = [];
-                                    for (int i = 0;
-                                        i < selectedDataContract.length;
-                                        i++) {
-                                      columnData
-                                          .add(selectedDataContract[i].value!);
-                                    }
-                                    String url =
-                                        'rfid/TA/kciSaveBarCodeScan/{"catalogId":"-1","catalogName":"${catelogNameController.text.trim()}","cscId":"${loginResponseModel.data!.first.cscId}","catalogFor":"CONTRACT","reqColumns":"${columnData.toString().replaceAll("[", "").replaceAll("]", "")}","contractNo":"${getBarCodeCatalogList.contTypeNo!.replaceAll("/", "-")}","contractId":"${getBarCodeCatalogList.contId}","userId":"${await loginResponseModel.data!.first.empId}","remarks":"${remarksController.text.trim()}","expirydate":"$expiry"}';
-                                    submitFormData(context, url);
-                                  } else {
-                                    var snackBar = const SnackBar(
-                                        content: Text('"Enter Value!!'));
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
+                                  if(catelogNameController.text.trim().isEmpty){
+                                      setState((){
+                                        catalogNameValidate=true;
+                                      });
                                   }
+                                  else if(selectedDataContract.isEmpty){
+                                    setState((){
+                                      selectedColumnValidate=true;
+                                    });
+                                  }
+                                  else
+                                    {
+                                      LoginResponseModel loginResponseModel =
+                                      LoginResponseModel.fromJson(jsonDecode(
+                                          (await PreferenceHelper()
+                                              .getStringValuesSF("data"))
+                                              .toString()));
+                                      List columnData = [];
+                                      for (int i = 0;
+                                      i < selectedDataContract.length;
+                                      i++) {
+                                        columnData
+                                            .add(selectedDataContract[i].value!);
+                                      }
+                                      String url =
+                                          'rfid/TA/kciSaveBarCodeScan/{"catalogId":"-1","catalogName":"${catelogNameController.text.trim()}","cscId":"${loginResponseModel.data!.first.cscId}","catalogFor":"CONTRACT","reqColumns":"${columnData.toString().replaceAll("[", "").replaceAll("]", "")}","contractNo":"${getBarCodeCatalogList.contTypeNo!.replaceAll("/", "-")}","contractId":"${getBarCodeCatalogList.contId}","userId":"${await loginResponseModel.data!.first.empId}","remarks":"${remarksController.text.trim()}","expirydate":"$expiry"}';
+                                      submitFormData(context, url);
+                                    }
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
@@ -940,13 +950,18 @@ class _CreateCatelogState extends State<CreateCatelog>
                               Container(
                                   margin: const EdgeInsets.symmetric(
                                       horizontal: 12),
-                                  child: Text(
-                                    "Catelog Name*",
-                                    style: TextStyle(
-                                        color: Colors.black.withOpacity(0.5),
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 13.sp),
-                                    textAlign: TextAlign.start,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Catelog Name*",
+                                        style: TextStyle(
+                                            color: Colors.black.withOpacity(0.5),
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 13.sp),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      catalogNameValidate?  Text("    Catalog Name is required",style: TextStyle(fontSize: 11.sp,fontWeight: FontWeight.w800,color: Colors.red),):Container()
+                                    ],
                                   )),
                               Container(
                                 height: 30.sp,
@@ -960,6 +975,7 @@ class _CreateCatelogState extends State<CreateCatelog>
                                 child: TextField(
                                   controller: catelogNameController,
                                   decoration: const InputDecoration(
+                                      contentPadding: EdgeInsets.only(left: 12,bottom: 10),
                                       border: InputBorder.none),
                                 ),
                               )
@@ -1054,12 +1070,14 @@ class _CreateCatelogState extends State<CreateCatelog>
                                 child: TextField(
                                   controller: remarksController,
                                   decoration: const InputDecoration(
+                                      contentPadding: EdgeInsets.only(left: 12,bottom: 10),
                                       border: InputBorder.none),
                                 ),
                               )
                             ],
                           ),
                         ),
+                        selectedColumnValidate?  Text("     Select atleast 11column",style: TextStyle(fontSize: 11.sp,fontWeight: FontWeight.w800,color: Colors.red),):Container(),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(

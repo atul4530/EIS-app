@@ -104,10 +104,11 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
 
                     });
                   },
-                  decoration: InputDecoration(
+                  textAlign: TextAlign.left,
+                  decoration:InputDecoration(
                       border: InputBorder.none,
                       fillColor: Colors.transparent,
-                      hintText: "Search",
+                      hintText: userMobile(context)?"Search": "  Search",
                       prefixIcon: Container(
                           margin: EdgeInsets.only(
                               left: userMobile(context) ? 0 : 20),
@@ -116,8 +117,7 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
                             color: Colors.black.withOpacity(0.2),
                             size: userMobile(context) ? 20.sp : 35.sp,
                           )),
-                      contentPadding:
-                          const EdgeInsets.only(bottom: 11, left: 0,top: 5),
+                      contentPadding: EdgeInsets.only(top: userMobile(context)? -2:4,left: userMobile(context)?0:30),
                       hintStyle: TextStyle(
                           fontSize: userMobile(context) ? 16.sp : 21.sp,
                           color: Colors.black.withOpacity(0.3))),

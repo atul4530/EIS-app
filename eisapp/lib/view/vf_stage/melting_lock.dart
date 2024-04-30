@@ -82,7 +82,7 @@ class _MeltingLockState extends State<MeltingLock> with BackgroundDecoration {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-              Text("${meltingLockModel!.result!.first.poId ?? '-'}",style: TextStyle(fontSize: font_Size,color: Color(0xff5338B4),fontWeight: FontWeight.w700),),
+              Text("${meltingLockModel!.result!.first.poNo ?? '-'}",style: TextStyle(fontSize: font_Size,color: Color(0xff5338B4),fontWeight: FontWeight.w700),),
               detailsLabeling("PO NO", "${meltingLockModel!.result!.first.poNo ?? '-'}",context),
               detailsLabeling("PO Date", meltingLockModel!.result!.first.poDt?? '-',context),
               detailsLabeling("PO Type", meltingLockModel!.result!.first.poType?? '-',context),

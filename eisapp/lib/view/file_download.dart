@@ -12,8 +12,8 @@ class FileDownload {
   Dio dio = Dio();
   bool isSuccess = false;
 
-  void startDownloading(BuildContext context, bool pdf,String url,final Function okCallback) async {
-    String fileName = "Report.pdf";
+  void startDownloading(BuildContext context, bool pdf,String url,final Function okCallback,String cat_name) async {
+    String fileName =pdf? "${cat_name}.pdf":"${cat_name}.xls";
 
     String baseUrl = url;
 

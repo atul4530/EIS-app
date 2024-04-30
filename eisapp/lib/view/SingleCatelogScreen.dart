@@ -114,7 +114,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
              Container(
                 decoration: decorationCommon(),
                 height: MediaQuery.of(context).size.height -
-                    MediaQuery.of(context).size.height / (userMobile(context)? 5.8:(dataTablet>700? 8.3:6.5)),
+                    MediaQuery.of(context).size.height / (userMobile(context)? 7.8:(dataTablet>700? 8.3:8.5)),
                 width: MediaQuery.of(context).size.width,
                 child:   dataLoading? Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),):getCatelogListModelById==null?Center(child: Text("No Data Found"),): getCatelogListModelById!.getBarCodeCatalogListById!.isEmpty?Center(child: Text("No Data Found"),): GridView.builder(
                   // physics: NeverScrollableScrollPhysics(),

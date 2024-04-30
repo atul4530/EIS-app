@@ -107,6 +107,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
   String selected_image = "";
   SelectCatalogHelper selectCatalogHelper = Get.find();
 
+  bool selectedColumnValidate=false;
+  bool catalogNameValidate=false;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -182,39 +185,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                                       },
                                     ),
                                   )
-                            // GestureDetector(
-                            //   onTap: () async {
-                            //     await getSelectCatelogData();
-                            //     openOptions(context);
-                            //   },
-                            //   child: Container(
-                            //     padding: const EdgeInsets.symmetric(
-                            //         horizontal: 10, vertical: 5),
-                            //     decoration: BoxDecoration(
-                            //         color: Colors.white,
-                            //         borderRadius: BorderRadius.circular(35)),
-                            //     child: Row(
-                            //       children: [
-                            //         Text(
-                            //           selected_catelog,
-                            //           style: TextStyle(
-                            //               color: Colors.black,
-                            //               fontSize: userMobile(context)
-                            //                   ? 13.sp
-                            //                   : 16.sp),
-                            //         ),
-                            //         const SizedBox(
-                            //           width: 5,
-                            //         ),
-                            //         Icon(
-                            //           Icons.arrow_drop_down,
-                            //           color: Colors.black,
-                            //           size: 15.sp,
-                            //         ),
-                            //       ],
-                            //     ),
-                            //   ),
-                            // )
                           ],
                         ),
                       );
@@ -761,6 +731,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                                     onTap: () async {
                                       if (selectCatalogHelper.selected_value ==
                                           "Select Catalog") {
+                                        setState(() {
+                                          selectedColumnValidate=false;
+                                          catalogNameValidate=false;
+                                        });
                                         await getBarcodeCatelogNameListModel();
                                         openDigitalCatelog(context,widget.data);
                                       } else {
@@ -849,6 +823,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
       selectCatalogHelper.getBarCodeCatelogNameList = GetBarCodeCatelogNameListModel(getBarCodeCatalogNameList: [GetBarCodeCatalogNameList(label: (jsonDecode(response.body))["BarCodeCatalogId"].first["digital_catalogue_name"],value: int.parse((jsonDecode(response.body))["BarCodeCatalogId"].first["digital_catalogue_id"].toString()))]);
       selectCatalogHelper.update();
       selectCatalogHelper.getSelectCatelogData();
+      selectCatalogHelper.selected_value=catelogNameController.text.trim();
+      selectCatalogHelper.update();
     } else {
       const snackBar = SnackBar(
         content: Text("Something Went Wrong!!"),
@@ -887,7 +863,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Digital Catelog",
+                            "Digital Catalog",
                             style: TextStyle(
                                 color: const Color(0xff5338b4),
                                 fontSize: 22.sp,
@@ -896,12 +872,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                           GestureDetector(
                             onTap: () async {
                               // ignore: prefer_is_empty
-                              if (catelogNameController.text.trim().length >
-                                  0 &&
-                                  remarksController.text.trim().length >
-                                      0 &&
-                                  selectedDataContract.length > 0 &&
-                                  expiry != "") {
+                              if(catelogNameController.text.trim().isEmpty){
+                                setState((){
+                                  catalogNameValidate=true;
+                                });
+                              }
+                              else if(selectedDataContract.isEmpty){
+                                setState((){
+                                  selectedColumnValidate=true;
+                                });
+                              }
+                              else
+                              {
                                 LoginResponseModel loginResponseModel =
                                 LoginResponseModel.fromJson(jsonDecode(
                                     (await PreferenceHelper()
@@ -917,11 +899,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                                 String url =
                                     'rfid/TA/kciSaveBarCodeScan/{"catalogId":"-1","catalogName":"${catelogNameController.text.trim()}","cscId":"${loginResponseModel.data!.first.cscId}","catalogFor":"CONTRACT","reqColumns":"${columnData.toString().replaceAll("[", "").replaceAll("]", "")}","contractNo":"${getBarCodeCatalogList.contTypeNo!.replaceAll("/", "-")}","contractId":"${getBarCodeCatalogList.contId}","userId":"${await loginResponseModel.data!.first.empId}","remarks":"${remarksController.text.trim()}","expirydate":"$expiry"}';
                                 submitFormData(context, url);
-                              } else {
-                                var snackBar = const SnackBar(
-                                    content: Text('"Enter Value!!'));
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
                               }
                             },
                             child: Container(
@@ -949,13 +926,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                           Container(
                               margin: const EdgeInsets.symmetric(
                                   horizontal: 12),
-                              child: Text(
-                                "Catelog Name*",
-                                style: TextStyle(
-                                    color: Colors.black.withOpacity(0.5),
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 13.sp),
-                                textAlign: TextAlign.start,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Catelog Name*",
+                                    style: TextStyle(
+                                        color: Colors.black.withOpacity(0.5),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 13.sp),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                  catalogNameValidate?  Text("    Catalog Name is required",style: TextStyle(fontSize: 11.sp,fontWeight: FontWeight.w800,color: Colors.red),):Container()
+                                ],
                               )),
                           Container(
                             height: 30.sp,
@@ -969,6 +951,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                             child: TextField(
                               controller: catelogNameController,
                               decoration: const InputDecoration(
+                                  contentPadding: EdgeInsets.only(left: 12,bottom: 10),
                                   border: InputBorder.none),
                             ),
                           )
@@ -1063,12 +1046,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                             child: TextField(
                               controller: remarksController,
                               decoration: const InputDecoration(
+                                  contentPadding: EdgeInsets.only(left: 12,bottom: 10),
                                   border: InputBorder.none),
                             ),
                           )
                         ],
                       ),
                     ),
+                    selectedColumnValidate?  Text("     Select atleast 11column",style: TextStyle(fontSize: 11.sp,fontWeight: FontWeight.w800,color: Colors.red),):Container(),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(

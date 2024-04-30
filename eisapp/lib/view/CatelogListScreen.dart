@@ -130,6 +130,9 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                         padding: const EdgeInsets.only(top: 20),
                         itemBuilder: (BuildContext context, int index) {
                           var data = getBarCodeCatelogNameList!.getBarCodeCatalogNameList![index];
+                          if(data.catCount==0){
+                            return Container();
+                          }
                           return GestureDetector(
                             onTap: (){
                               Navigator.push(context, MaterialPageRoute(builder: (context)=>SingleCatelogScreen(catelog: data,))).then((value) {
@@ -353,7 +356,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("${getBarCodeCatalogNameList.label}",style: TextStyle(fontSize: userMobile(context)? 14.sp:16.sp,color: Colors.black,fontWeight: FontWeight.w500),),
+                          Text("PrestoBarcodeScan",style: TextStyle(fontSize: userMobile(context)? 14.sp:16.sp,color: Colors.black,fontWeight: FontWeight.w500),),
                           Icon(Icons.arrow_drop_down_outlined,size: 22.sp,color: Colors.black,)
                         ],
                       ),
@@ -412,7 +415,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                             showDialog(
                                 context: context,
                                 builder: (dialogcontext) {
-                                  return DownloadProgressDialog(url: "http://10.20.1.41:2910/kgk/report/wsrprintapi.htm?reportName=PrestoBarcodeScan.jasper&digitalCatalogueId=${getBarCodeCatalogNameList.value.toString()}&cscId=${loginResponseModel.data!.first.cscId}&reporttype=pdf",pdf: true,);
+                                  return DownloadProgressDialog(url: "http://10.20.1.41:2910/kgk/report/wsrprintapi.htm?reportName=PrestoBarcodeScan.jasper&digitalCatalogueId=${getBarCodeCatalogNameList.value.toString()}&cscId=${loginResponseModel.data!.first.cscId}&reporttype=pdf",pdf: true,cat_name: getBarCodeCatalogNameList.label!+"-PrestoBarcodeScan",);
                                 });
                           }
                           else
@@ -421,7 +424,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                                   context: context,
                                   builder: (dialogcontext) {
                                     print("http://10.20.1.41:2910/kgk/report/wsrprintapi.htm?reportName=PrestoBarcodeScan.jasper&digitalCatalogueId=${getBarCodeCatalogNameList.value.toString()}&cscId=${loginResponseModel.data!.first.cscId}&reporttype=xls");
-                                    return DownloadProgressDialog(url: "http://10.20.1.41:2910/kgk/report/wsrprintapi.htm?reportName=PrestoBarcodeScan.jasper&digitalCatalogueId=${getBarCodeCatalogNameList.value.toString()}&cscId=${loginResponseModel.data!.first.cscId}&reporttype=xlsx",pdf: false,);
+                                    return DownloadProgressDialog(url: "http://10.20.1.41:2910/kgk/report/wsrprintapi.htm?reportName=PrestoBarcodeScan.jasper&digitalCatalogueId=${getBarCodeCatalogNameList.value.toString()}&cscId=${loginResponseModel.data!.first.cscId}&reporttype=xls",pdf: false,cat_name: getBarCodeCatalogNameList.label!+"-PrestoBarcodeScan",);
                                   });
                             }
 

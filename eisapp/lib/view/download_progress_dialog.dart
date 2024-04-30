@@ -5,7 +5,8 @@ import 'file_download.dart';
 class DownloadProgressDialog extends StatefulWidget {
   String url;
   bool pdf;
-  DownloadProgressDialog({super.key, required this.url,required this.pdf});
+  String cat_name;
+  DownloadProgressDialog({super.key, required this.url,required this.pdf,required this.cat_name});
   @override
   State<DownloadProgressDialog> createState() => _DownloadProgressDialogState();
 }
@@ -24,7 +25,7 @@ class _DownloadProgressDialogState extends State<DownloadProgressDialog> {
       setState(() {
         progress = recivedBytes / totalBytes;
       });
-    });
+    },widget.cat_name);
   }
 
   @override

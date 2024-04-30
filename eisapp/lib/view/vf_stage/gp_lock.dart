@@ -140,7 +140,7 @@ class _GpLockState extends State<GpLock> with BackgroundDecoration {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("Cost Amount",style: TextStyle(fontSize: font_Size-2.sp,color:Color(0xff9DA5BC),fontWeight: FontWeight.w600),),
-                        Text(result.chargeAmt.toString().trim(),style: TextStyle(fontSize: font_Size-2.sp,color: Colors.black,fontWeight: FontWeight.w600),)
+                        Text(result.ocpgm.toString().trim(),style: TextStyle(fontSize: font_Size-2.sp,color: Colors.black,fontWeight: FontWeight.w600),)
                       ],
                     ),
                   ),

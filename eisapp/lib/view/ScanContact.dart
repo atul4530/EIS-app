@@ -40,8 +40,8 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
     super.initState();
     if(selectCatalogHelper.getBarCodeCatelogNameList!=null){
       if(selectCatalogHelper.getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.length>1){
-        selectCatalogHelper.selected_value=selectCatalogHelper.selected_value;
-        selectCatalogHelper.selected_catalog_id=selectCatalogHelper.selected_catalog_id;
+        selectCatalogHelper.selected_value="Select Catalog";
+        selectCatalogHelper.selected_catalog_id="Select Catalog";
         selectCatalogHelper.update();
       }
     }
@@ -81,14 +81,7 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                                     Icons.arrow_back,
                                     color: Colors.white,
                                   )),
-                              controller.catalog_loading
-                                  ? Center(
-                                      child: Image.asset(
-                                        "assets/images/loader.gif",
-                                        height: userMobile(context) ? 50 : 80,
-                                      ),
-                                    )
-                                  : Container(
+                              Container(
                                       decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius:
@@ -98,6 +91,7 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                                           EdgeInsets.symmetric(horizontal: 20),
                                       child: DropdownButton<
                                           GetBarCodeCatalogNameList>(
+                                        underline: Container(),
                                         hint: Text(
                                           controller.selected_value,
                                           style: TextStyle(
@@ -108,12 +102,14 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                                         ),
                                         borderRadius: BorderRadius.circular(12),
                                         padding: EdgeInsets.zero,
+
                                         elevation: 0,
                                         icon: Container(
                                             margin: EdgeInsets.only(left: 10),
                                             child: Icon(
                                                 Icons.arrow_drop_down_sharp)),
                                         items: controller
+                                            .getBarCodeCatelogNameList==null?[]:controller
                                             .getBarCodeCatelogNameList!
                                             .getBarCodeCatalogNameList!
                                             .map((GetBarCodeCatalogNameList
@@ -262,6 +258,10 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
 
                                       if(selectCatalogHelper.selected_value=="Select Catalog"){
                                         ///Create and save catelog with contract
+                                        setState(() {
+                                          selectedColumnValidate=false;
+                                          catalogNameValidate=false;
+                                        });
                                         await getBarcodeCatelogNameListModel();
                                         openDigitalCatelog(context);
                                       }
@@ -471,14 +471,15 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       //this right here
       child: Container(
-        height: 25.w,
-        width: 95.w,
+        height: userMobile(context)? 25.w:15.w,
+        width: userMobile(context)? 95.w:75.w,
         color: Colors.white,
         child: Container(
           padding: EdgeInsets.all(12),
           child: Column(
             children: [
               Text("To change setting means scanned barcode wil be removed?",style: TextStyle(fontSize: 15.sp,color: Colors.black,fontWeight: FontWeight.w600),),
+              SizedBox(height: userMobile(context)? 0:4.w,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -536,7 +537,16 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
         content: Text(
             "Barcode Added Successfully in ${(jsonDecode(response.body))["BarCodeCatalogId"].first["digital_catalogue_name"]}"),
       );
+      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      selectCatalogHelper.getSelectCatelogData();
+      selectCatalogHelper.selected_value=catelogNameController.text.trim();
+      selectCatalogHelper.update();
+      listBarcode.clear();
+      setState(() {
+
+      });
+
     } else {
       const snackBar = SnackBar(
         content: Text("Something Went Wrong!!"),
@@ -546,6 +556,7 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
   }
 
   TextEditingController controller = TextEditingController();
+  bool manualValidate = false;
 
   openDialogue(BuildContext context) {
     Dialog errorDialog = Dialog(
@@ -608,8 +619,7 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                     GestureDetector(
                       onTap: () {
                         if(controller.text.trim().isEmpty){
-                          var snackBar = const SnackBar(content: Text('Please enter Contract no'));
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                         Get.snackbar("Error!!", "Enter Valid Data",colorText: label_color,backgroundColor: Colors.white);
                         }
                         else
                           {
@@ -700,6 +710,9 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
   }
 
 
+  bool selectedColumnValidate=false;
+  bool catalogNameValidate=false;
+
   openDigitalCatelog(
       BuildContext context) {
     selectedData.clear();
@@ -728,7 +741,7 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Digital Catelog",
+                            "Digital Catalog",
                             style: TextStyle(
                                 color: const Color(0xff5338b4),
                                 fontSize: 22.sp,
@@ -737,12 +750,18 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                           GestureDetector(
                             onTap: () async {
                               // ignore: prefer_is_empty
-                              if (catelogNameController.text.trim().length >
-                                  0 &&
-                                  remarksController.text.trim().length >
-                                      0 &&
-                                  selectedDataContract.length > 0 &&
-                                  expiry != "") {
+                              if(catelogNameController.text.trim().isEmpty){
+                                setState((){
+                                  catalogNameValidate=true;
+                                });
+                              }
+                              else if(selectedDataContract.isEmpty){
+                                setState((){
+                                  selectedColumnValidate=true;
+                                });
+                              }
+                              else
+                              {
                                 LoginResponseModel loginResponseModel =
                                 LoginResponseModel.fromJson(jsonDecode(
                                     (await PreferenceHelper()
@@ -758,11 +777,6 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                                 String url =
                                     'rfid/TA/kciSaveBarCodeScan/{"catalogId":"-1","catalogName":"${catelogNameController.text.trim()}","cscId":"${loginResponseModel.data!.first.cscId}","catalogFor":"CONTRACT","reqColumns":"${columnData.toString().replaceAll("[", "").replaceAll("]", "")}","contractNo":"${listBarcode.toString().replaceAll("[", "").replaceAll("]", "").replaceAll("/", "-")}","contractId":"","userId":"${await loginResponseModel.data!.first.empId}","remarks":"${remarksController.text.trim()}","expirydate":"$expiry"}';
                                 submitFormData(context, url);
-                              } else {
-                                var snackBar = const SnackBar(
-                                    content: Text('"Enter Value!!'));
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
                               }
                             },
                             child: Container(
@@ -790,13 +804,18 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                           Container(
                               margin: const EdgeInsets.symmetric(
                                   horizontal: 12),
-                              child: Text(
-                                "Catelog Name*",
-                                style: TextStyle(
-                                    color: Colors.black.withOpacity(0.5),
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 13.sp),
-                                textAlign: TextAlign.start,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Catelog Name*",
+                                    style: TextStyle(
+                                        color: Colors.black.withOpacity(0.5),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 13.sp),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                  catalogNameValidate?  Text("    Catalog Name is required",style: TextStyle(fontSize: 11.sp,fontWeight: FontWeight.w800,color: Colors.red),):Container()
+                                ],
                               )),
                           Container(
                             height: 30.sp,
@@ -810,6 +829,7 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                             child: TextField(
                               controller: catelogNameController,
                               decoration: const InputDecoration(
+                                  contentPadding: EdgeInsets.only(left: 12,bottom: 10),
                                   border: InputBorder.none),
                             ),
                           )
@@ -904,12 +924,14 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                             child: TextField(
                               controller: remarksController,
                               decoration: const InputDecoration(
+                                  contentPadding: EdgeInsets.only(left: 12,bottom: 10),
                                   border: InputBorder.none),
                             ),
                           )
                         ],
                       ),
                     ),
+                    selectedColumnValidate?  Text("     Select atleast 11column",style: TextStyle(fontSize: 11.sp,fontWeight: FontWeight.w800,color: Colors.red),):Container(),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
@@ -1018,6 +1040,7 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
       //   Navigator.pop(context);
     });
   }
+
 
   bool selectedContact=true;
   List<GetBarCodeCatalogNameList> selectedColumnData = [];

@@ -127,7 +127,7 @@ class _DebtorAgingLockState extends State<DebtorAgingLock>  with BackgroundDecor
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        width: 28.w,
+                        width: 32.w,
                         decoration: BoxDecoration(
                             border: Border(
                                 bottom: BorderSide(width: 1,color: Color(0xff9DA5BC)),
@@ -136,7 +136,7 @@ class _DebtorAgingLockState extends State<DebtorAgingLock>  with BackgroundDecor
                             )
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.only(left: 8.0,top: 8.0,bottom: 8),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -148,9 +148,10 @@ class _DebtorAgingLockState extends State<DebtorAgingLock>  with BackgroundDecor
                         ),
                       ),
                       Container(
-                        width: 28.w,
+                        width: 32.w,
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.only(left: 8.0,top: 8.0,bottom: 8),
+
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -166,7 +167,7 @@ class _DebtorAgingLockState extends State<DebtorAgingLock>  with BackgroundDecor
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        width: 28.w,
+                        width: 30.w,
                         decoration: BoxDecoration(
                             border: Border(
                                 bottom: BorderSide(width: 1,color: Color(0xff9DA5BC)),
@@ -175,7 +176,7 @@ class _DebtorAgingLockState extends State<DebtorAgingLock>  with BackgroundDecor
                             )
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.only(left: 8.0,top: 8.0,bottom: 8),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
