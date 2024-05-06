@@ -34,8 +34,10 @@ class SelectCatalogHelper extends GetxController{
     getBarCodeCatelogNameList!.getBarCodeCatalogNameList = getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.reversed.toList();
     catalog_loading=false;
     for(int i=0;i<getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.length;i++){
-      if(getBarCodeCatelogNameList!.getBarCodeCatalogNameList![i].value.toString() == selected_catalog_id){
-        selected_value=getBarCodeCatelogNameList!.getBarCodeCatalogNameList![i].label!;
+      if(getBarCodeCatelogNameList!.getBarCodeCatalogNameList![i].value.toString() == selected_catalog_id) {
+        selected_value =
+        getBarCodeCatelogNameList!.getBarCodeCatalogNameList![i].label!;
+        i=getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.length;
       }
     }
     update();

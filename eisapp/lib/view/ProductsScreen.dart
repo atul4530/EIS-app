@@ -50,6 +50,8 @@ class _ProductsScreenState extends State<ProductsScreen> with BackgroundDecorati
     });
   }
 
+  var dataTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.shortestSide;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -60,7 +62,7 @@ class _ProductsScreenState extends State<ProductsScreen> with BackgroundDecorati
         children: [
           Container(
             //color: Colors.black,
-            height: MediaQuery.of(context).size.height /(userMobile(context)? 10:7.8),
+            height: MediaQuery.of(context).size.height /(userMobile(context)? 10:(dataTablet>700?10:7.8)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -70,7 +72,7 @@ class _ProductsScreenState extends State<ProductsScreen> with BackgroundDecorati
                   children: [
                     Container(
                         margin: EdgeInsets.only(left: 8),
-                        child: Image.asset("assets/images/logo.png",width: MediaQuery.of(context).size.width/4.5,)),
+                        child: logo(context)),
                     logout_icon(context)
                   ],
                 ),

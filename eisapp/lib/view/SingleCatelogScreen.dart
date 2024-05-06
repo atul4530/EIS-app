@@ -70,9 +70,9 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
             children: [
               SizedBox(
                 //color: Colors.black,
-                height: MediaQuery.of(context).size.height /(userMobile(context)? 10:(dataTablet>700?10:7.7)),
+                height: MediaQuery.of(context).size.height /(userMobile(context)? 8:dataTablet>700?10:7.8),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
                       padding: EdgeInsets.all(userMobile(context) ? 8.0 : 12),
@@ -92,7 +92,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(userMobile(context) ? 8.0 : 12),
+                      padding: userMobile(context)?EdgeInsets.all(userMobile(context) ? 8.0 : 12):EdgeInsets.symmetric(horizontal: 12,vertical: 8),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -114,7 +114,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
              Container(
                 decoration: decorationCommon(),
                 height: MediaQuery.of(context).size.height -
-                    MediaQuery.of(context).size.height / (userMobile(context)? 7.8:(dataTablet>700? 8.3:8.5)),
+                    MediaQuery.of(context).size.height / (userMobile(context)? 5.4:(dataTablet>700? 10:6.4)),
                 width: MediaQuery.of(context).size.width,
                 child:   dataLoading? Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),):getCatelogListModelById==null?Center(child: Text("No Data Found"),): getCatelogListModelById!.getBarCodeCatalogListById!.isEmpty?Center(child: Text("No Data Found"),): GridView.builder(
                   // physics: NeverScrollableScrollPhysics(),
@@ -378,6 +378,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
 
   Widget detailedWidget(String name) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Icon(
           Icons.circle_outlined,

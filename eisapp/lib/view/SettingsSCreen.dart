@@ -49,6 +49,7 @@ class _SettingScreenState extends State<SettingScreen>
 
   }
 
+  var dataTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.shortestSide;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +59,7 @@ class _SettingScreenState extends State<SettingScreen>
         children: [
           Container(
             //color: Colors.black,
-            height: MediaQuery.of(context).size.height /(userMobile(context)? 10:7.8),
+            height: MediaQuery.of(context).size.height /(userMobile(context)? 10:(dataTablet>700?10:7.8)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -68,7 +69,7 @@ class _SettingScreenState extends State<SettingScreen>
                   children: [
                     Container(
                         margin: EdgeInsets.only(
-                            left: 8, top: 4),
+                            left: 8, top:0),
                         child: singleApprove
                             ? GestureDetector(
                             onTap: () {
@@ -81,12 +82,7 @@ class _SettingScreenState extends State<SettingScreen>
                               color: Colors.white,
                               size: 25.sp,
                             ))
-                            : Image.asset(
-                          "assets/images/logo.png",
-                          width:
-                          MediaQuery.of(context).size.width /
-                              4.5,
-                        )),
+                            : logo(context)),
                     logout_icon(context),
                   ],
                 ),
@@ -109,7 +105,7 @@ class _SettingScreenState extends State<SettingScreen>
             decoration: decorationCommon(),
             height: MediaQuery.of(context).size.height -
                 MediaQuery.of(context).size.height /
-                    (userMobile(context) ? 5.2 : 5.6),
+                    (userMobile(context) ? 5.2 : dataTablet>700?6: 5.6),
             width: 100.w,
             child: Padding(
               padding: const EdgeInsets.all(15),

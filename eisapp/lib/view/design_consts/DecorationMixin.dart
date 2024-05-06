@@ -49,6 +49,16 @@ mixin BackgroundDecoration{
             topRight: Radius.circular(20)));
   }
 
+  Widget logo(BuildContext context){
+    return Image.asset(
+      "assets/images/logo.png",
+      width:
+      MediaQuery.of(context).size.width /
+         (userMobile(context)?4.5: 6),
+      fit: BoxFit.fitWidth,
+    );
+  }
+
   Widget logout_icon(BuildContext context){
     return GestureDetector(
       onTap: () async {

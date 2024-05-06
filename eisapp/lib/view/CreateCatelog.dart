@@ -145,10 +145,7 @@ class _CreateCatelogState extends State<CreateCatelog>
               children: [
                 SizedBox(
                   //color: Colors.black,
-                  height: MediaQuery.of(context).size.height /
-                      (userMobile(context)
-                          ? 9.8
-                          : (dataTablet > 700 ? 10 : 7.8)),
+                  height: MediaQuery.of(context).size.height /(userMobile(context)? 10:(dataTablet>700?10:7.8)),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -783,17 +780,18 @@ class _CreateCatelogState extends State<CreateCatelog>
     //LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(jsonDecode((await PreferenceHelper().getStringValuesSF("data")).toString()));
     var response = await ApiService.getData(url);
     print("Response :  ${response.body}");
-    Navigator.pop(context);
-    Navigator.pop(context);
     if (response.body.contains("SUCCESS")) {
       var snackBar = SnackBar(
         content: Text(
             "Added Successfully ${(jsonDecode(response.body))["BarCodeCatalogId"].first["digital_catalogue_name"]}"),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      selectCatalogHelper.getSelectCatelogData();
-      selectCatalogHelper.selected_value=catelogNameController.text.trim();
+      await selectCatalogHelper.getSelectCatelogData();
+      selectCatalogHelper.selected_value=selectCatalogHelper.getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.last.label!;
+      selectCatalogHelper.selected_catalog_id=selectCatalogHelper.getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.last.value!.toString();
       selectCatalogHelper.update();
+      Navigator.pop(context);
+      Navigator.pop(context);
 
     } else {
       const snackBar = SnackBar(
@@ -805,6 +803,7 @@ class _CreateCatelogState extends State<CreateCatelog>
 
   Widget detailedWidget(String name) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Icon(
           Icons.circle_outlined,

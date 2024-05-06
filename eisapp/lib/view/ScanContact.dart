@@ -62,14 +62,13 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
               children: [
                 SizedBox(
                   //color: Colors.black,
-                  height: MediaQuery.of(context).size.height /(userMobile(context)? 8:dataTablet>700?8:7),
+                  height: MediaQuery.of(context).size.height /(userMobile(context)? 8:dataTablet>700?10:7.8),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GetBuilder<SelectCatalogHelper>(builder: (controller) {
                         return Padding(
-                          padding:
-                              EdgeInsets.all(userMobile(context) ? 8.0 : 16),
+                          padding: userMobile(context) ? EdgeInsets.all(userMobile(context) ? 8.0 : 8):EdgeInsets.symmetric(horizontal: 12,vertical: 8),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -167,7 +166,7 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                         );
                       }),
                       Padding(
-                        padding: EdgeInsets.all(userMobile(context) ? 8.0 : 16),
+                        padding: userMobile(context) ? EdgeInsets.all(userMobile(context) ? 8.0 : 8):EdgeInsets.symmetric(horizontal: 12,vertical: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -234,7 +233,7 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                 Container(
                   decoration: decorationCommon(),
                   height: MediaQuery.of(context).size.height -
-                      MediaQuery.of(context).size.height / 8,
+                      MediaQuery.of(context).size.height / (userMobile(context)? 8:dataTablet>700?10:7),
                   width: MediaQuery.of(context).size.width,
                   child: Column(
                     children: [
@@ -263,11 +262,11 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                                           catalogNameValidate=false;
                                         });
                                         await getBarcodeCatelogNameListModel();
-                                        openDigitalCatelog(context);
+                                        openDigitalCatelog(context,);
                                       }
                                       else{
                                         var url =  'rfid/TA/kciSaveBarCodeScan/{"catalogId":"${selectCatalogHelper.selected_catalog_id}","catalogName":"${selectCatalogHelper.selected_value}","cscId":"${loginResponseModel.data!.first.cscId}","catalogFor":"CONTRACT","reqColumns":"","contractNo":"${listBarcode.toString().replaceAll("[", "").replaceAll("]", "").replaceAll("/", "-")}","contractId":"","userId":"${loginResponseModel.data!.first.empId}","remarks":""}';
-                                        submitFormData(context, url);
+                                        submitFormData(context, url,false);
                                       }
 
 
@@ -291,7 +290,7 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                                             tileMode: TileMode.mirror),
                                       ),
                                       child: Text(
-                                        "SAVE AS CATELOG",
+                                        "SAVE AS CATALOG",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w600,
@@ -305,6 +304,11 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                               children: [
                                 GestureDetector(
                                   onTap: () {
+
+                                    setState(() {
+                                      controller.clear();
+                                      manualValidate=false;
+                                    });
                                     openDialogue(context);
                                   },
                                   child: Container(
@@ -525,24 +529,36 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
 
 
 
-  submitFormData(BuildContext context, String url) async {
+  submitFormData(BuildContext context, String url,bool fromDigital) async {
     showLoaderDialog(context);
     //LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(jsonDecode((await PreferenceHelper().getStringValuesSF("data")).toString()));
     var response = await ApiService.getData(url);
     print("Response :  ${response.body}");
     //Navigator.pop(context);
-    Navigator.pop(context);
+
+
     if (response.body.contains("SUCCESS")) {
       var snackBar = SnackBar(
         content: Text(
             "Barcode Added Successfully in ${(jsonDecode(response.body))["BarCodeCatalogId"].first["digital_catalogue_name"]}"),
       );
-      Navigator.pop(context);
+
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      selectCatalogHelper.getSelectCatelogData();
-      selectCatalogHelper.selected_value=catelogNameController.text.trim();
+      await selectCatalogHelper.getSelectCatelogData();
+      if(fromDigital){
+        print("----Now Created and Selected is ${selectCatalogHelper.selected_value}");
+        selectCatalogHelper.selected_value=selectCatalogHelper.getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.last.label!;
+        selectCatalogHelper.selected_catalog_id=selectCatalogHelper.getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.last.value!.toString();
+        print("=====Now Updation and Selected is ${selectCatalogHelper.selected_value}");
+        selectCatalogHelper.update();
+      }
+     // selectCatalogHelper.selected_value=catelogNameController.text.trim();
       selectCatalogHelper.update();
       listBarcode.clear();
+      if(fromDigital){
+        Navigator.pop(context);
+      }
+      Navigator.pop(context);
       setState(() {
 
       });
@@ -558,123 +574,141 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
   TextEditingController controller = TextEditingController();
   bool manualValidate = false;
 
+
   openDialogue(BuildContext context) {
-    Dialog errorDialog = Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-      //this right here
-      child: Container(
-        height: userMobile(context) ? 75.w : 55.w,
-        width: 85.w,
-        color: Colors.white,
-        child: Padding(
-          padding:  EdgeInsets.all(userMobile(context) ?8.0:15),
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Manual Entry",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
-                          fontSize: userMobile(context) ? 18.sp : 24.sp),
-                    ),
-                    GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Icon(
-                          Icons.close,
-                          size: 25.sp,
-                        ))
-                  ],
-                ),
-              ),
-              Container(
-                height: userMobile(context)?40.w: 30.w,
-                margin: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                        color: Color(0xffdcdcdc), width: 2)),
-                child: TextField(
-                  controller: controller,
-                  maxLines: null,
-                  expands: true,
-                  style: TextStyle(fontSize: userMobile(context)?15.sp:22.sp),
-                  decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.only(left: 10,right: 10,top: 4),
-                      border: InputBorder.none, fillColor: Colors.transparent),
-                  keyboardType: TextInputType.multiline,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        if(controller.text.trim().isEmpty){
-                         Get.snackbar("Error!!", "Enter Valid Data",colorText: label_color,backgroundColor: Colors.white);
-                        }
-                        else
-                          {
 
-                            if(checkValidation() ?? false){
-                              print("List----${controller.text.trim().split("\n")}");
-                              if(allowMultiple){
-                                listBarcode
-                                    .addAll(controller.text.trim().split("\n").toList());
-                              }
-                              else
-                                {
-                                  listBarcode
-                                      .addAll(controller.text.trim().split("\n").toList().toSet().toList());
-                                  listBarcode=listBarcode.toSet().toList();
-                                }
-                              controller.clear();
-                              Navigator.pop(context);
-                              setState(() {});
-                            }
-                            else
-                              {
-                                var snackBar = const SnackBar(content: Text('Please enter valid Contract no'));
-                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                              }
-
-
-                          }
-
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 40, vertical: 5),
-                        decoration: BoxDecoration(
-                            color: Colors.green.withOpacity(0.9),
-                            borderRadius: BorderRadius.circular(4)),
-                        child: Text(
-                          "ADD",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              fontSize: userMobile(context) ? 16.sp : 25.sp),
-                        ),
+    showDialog<void>(
+        context: context,
+        builder: (context) => StatefulBuilder(builder: (context, setState) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4)),
+            contentPadding: EdgeInsets.zero,
+            content: Container(
+              height: (userMobile(context) ? manualValidate?80.w: 75.w : dataTablet>700?(manualValidate?58.w:55.w): (manualValidate?65.w: 60.w)),
+              width: 85.w,
+              color: Colors.white,
+              child: Padding(
+                padding:  EdgeInsets.all(userMobile(context) ?8.0:15),
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Manual Entry",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700,
+                                fontSize: userMobile(context) ? 18.sp : 24.sp),
+                          ),
+                          GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Icon(
+                                Icons.close,
+                                size: 25.sp,
+                              ))
+                        ],
                       ),
                     ),
+                    Padding(padding: EdgeInsets.symmetric(vertical: 3,horizontal: 8),child: Row(
+                      children: [
+                        manualValidate?  Text("Enter Valid Data",style: TextStyle(color: Colors.red,fontSize: userMobile(context)?13.sp: 16.sp),):Container(),
+                      ],
+                    ),),
+                    Container(
+                      height: userMobile(context)?40.w: 30.w,
+                      margin: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                              color: Color(0xffdcdcdc), width: 2)),
+                      child: TextField(
+                        controller: controller,
+                        maxLines: null,
+                        expands: true,
+                        style: TextStyle(fontSize: userMobile(context)?15.sp:22.sp),
+                        decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.only(left: 10,right: 10,top: 4),
+                            border: InputBorder.none, fillColor: Colors.transparent),
+                        keyboardType: TextInputType.multiline,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              if(controller.text.trim().isEmpty){
+                                setState(() {
+                                  manualValidate=true;
+                                });
+                            //    Get.snackbar("Error!!", "Enter Valid Data",colorText: label_color,backgroundColor: Colors.white);
+                              }
+                              else
+                              {
+
+                                if(checkValidation() ?? false){
+                                  print("List----${controller.text.trim().split("\n")}");
+                                  if(allowMultiple){
+                                    listBarcode
+                                        .addAll(controller.text.trim().split("\n").toList());
+                                  }
+                                  else
+                                  {
+                                    listBarcode
+                                        .addAll(controller.text.trim().split("\n").toList().toSet().toList());
+                                    listBarcode=listBarcode.toSet().toList();
+                                  }
+                                  controller.clear();
+                                  Navigator.pop(context);
+                                  setState(() {});
+                                }
+                                else
+                                {
+                                  setState(() {
+                                    manualValidate=true;
+                                  });
+                               //   var snackBar = const SnackBar(content: Text('Please enter valid Contract no'));
+                                //  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                }
+
+
+                              }
+
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 40, vertical: 5),
+                              decoration: BoxDecoration(
+                                  color: Colors.green.withOpacity(0.9),
+                                  borderRadius: BorderRadius.circular(4)),
+                              child: Text(
+                                "ADD",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: userMobile(context) ? 16.sp : 25.sp),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-    showDialog(
-        context: context, builder: (BuildContext context) => errorDialog);
+              ),
+            ),
+          );
+        })).then((value) {
+      //   Navigator.pop(context);
+    });
   }
 
   ///Create Catelog
@@ -776,7 +810,7 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                                 }
                                 String url =
                                     'rfid/TA/kciSaveBarCodeScan/{"catalogId":"-1","catalogName":"${catelogNameController.text.trim()}","cscId":"${loginResponseModel.data!.first.cscId}","catalogFor":"CONTRACT","reqColumns":"${columnData.toString().replaceAll("[", "").replaceAll("]", "")}","contractNo":"${listBarcode.toString().replaceAll("[", "").replaceAll("]", "").replaceAll("/", "-")}","contractId":"","userId":"${await loginResponseModel.data!.first.empId}","remarks":"${remarksController.text.trim()}","expirydate":"$expiry"}';
-                                submitFormData(context, url);
+                                submitFormData(context, url,true);
                               }
                             },
                             child: Container(
@@ -1096,7 +1130,10 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
       );
       selectCatalogHelper.getBarCodeCatelogNameList = GetBarCodeCatelogNameListModel(getBarCodeCatalogNameList: [GetBarCodeCatalogNameList(label: (jsonDecode(response.body))["BarCodeCatalogId"].first["digital_catalogue_name"],value: int.parse((jsonDecode(response.body))["BarCodeCatalogId"].first["digital_catalogue_id"].toString()))]);
       selectCatalogHelper.update();
-      selectCatalogHelper.getSelectCatelogData();
+      await selectCatalogHelper.getSelectCatelogData();
+      selectCatalogHelper.selected_value=selectCatalogHelper.getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.last.label!;
+      selectCatalogHelper.selected_catalog_id=selectCatalogHelper.getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.last.value!.toString();
+      selectCatalogHelper.update();
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
       const snackBar = SnackBar(

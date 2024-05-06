@@ -110,6 +110,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
   bool selectedColumnValidate=false;
   bool catalogNameValidate=false;
 
+  var dataTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.shortestSide;
+
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -120,8 +123,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
             children: [
               SizedBox(
                 //color: Colors.black,
-                height: MediaQuery.of(context).size.height / (userMobile(context)?10: 9),
+                height: MediaQuery.of(context).size.height /(userMobile(context)? 10:(dataTablet>700?10:7.8)),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GetBuilder<SelectCatalogHelper>(builder: (controller) {
                       return Padding(
@@ -137,9 +141,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                                   Icons.arrow_back,
                                   color: Colors.white,
                                 )),
-                            controller.catalog_loading
-                                ? loader_center(context)
-                                : Container(
+                             Container(
                                     decoration: BoxDecoration(
                                         color: Colors.white,
                                         borderRadius:
@@ -192,7 +194,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                     Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: userMobile(context) ? 8.0 : 16,
-                          vertical: userMobile(context) ? 5 : 8),
+                          vertical: userMobile(context) ? 5 : 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -217,7 +219,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
               Container(
                 decoration: decorationCommon(),
                 height: MediaQuery.of(context).size.height -
-                    MediaQuery.of(context).size.height /(userMobile(context)?7.8: 7.3),
+                    MediaQuery.of(context).size.height /(userMobile(context)?7.8: dataTablet>700?8.4: 7.3),
                 width: MediaQuery.of(context).size.width,
                 child: dataLoading
                     ? loader_center(context)
@@ -822,8 +824,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       selectCatalogHelper.getBarCodeCatelogNameList = GetBarCodeCatelogNameListModel(getBarCodeCatalogNameList: [GetBarCodeCatalogNameList(label: (jsonDecode(response.body))["BarCodeCatalogId"].first["digital_catalogue_name"],value: int.parse((jsonDecode(response.body))["BarCodeCatalogId"].first["digital_catalogue_id"].toString()))]);
       selectCatalogHelper.update();
-      selectCatalogHelper.getSelectCatelogData();
-      selectCatalogHelper.selected_value=catelogNameController.text.trim();
+      await selectCatalogHelper.getSelectCatelogData();
+      selectCatalogHelper.selected_value=selectCatalogHelper.getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.last.label!;
+      selectCatalogHelper.selected_catalog_id=selectCatalogHelper.getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.last.value!.toString();
       selectCatalogHelper.update();
     } else {
       const snackBar = SnackBar(

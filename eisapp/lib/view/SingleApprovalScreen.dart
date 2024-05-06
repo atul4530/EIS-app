@@ -105,6 +105,9 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
                     });
                   },
                   textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontSize: userMobile(context) ? 16.sp : 21.sp,
+                      color: Colors.black),
                   decoration:InputDecoration(
                       border: InputBorder.none,
                       fillColor: Colors.transparent,
@@ -126,7 +129,7 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
             ),
           ),
           Container(
-            height: userMobile(context) ? 68.h : (dataTablet>700? 71.h:66.h),
+            height: userMobile(context) ? 64.h : (dataTablet>700? 71.h:66.h),
             child:dataLoading? Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),): ListView.builder(
               itemCount: getVfStageDetailsModel!.result!.length,
               //physics: NeverScrollableScrollPhysics(),
