@@ -328,6 +328,7 @@ class _VfStageDetailsState extends State<VfStageDetails>
         content: Text(
           "Approved!!!!",style: TextStyle(color: Colors.white,fontSize: 16.sp,fontWeight: FontWeight.w800),),
       );
+      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
      // get_bc_vf_stage_details(context);
     } else {

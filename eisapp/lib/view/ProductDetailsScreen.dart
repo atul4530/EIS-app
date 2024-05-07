@@ -738,6 +738,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                                           catalogNameValidate=false;
                                         });
                                         await getBarcodeCatelogNameListModel();
+                                        catelogNameController.clear();
+                                        remarksController.clear();
+                                        columnController.clear();
                                         openDigitalCatelog(context,widget.data);
                                       } else {
                                         submitData(context, widget.data);
@@ -954,7 +957,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                             child: TextField(
                               controller: catelogNameController,
                               decoration: const InputDecoration(
-                                  contentPadding: EdgeInsets.only(left: 12,bottom: 10),
+                                  contentPadding: EdgeInsets.only(left: 12,bottom: 15),
                                   border: InputBorder.none),
                             ),
                           )
@@ -1049,7 +1052,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                             child: TextField(
                               controller: remarksController,
                               decoration: const InputDecoration(
-                                  contentPadding: EdgeInsets.only(left: 12,bottom: 10),
+                                  contentPadding: EdgeInsets.only(left: 12,bottom: 15),
                                   border: InputBorder.none),
                             ),
                           )

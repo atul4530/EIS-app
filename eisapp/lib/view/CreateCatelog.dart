@@ -434,7 +434,16 @@ class _CreateCatelogState extends State<CreateCatelog>
                                 ),
                               )
                             : getBarCodeCatalogListModel == null
-                                ? Container()
+                                ?Center(
+                          child: Text(
+                            "No Data Found",
+                            style: TextStyle(
+                                fontSize: 14.sp,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
                                 : Expanded(
                                     child: GridView.builder(
                                       // physics: NeverScrollableScrollPhysics(),
@@ -609,6 +618,9 @@ class _CreateCatelogState extends State<CreateCatelog>
                       catalogNameValidate=false;
                     });
                     await getBarcodeCatelogNameListModel();
+                    catelogNameController.clear();
+                    remarksController.clear();
+                    columnController.clear();
                     openDigitalCatelog(context, getBarCodeCatalogList);
                   } else {
                     submitData(context, getBarCodeCatalogList);
@@ -974,7 +986,7 @@ class _CreateCatelogState extends State<CreateCatelog>
                                 child: TextField(
                                   controller: catelogNameController,
                                   decoration: const InputDecoration(
-                                      contentPadding: EdgeInsets.only(left: 12,bottom: 10),
+                                      contentPadding: EdgeInsets.only(left: 12,bottom: 15),
                                       border: InputBorder.none),
                                 ),
                               )
@@ -1069,7 +1081,7 @@ class _CreateCatelogState extends State<CreateCatelog>
                                 child: TextField(
                                   controller: remarksController,
                                   decoration: const InputDecoration(
-                                      contentPadding: EdgeInsets.only(left: 12,bottom: 10),
+                                      contentPadding: EdgeInsets.only(left: 12,bottom: 15),
                                       border: InputBorder.none),
                                 ),
                               )

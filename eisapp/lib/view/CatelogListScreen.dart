@@ -107,7 +107,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Catelog List",style: TextStyle(color: Colors.white,fontSize:  userMobile(context)?16.sp:22.sp,fontWeight: FontWeight.w600),),
+                        Text("Catalog List",style: TextStyle(color: Colors.white,fontSize:  userMobile(context)?16.sp:22.sp,fontWeight: FontWeight.w600),),
                         Container()
                       ],
                     ),
@@ -117,14 +117,23 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
             ),
             Container(
               decoration: decorationCommon(),
-              height: MediaQuery.of(context).size.height- MediaQuery.of(context).size.height /(userMobile(context)? 5.4:dataTablet>700?10:9),
+              height: MediaQuery.of(context).size.height- MediaQuery.of(context).size.height /(userMobile(context)? 7:dataTablet>700?10:9),
               width: MediaQuery.of(context).size.width,
               child: dataLoading?Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),):Column(
                 children: [
                   SizedBox(height: 10,),
                   SizedBox(
-                    height: (MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/(userMobile(context)?5:(dataTablet>700? 8.5:7)))-10,
-                    child: ListView.builder(
+                    height: (MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/(userMobile(context)?5.3:(dataTablet>700? 8.5:7)))-10,
+                    child: (getBarCodeCatelogNameList==null || getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.isEmpty)?Center(
+                      child: Text(
+                        "No Catalog Available",
+                        style: TextStyle(
+                            fontSize: 14.sp,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.center,
+                      ),
+                    ): ListView.builder(
                       itemCount: getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.length,
                       padding: const EdgeInsets.only(top: 20),
                       itemBuilder: (BuildContext context, int index) {
@@ -158,8 +167,8 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                                       GestureDetector(
                                         onTap: (){
                                           controller.clear();
-                                          controller.text = data.label!.split(" ").first;
-
+                                          controller.text = data.label!.split("(").first.trim();
+                                          //controller.text =  data.label!.replaceAll( data.label!, "");
                                           openUpdateCatelog(context,data);
                                         },
                                         child: Padding(
@@ -170,7 +179,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                                       GestureDetector(
                                         onTap: (){
                                           shareDetails(context,data);
-                                         // Share.share('check out my website https://example.com', subject: 'Look what I made!');
+                                          // Share.share('check out my website https://example.com', subject: 'Look what I made!');
                                         },
                                         child: Padding(
                                           padding:  EdgeInsets.symmetric(horizontal: 5.sp),
@@ -180,7 +189,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                                       GestureDetector(
                                         onTap:(){
                                           printCatelog(context,data);
-                                         },
+                                        },
                                         child: Padding(
                                           padding:  EdgeInsets.symmetric(horizontal: 5.sp),
                                           child: Text("Print",style: TextStyle(color: const Color(0xff5f1e80),fontSize: userMobile(context)? 15.sp:18.sp,fontWeight: FontWeight.w800),),

@@ -97,7 +97,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            widget.catelog.label!.split(" ").first,
+                            widget.catelog.label!.split("(").first,
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
@@ -114,7 +114,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
              Container(
                 decoration: decorationCommon(),
                 height: MediaQuery.of(context).size.height -
-                    MediaQuery.of(context).size.height / (userMobile(context)? 5.4:(dataTablet>700? 10:6.4)),
+                    MediaQuery.of(context).size.height / (userMobile(context)? 8:(dataTablet>700? 10:6.4)),
                 width: MediaQuery.of(context).size.width,
                 child:   dataLoading? Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),):getCatelogListModelById==null?Center(child: Text("No Data Found"),): getCatelogListModelById!.getBarCodeCatalogListById!.isEmpty?Center(child: Text("No Data Found"),): GridView.builder(
                   // physics: NeverScrollableScrollPhysics(),

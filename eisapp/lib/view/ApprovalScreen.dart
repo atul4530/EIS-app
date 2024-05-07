@@ -135,7 +135,7 @@ class _ApprovalScreenState extends State<ApprovalScreen>
             decoration: decorationCommon(),
             height: MediaQuery.of(context).size.height -
                 MediaQuery.of(context).size.height /
-                    (userMobile(context) ? 4.34 : 6),
+                    (userMobile(context) ? 7 : 6),
             width: 100.w,
             child: dataLoading
                 ? Center(
@@ -179,7 +179,7 @@ class _ApprovalScreenState extends State<ApprovalScreen>
                         Container(
                           height: (MediaQuery.of(context).size.height -
                               MediaQuery.of(context).size.height /
-                                  (userMobile(context) ? 4.34 : 5.4))-(userMobile(context)?20: 40),
+                                  (userMobile(context) ? 5: 5.4))-(userMobile(context)?20: 40),
                           child: ListView.builder(
                               itemCount: getAllBcAccountModel!.result!.length,
                               padding: EdgeInsets.only(top: 20),
@@ -253,7 +253,7 @@ class _ApprovalScreenState extends State<ApprovalScreen>
                               },
                             ),
                         ),
-                        SizedBox(height: userMobile(context)?0: 30,),
+                        SizedBox(height: userMobile(context)?30: 30,),
                       ],
                     ),
           )

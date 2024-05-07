@@ -262,6 +262,10 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                                           catalogNameValidate=false;
                                         });
                                         await getBarcodeCatelogNameListModel();
+                                        catelogNameController.clear();
+                                        remarksController.clear();
+                                        columnController.clear();
+                                        controller.clear();
                                         openDigitalCatelog(context,);
                                       }
                                       else{
@@ -495,22 +499,12 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                   SizedBox(width: 20,),
                   GestureDetector(
                     onTap: (){
-                      allowMultiple = !allowMultiple;
-                      if(allowMultiple){
-                        setState(() {
-                          listBarcode=listBarcode.toSet().toList();
+                      setState(() {
+                        allowMultiple = !allowMultiple;
+                        listBarcode.clear();
 
-                        });
+                      });
                         Navigator.pop(context);
-                      }
-                      else
-                        {
-                          setState(() {
-
-                          });
-                          Navigator.pop(context);
-                        }
-
 
 
                     },
@@ -863,7 +857,7 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                             child: TextField(
                               controller: catelogNameController,
                               decoration: const InputDecoration(
-                                  contentPadding: EdgeInsets.only(left: 12,bottom: 10),
+                                  contentPadding: EdgeInsets.only(left: 12,bottom: 15),
                                   border: InputBorder.none),
                             ),
                           )
@@ -958,7 +952,7 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                             child: TextField(
                               controller: remarksController,
                               decoration: const InputDecoration(
-                                  contentPadding: EdgeInsets.only(left: 12,bottom: 10),
+                                  contentPadding: EdgeInsets.only(left: 12,bottom: 15),
                                   border: InputBorder.none),
                             ),
                           )
