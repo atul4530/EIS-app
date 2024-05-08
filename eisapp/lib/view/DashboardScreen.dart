@@ -7,6 +7,8 @@ import 'package:eisapp/view/design_consts/DecorationMixin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -50,38 +52,78 @@ class _DashboardScreenState extends State<DashboardScreen> with BackgroundDecora
     });
   }
 
+  DateTime? currentBackPressTime;
+
   @override
   Widget build(BuildContext context) {
 
     var shortestSide = MediaQuery.of(context).size.shortestSide;
     final bool useMobileLayout = shortestSide < 600;
-    return SafeArea(
-      child: Scaffold(
-        body: selectedIndex==1?ProductsScreen():selectedIndex==2?ApprovalScreen():selectedIndex==3?SettingScreen(): dashBoardView(),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.white,
-          elevation: 5,
-          selectedItemColor: Color(0xff3B1CAD),
-          unselectedItemColor: Color(0xff7882A9),
-          selectedLabelStyle: TextStyle(
-            color: Color(0xff3B1CAD),
-            fontWeight: FontWeight.w700
+    return WillPopScope(
+      onWillPop: (){
+        if(selectedIndex==0){
+          DateTime now = DateTime.now();
+          if (currentBackPressTime == null ||
+              now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
+            currentBackPressTime = now;
+            Fluttertoast.showToast(msg: "Press again to exit",fontSize: userMobile(context)?13.sp:18.sp);
+            return Future.value(false);
+          }
+          return Future.value(true);
+        }
+        else
+          {
+            if(selectedIndex==2){
+              if(singleApprove){
+                setState(() {
+                  singleApprove=false;
+                });
+              }
+              else
+                {
+                  setState(() {
+                    selectedIndex=0;
+                  });
+                }
+
+            }
+            else
+              {
+                setState(() {
+                  selectedIndex=0;
+                });
+              }
+          }
+        return Future.value(false);
+      },
+      child: SafeArea(
+        child: Scaffold(
+          body: selectedIndex==1?ProductsScreen():selectedIndex==2?ApprovalScreen():selectedIndex==3?SettingScreen(): dashBoardView(),
+          bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: Colors.white,
+            elevation: 5,
+            selectedItemColor: Color(0xff3B1CAD),
+            unselectedItemColor: Color(0xff7882A9),
+            selectedLabelStyle: TextStyle(
+              color: Color(0xff3B1CAD),
+              fontWeight: FontWeight.w700
+            ),
+            unselectedLabelStyle: TextStyle( fontWeight: FontWeight.w700),
+            type: BottomNavigationBarType.fixed,
+            items:  <BottomNavigationBarItem>[
+              BottomNavigationBarItem(icon: Image.asset(selectedIndex==0?"assets/images/dashboard.png":"assets/images/dashboard_black.png",height: 22.sp,width: 22.sp,fit: BoxFit.fill,), label: "Dashboard"),
+              BottomNavigationBarItem(icon: Image.asset(selectedIndex==1?"assets/images/products.png":"assets/images/products_black.png",height: 22.sp,width: 22.sp,fit: BoxFit.fill,), label: "Products"),
+              BottomNavigationBarItem(icon: Image.asset(selectedIndex==2?"assets/images/approval.png":"assets/images/approval_black.png",height: 22.sp,width: 22.sp,fit: BoxFit.fill,), label: "Approval"),
+              BottomNavigationBarItem(icon: Image.asset(selectedIndex==3?"assets/images/settings.png":"assets/images/settings_black.png",height: 22.sp,width: 22.sp,fit: BoxFit.fill,), label: "Settings"),
+            ],
+            currentIndex: selectedIndex,
+            //fixedColor: Colors.deepPurple,
+            onTap: (val){
+              setState(() {
+                selectedIndex=val;
+              });
+            },
           ),
-          unselectedLabelStyle: TextStyle( fontWeight: FontWeight.w700),
-          type: BottomNavigationBarType.fixed,
-          items:  <BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Image.asset(selectedIndex==0?"assets/images/dashboard.png":"assets/images/dashboard_black.png",height: 22.sp,width: 22.sp,fit: BoxFit.fill,), label: "Dashboard"),
-            BottomNavigationBarItem(icon: Image.asset(selectedIndex==1?"assets/images/products.png":"assets/images/products_black.png",height: 22.sp,width: 22.sp,fit: BoxFit.fill,), label: "Products"),
-            BottomNavigationBarItem(icon: Image.asset(selectedIndex==2?"assets/images/approval.png":"assets/images/approval_black.png",height: 22.sp,width: 22.sp,fit: BoxFit.fill,), label: "Approval"),
-            BottomNavigationBarItem(icon: Image.asset(selectedIndex==3?"assets/images/settings.png":"assets/images/settings_black.png",height: 22.sp,width: 22.sp,fit: BoxFit.fill,), label: "Settings"),
-          ],
-          currentIndex: selectedIndex,
-          //fixedColor: Colors.deepPurple,
-          onTap: (val){
-            setState(() {
-              selectedIndex=val;
-            });
-          },
         ),
       ),
     );

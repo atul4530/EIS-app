@@ -254,7 +254,7 @@ class _CreateCatelogState extends State<CreateCatelog>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Create Catelog",
+                              "Create Catalog",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,
@@ -741,6 +741,9 @@ class _CreateCatelogState extends State<CreateCatelog>
                       catalogNameValidate=false;
                     });
                     await getBarcodeCatelogNameListModel();
+                    catelogNameController.clear();
+                    remarksController.clear();
+                    columnController.clear();
                     openDigitalCatelog(context, getBarCodeCatalogList);
                   } else {
                     submitData(context, getBarCodeCatalogList);

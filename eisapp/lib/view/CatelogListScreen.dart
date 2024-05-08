@@ -84,7 +84,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
           children: [
             SizedBox(
               //color: Colors.black,
-              height: MediaQuery.of(context).size.height /(userMobile(context)? 8:dataTablet>700?10:7.8),
+              height: MediaQuery.of(context).size.height /(userMobile(context)? 10:(dataTablet>700?10:7.8)),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -117,13 +117,13 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
             ),
             Container(
               decoration: decorationCommon(),
-              height: MediaQuery.of(context).size.height- MediaQuery.of(context).size.height /(userMobile(context)? 7:dataTablet>700?10:9),
+              height: MediaQuery.of(context).size.height- MediaQuery.of(context).size.height /(userMobile(context)? 10:dataTablet>700?10:9),
               width: MediaQuery.of(context).size.width,
               child: dataLoading?Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),):Column(
                 children: [
                   SizedBox(height: 10,),
                   SizedBox(
-                    height: (MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/(userMobile(context)?5.3:(dataTablet>700? 8.5:7)))-10,
+                    height: (MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/(userMobile(context)?7:(dataTablet>700? 8.5:7)))-10,
                     child: (getBarCodeCatelogNameList==null || getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.isEmpty)?Center(
                       child: Text(
                         "No Catalog Available",
@@ -141,63 +141,66 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                         if(data.catCount==0){
                           return Container();
                         }
-                        return GestureDetector(
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>SingleCatelogScreen(catelog: data,))).then((value) {
-                              getSelectCatelogData();
-                            });
-                          },
-                          child: Card(
-                            elevation: 6,
-                            margin: const EdgeInsets.only(bottom: 8,left: 8,right: 8),
+                        return Container(
+                          margin: index==(getBarCodeCatelogNameList!.getBarCodeCatalogNameList!.length-1) ?EdgeInsets.only(bottom: userMobile(context)?30:30):EdgeInsets.zero,
+                          child: GestureDetector(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>SingleCatelogScreen(catelog: data,))).then((value) {
+                                getSelectCatelogData();
+                              });
+                            },
+                            child: Card(
+                              elevation: 6,
+                              margin: const EdgeInsets.only(bottom: 8,left: 8,right: 8),
 
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 8),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 8),
 
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(5)
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("   "+data.label!,style: TextStyle(color: Colors.black,fontSize: userMobile(context)? 15.sp:20.sp,fontWeight: FontWeight.w600),),
-                                  Row(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: (){
-                                          controller.clear();
-                                          controller.text = data.label!.split("(").first.trim();
-                                          //controller.text =  data.label!.replaceAll( data.label!, "");
-                                          openUpdateCatelog(context,data);
-                                        },
-                                        child: Padding(
-                                          padding:  EdgeInsets.symmetric(horizontal: 2.5.sp),
-                                          child: Icon(Icons.edit_note_sharp,color: const Color(0xff5f1e80),size: userMobile(context)?20.sp:30.sp,),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(5)
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("   "+data.label!,style: TextStyle(color: Colors.black,fontSize: userMobile(context)? 15.sp:20.sp,fontWeight: FontWeight.w600),),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: (){
+                                            controller.clear();
+                                            controller.text = data.label!.split("(").first.trim();
+                                            //controller.text =  data.label!.replaceAll( data.label!, "");
+                                            openUpdateCatelog(context,data);
+                                          },
+                                          child: Padding(
+                                            padding:  EdgeInsets.symmetric(horizontal: 2.5.sp),
+                                            child: Icon(Icons.edit_note_sharp,color: const Color(0xff5f1e80),size: userMobile(context)?20.sp:30.sp,),
+                                          ),
                                         ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: (){
-                                          shareDetails(context,data);
-                                          // Share.share('check out my website https://example.com', subject: 'Look what I made!');
-                                        },
-                                        child: Padding(
-                                          padding:  EdgeInsets.symmetric(horizontal: 5.sp),
-                                          child: Icon(Icons.share,color: const Color(0xff5f1e80),size:  userMobile(context)?20.sp:30.sp,),
+                                        GestureDetector(
+                                          onTap: (){
+                                            shareDetails(context,data);
+                                            // Share.share('check out my website https://example.com', subject: 'Look what I made!');
+                                          },
+                                          child: Padding(
+                                            padding:  EdgeInsets.symmetric(horizontal: 5.sp),
+                                            child: Icon(Icons.share,color: const Color(0xff5f1e80),size:  userMobile(context)?20.sp:30.sp,),
+                                          ),
                                         ),
-                                      ),
-                                      GestureDetector(
-                                        onTap:(){
-                                          printCatelog(context,data);
-                                        },
-                                        child: Padding(
-                                          padding:  EdgeInsets.symmetric(horizontal: 5.sp),
-                                          child: Text("Print",style: TextStyle(color: const Color(0xff5f1e80),fontSize: userMobile(context)? 15.sp:18.sp,fontWeight: FontWeight.w800),),
+                                        GestureDetector(
+                                          onTap:(){
+                                            printCatelog(context,data);
+                                          },
+                                          child: Padding(
+                                            padding:  EdgeInsets.symmetric(horizontal: 5.sp),
+                                            child: Text("Print",style: TextStyle(color: const Color(0xff5f1e80),fontSize: userMobile(context)? 15.sp:18.sp,fontWeight: FontWeight.w800),),
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  )
-                                ],
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),

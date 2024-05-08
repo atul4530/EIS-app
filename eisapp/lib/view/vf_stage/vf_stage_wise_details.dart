@@ -256,14 +256,14 @@ class _VfStageDetailsState extends State<VfStageDetails>
                 decoration: decorationCommon(),
                 alignment: Alignment.topCenter,
                 height: (MediaQuery.of(context).size.height -
-                    MediaQuery.of(context).size.height /(userMobile(context)? 6.25:dataTablet>700?8.35:7.18)),
+                    MediaQuery.of(context).size.height /(userMobile(context)? 8.2:dataTablet>700?8.35:7.18)),
                 width: MediaQuery.of(context).size.width,
                 child: Stack(
                   alignment: Alignment.bottomCenter,
                   children: [
                     SizedBox(
                         height:  (MediaQuery.of(context).size.height -
-                            MediaQuery.of(context).size.height /(userMobile(context)? 8:dataTablet>700?7:5.96)),
+                            MediaQuery.of(context).size.height /(userMobile(context)? 7.5:dataTablet>700?7:5.96)),
                         child: VfStageDetails(context,widget.name)),
                     GetBuilder(
                         init: ApproveoaderHelper(),

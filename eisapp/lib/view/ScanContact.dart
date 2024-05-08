@@ -62,13 +62,13 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
               children: [
                 SizedBox(
                   //color: Colors.black,
-                  height: MediaQuery.of(context).size.height /(userMobile(context)? 8:dataTablet>700?10:7.8),
+                  height: MediaQuery.of(context).size.height /(userMobile(context)? 10:dataTablet>700?10:7.8),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GetBuilder<SelectCatalogHelper>(builder: (controller) {
                         return Padding(
-                          padding: userMobile(context) ? EdgeInsets.all(userMobile(context) ? 8.0 : 8):EdgeInsets.symmetric(horizontal: 12,vertical: 8),
+                          padding: userMobile(context) ? EdgeInsets.only(left:8,right: 8,top: 4):EdgeInsets.symmetric(horizontal: 12,vertical: 8),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -166,7 +166,7 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                         );
                       }),
                       Padding(
-                        padding: userMobile(context) ? EdgeInsets.all(userMobile(context) ? 8.0 : 8):EdgeInsets.symmetric(horizontal: 12,vertical: 8),
+                        padding: userMobile(context) ? EdgeInsets.only(left: 8,right: 8):EdgeInsets.symmetric(horizontal: 12,vertical: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

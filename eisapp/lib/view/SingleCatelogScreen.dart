@@ -70,7 +70,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
             children: [
               SizedBox(
                 //color: Colors.black,
-                height: MediaQuery.of(context).size.height /(userMobile(context)? 8:dataTablet>700?10:7.8),
+                height: MediaQuery.of(context).size.height /(userMobile(context)? 10:(dataTablet>700?10:7.8)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -113,27 +113,31 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
               ),
              Container(
                 decoration: decorationCommon(),
+               //height: MediaQuery.of(context).size.height- MediaQuery.of(context).size.height /(userMobile(context)? 10:dataTablet>700?10:9),
                 height: MediaQuery.of(context).size.height -
                     MediaQuery.of(context).size.height / (userMobile(context)? 8:(dataTablet>700? 10:6.4)),
                 width: MediaQuery.of(context).size.width,
-                child:   dataLoading? Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),):getCatelogListModelById==null?Center(child: Text("No Data Found"),): getCatelogListModelById!.getBarCodeCatalogListById!.isEmpty?Center(child: Text("No Data Found"),): GridView.builder(
-                  // physics: NeverScrollableScrollPhysics(),
-                  gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: userMobile(context) ? 2 :3,
-                      mainAxisSpacing:
-                      userMobile(context) ? 2 : 10,
-                      childAspectRatio:
-                      userMobile(context) ? .82 :(dataTablet>700?0.55: 0.41),
-                      crossAxisSpacing:
-                      userMobile(context) ? 2 : 10),
-                  padding: const EdgeInsets.only(top: 10, left: 4, right: 4),
-                  // padding around the grid
-                  itemCount: getCatelogListModelById!.getBarCodeCatalogListById!.length,
-                  // total number of items
-                  itemBuilder: (context, index) {
-                    var data = getCatelogListModelById!.getBarCodeCatalogListById![index];
-                    return userMobile(context)? gridItem(context,data):gridItemTab(context, data);
-                  },
+                child:   dataLoading? Center(child:  Image.asset("assets/images/loader.gif",height:userMobile(context)?50:80,),):getCatelogListModelById==null?Center(child: Text("No Data Found"),): getCatelogListModelById!.getBarCodeCatalogListById!.isEmpty?Center(child: Text("No Data Found"),): Container(
+                  margin: EdgeInsets.only(top: userMobile(context)? 20:5),
+                  child: GridView.builder(
+                    // physics: NeverScrollableScrollPhysics(),
+                    gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: userMobile(context) ? 2 :3,
+                        mainAxisSpacing:
+                        userMobile(context) ? 2 : 10,
+                        childAspectRatio:
+                        userMobile(context) ? .82 :(dataTablet>700?0.55: 0.41),
+                        crossAxisSpacing:
+                        userMobile(context) ? 2 : 10),
+                    padding: const EdgeInsets.only(top: 30, left: 4, right: 4,bottom: 30),
+                    // padding around the grid
+                    itemCount: getCatelogListModelById!.getBarCodeCatalogListById!.length,
+                    // total number of items
+                    itemBuilder: (context, index) {
+                      var data = getCatelogListModelById!.getBarCodeCatalogListById![index];
+                      return userMobile(context)? gridItem(context,data):gridItemTab(context, data);
+                    },
+                  ),
                 ),
               )
             ],
