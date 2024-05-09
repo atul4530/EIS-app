@@ -384,10 +384,13 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(
-          Icons.circle_outlined,
-          color: Colors.black,
-          size:userMobile(context)? 12:16,
+        Container(
+          margin: EdgeInsets.only(top: 3),
+          child: Icon(
+            Icons.circle_outlined,
+            color: Colors.black,
+            size: userMobile(context) ? 11.sp : 16.sp,
+          ),
         ),
         const SizedBox(
           width: 3,

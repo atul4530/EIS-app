@@ -263,25 +263,35 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                 ],
               ),
             ),
-            Container(
-              height: 8.w,
-              margin: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: Color(0xffdcdcdc),width: 2)
-              ),
-              child: TextField(
-                controller: controller,
-                textAlignVertical: TextAlignVertical.center,
-              //  maxLines: 2,
-                style: TextStyle(fontSize: userMobile(context)?15.sp: 20.sp),
-                decoration:  InputDecoration(
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.only(left: 12,top: 0,bottom: dataTablet>700?0: 15),
-                    fillColor: Colors.transparent
+            Stack(
+              alignment: Alignment.centerLeft,
+              children: [
+                Container(
+                  height: 8.w,
+                  margin: const EdgeInsets.all(12),
+                  alignment: Alignment.centerLeft,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(color: Color(0xffdcdcdc),width: 2)
+                  ),
+                  child: Container(),
                 ),
-               // keyboardType: TextInputType.multiline,
-              ),
+                Container(
+                  margin: EdgeInsets.only(left: 24),
+                  child: TextField(
+                    controller: controller,
+                    // textAlignVertical: TextAlignVertical.center,
+                    //  maxLines: 2,
+                    style: TextStyle(fontSize: userMobile(context)?15.sp: 20.sp,textBaseline: TextBaseline.alphabetic),
+                    decoration:  InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.zero,
+
+                    ),
+                    // keyboardType: TextInputType.multiline,
+                  ),
+                )
+              ],
             ),
 
             Padding(

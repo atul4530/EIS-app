@@ -13,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:get/get.dart';
@@ -44,8 +45,8 @@ class _CreateCatelogState extends State<CreateCatelog>
   GetBarCodeCatalogListModel? getBarCodeCatalogListModel;
   GetBarCodeCatalogListModel? getBarCodeCatalogListModelSearch;
 
-  String selected_catelog = "Select Catelog";
-  String selected_catelog_id = "Select Catelog";
+  String selected_catelog = "Select Catalog";
+  String selected_catelog_id = "Select Catalog";
   SelectCatalogHelper selectCatalogHelper = Get.find();
 
   @override
@@ -820,15 +821,19 @@ class _CreateCatelogState extends State<CreateCatelog>
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(
-          Icons.circle_outlined,
-          color: Colors.black,
-          size: userMobile(context) ? 12 : 16,
+        Container(
+          margin: EdgeInsets.only(top: 3),
+          child: Icon(
+            Icons.circle_outlined,
+            color: Colors.black,
+            size: userMobile(context) ? 11.sp : 16.sp,
+          ),
         ),
         const SizedBox(
           width: 3,
         ),
-        SizedBox(
+        Container(
+         // alignment: Alignment.topLeft,
           width: userMobile(context) ? 40.w : 25.w,
           child: Text(
             name,
