@@ -245,6 +245,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
         height: userMobile(context)? 40.w:(dataTablet>700?18.h: 20.h),
         width: 85.w,
         color: Colors.white,
+        padding: EdgeInsets.symmetric(horizontal:  userMobile(context)?0:dataTablet>700?20:10),
 
         child: Column(
 

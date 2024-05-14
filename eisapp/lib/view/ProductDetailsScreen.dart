@@ -855,7 +855,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                 borderRadius: BorderRadius.circular(4)),
             contentPadding: EdgeInsets.zero,
             content: Container(
-              height: 75.h,
+              height: userMobile(context)? 75.h:( dataTablet > 700?65.h:70.h),
               width: 98.w,
               color: Colors.white,
               child: SingleChildScrollView(

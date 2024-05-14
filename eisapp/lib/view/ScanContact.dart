@@ -349,24 +349,7 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                                 ),
                                 GestureDetector(
                                   onTap: () async {
-                                    var res = await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const SimpleBarcodeScannerPage(),
-                                        ));
-                                    setState(() {
-                                      if (res is String) {
-                                        result = res;
-                                        if(result=="-1"){
-
-                                        }
-                                        else{
-                                          listBarcode.add(result);
-                                        }
-
-                                      }
-                                    });
+                                    open_scanner();
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
@@ -472,6 +455,37 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
     );
   }
 
+  open_scanner() async {
+    var res = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+          const SimpleBarcodeScannerPage(),
+        ));
+    setState(() {
+      if (res is String) {
+        result = res;
+        if(result=="-1"){
+          Navigator.pop(context);
+        }
+        else{
+          if(allowMultiple){
+            listBarcode.add(result);
+            open_scanner();
+          }
+          else
+          {
+            if(!listBarcode.contains(result)){
+              listBarcode.add(result);
+              open_scanner();
+            }
+          }
+
+        }
+
+      }
+    });
+  }
 
   openAlertBox(BuildContext context){
     Dialog errorDialog = Dialog(
@@ -755,7 +769,7 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                 borderRadius: BorderRadius.circular(4)),
             contentPadding: EdgeInsets.zero,
             content: Container(
-              height: 75.h,
+              height: userMobile(context)? 75.h:( dataTablet > 700?65.h:70.h),
               width: 98.w,
               color: Colors.white,
               child: SingleChildScrollView(
