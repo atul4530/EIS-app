@@ -7,6 +7,7 @@ import 'package:eisapp/view/vf_stage/debtor_aging_lock.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_sizer/flutter_sizer.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
@@ -456,35 +457,42 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
   }
 
   open_scanner() async {
-    var res = await Navigator.push(
+    await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) =>
           const SimpleBarcodeScannerPage(),
-        ));
-    setState(() {
-      if (res is String) {
-        result = res;
-        if(result=="-1"){
-          Navigator.pop(context);
-        }
-        else{
-          if(allowMultiple){
-            listBarcode.add(result);
-            open_scanner();
+        )).then((res) {
+      setState(() {
+        if (res is String) {
+          result = res;
+          if(result=="-1"){
+
           }
-          else
-          {
-            if(!listBarcode.contains(result)){
+          else{
+            if(allowMultiple){
               listBarcode.add(result);
               open_scanner();
             }
+            else
+            {
+              if(!listBarcode.contains(result)){
+                listBarcode.add(result);
+                open_scanner();
+              }
+              else
+                {
+                  Fluttertoast.showToast(msg: "Duplicate Entry!!!");
+                  open_scanner();
+                }
+            }
+
           }
-
         }
-
-      }
+      });
     });
+
+
   }
 
   openAlertBox(BuildContext context){
@@ -859,21 +867,30 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                                   catalogNameValidate?  Text("    Catalog Name is required",style: TextStyle(fontSize: 11.sp,fontWeight: FontWeight.w800,color: Colors.red),):Container()
                                 ],
                               )),
-                          Container(
-                            height: 30.sp,
-                            margin:
-                            const EdgeInsets.symmetric(horizontal: 12),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.black.withOpacity(0.5),
-                                    width: 0.5),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: TextField(
-                              controller: catelogNameController,
-                              decoration: const InputDecoration(
-                                  contentPadding: EdgeInsets.only(left: 12,bottom: 15),
-                                  border: InputBorder.none),
-                            ),
+                          Stack(
+                            alignment: Alignment.centerLeft,
+                            children: [
+                              Container(
+                                height: 30.sp,
+                                margin:
+                                const EdgeInsets.symmetric(horizontal: 12),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.black.withOpacity(0.5),
+                                        width: 0.5),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Container(),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(left: 25),
+                                child: TextField(
+                                  controller: catelogNameController,
+                                  decoration: const InputDecoration(
+
+                                      border: InputBorder.none),
+                                ),
+                              )
+                            ],
                           )
                         ],
                       ),
@@ -954,6 +971,40 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                                     fontSize: 13.sp),
                                 textAlign: TextAlign.start,
                               )),
+                          Stack(
+                            alignment: Alignment.centerLeft,
+                            children: [
+                              Container(
+                                height: 30.sp,
+                                margin:
+                                const EdgeInsets.symmetric(horizontal: 12),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.black.withOpacity(0.5),
+                                        width: 0.5),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Container(),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(left: 25),
+                                child: TextField(
+                                  controller: remarksController,
+                                  decoration: const InputDecoration(
+
+                                      border: InputBorder.none),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    selectedColumnValidate?  Text("     Select At-least 1 column",style: TextStyle(fontSize: 11.sp,fontWeight: FontWeight.w800,color: Colors.red),):Container(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Stack(
+                        alignment: Alignment.centerLeft,
+                        children: [
                           Container(
                             height: 30.sp,
                             margin:
@@ -963,43 +1014,25 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                                     color: Colors.black.withOpacity(0.5),
                                     width: 0.5),
                                 borderRadius: BorderRadius.circular(10)),
+                            child: Container(),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 25),
                             child: TextField(
-                              controller: remarksController,
+                              controller: columnController,
+                              onChanged: (val){
+                                setState((){});
+                              },
                               decoration: const InputDecoration(
-                                  contentPadding: EdgeInsets.only(left: 12,bottom: 15),
+                                  hintText: 'Select Column Required',
                                   border: InputBorder.none),
                             ),
                           )
                         ],
                       ),
                     ),
-                    selectedColumnValidate?  Text("     Select atleast 11column",style: TextStyle(fontSize: 11.sp,fontWeight: FontWeight.w800,color: Colors.red),):Container(),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: 30.sp,
-                        margin:
-                        const EdgeInsets.symmetric(horizontal: 12),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Colors.black.withOpacity(0.5),
-                                width: 0.5),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: TextField(
-                          controller: columnController,
-                          onChanged: (val){
-                            setState((){});
-                          },
-                          decoration: const InputDecoration(
-                              hintText: 'Select Column Required',
-                              contentPadding: EdgeInsets.only(left: 12,bottom: 10),
-
-                              border: InputBorder.none),
-                        ),
-                      ),
-                    ),
                     SizedBox(
-                      height: 34.h,
+                      height: dataTablet > 700?34.h:30.h,
                       child: ListView.builder(
                           itemCount: selectedContact
                               ? selectedColumnDataContract.length
@@ -1037,10 +1070,10 @@ class _ScanContactState extends State<ScanContact> with BackgroundDecoration {
                                     color: selectedContact
                                         ? (selectedDataContract
                                         .contains(dataC)
-                                        ? Color(0xffd1c6fe)
+                                        ? const Color(0xffd1c6fe)
                                         : Colors.white)
                                         : (selectedData.contains(data)
-                                        ? Color(0xffd1c6fe)
+                                        ? const Color(0xffd1c6fe)
                                         : Colors.white),
                                     child: Container(
                                       padding: const EdgeInsets.all(8),

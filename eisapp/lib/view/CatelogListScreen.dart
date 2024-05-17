@@ -255,7 +255,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Update Catelog Name",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w700,fontSize: 18.sp),),
+                  Text("Update Catalog Name",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w700,fontSize: 18.sp),),
                   GestureDetector(
                       onTap: (){
                         Navigator.pop(context);
@@ -278,7 +278,7 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                   child: Container(),
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 24),
+                  margin: EdgeInsets.only(left: 24,bottom: 2),
                   child: TextField(
                     controller: controller,
                     // textAlignVertical: TextAlignVertical.center,
@@ -286,7 +286,6 @@ class _CatelogListScreenState extends State<CatelogListScreen>  with BackgroundD
                     style: TextStyle(fontSize: userMobile(context)?15.sp: 20.sp,textBaseline: TextBaseline.alphabetic),
                     decoration:  InputDecoration(
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.zero,
 
                     ),
                     // keyboardType: TextInputType.multiline,

@@ -945,21 +945,30 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                                   catalogNameValidate?  Text("    Catalog Name is required",style: TextStyle(fontSize: 11.sp,fontWeight: FontWeight.w800,color: Colors.red),):Container()
                                 ],
                               )),
-                          Container(
-                            height: 30.sp,
-                            margin:
-                            const EdgeInsets.symmetric(horizontal: 12),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.black.withOpacity(0.5),
-                                    width: 0.5),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: TextField(
-                              controller: catelogNameController,
-                              decoration: const InputDecoration(
-                                  contentPadding: EdgeInsets.only(left: 12,bottom: 15),
-                                  border: InputBorder.none),
-                            ),
+                          Stack(
+                            alignment: Alignment.centerLeft,
+                            children: [
+                              Container(
+                                height: 30.sp,
+                                margin:
+                                const EdgeInsets.symmetric(horizontal: 12),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.black.withOpacity(0.5),
+                                        width: 0.5),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Container(),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(left: 25),
+                                child: TextField(
+                                  controller: catelogNameController,
+                                  decoration: const InputDecoration(
+
+                                      border: InputBorder.none),
+                                ),
+                              )
+                            ],
                           )
                         ],
                       ),
@@ -1040,6 +1049,40 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                                     fontSize: 13.sp),
                                 textAlign: TextAlign.start,
                               )),
+                          Stack(
+                            alignment: Alignment.centerLeft,
+                            children: [
+                              Container(
+                                height: 30.sp,
+                                margin:
+                                const EdgeInsets.symmetric(horizontal: 12),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.black.withOpacity(0.5),
+                                        width: 0.5),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Container(),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(left: 25),
+                                child: TextField(
+                                  controller: remarksController,
+                                  decoration: const InputDecoration(
+
+                                      border: InputBorder.none),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    selectedColumnValidate?  Text("     Select At-least 1 column",style: TextStyle(fontSize: 11.sp,fontWeight: FontWeight.w800,color: Colors.red),):Container(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Stack(
+                        alignment: Alignment.centerLeft,
+                        children: [
                           Container(
                             height: 30.sp,
                             margin:
@@ -1049,43 +1092,25 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                                     color: Colors.black.withOpacity(0.5),
                                     width: 0.5),
                                 borderRadius: BorderRadius.circular(10)),
+                            child: Container(),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 25),
                             child: TextField(
-                              controller: remarksController,
+                              controller: columnController,
+                              onChanged: (val){
+                                setState((){});
+                              },
                               decoration: const InputDecoration(
-                                  contentPadding: EdgeInsets.only(left: 12,bottom: 15),
+                                  hintText: 'Select Column Required',
                                   border: InputBorder.none),
                             ),
                           )
                         ],
                       ),
                     ),
-                    selectedColumnValidate?  Text("     Select atleast 11column",style: TextStyle(fontSize: 11.sp,fontWeight: FontWeight.w800,color: Colors.red),):Container(),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: 30.sp,
-                        margin:
-                        const EdgeInsets.symmetric(horizontal: 12),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Colors.black.withOpacity(0.5),
-                                width: 0.5),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: TextField(
-                          controller: columnController,
-                          onChanged: (val){
-                            setState((){});
-                          },
-                          decoration: const InputDecoration(
-                              hintText: 'Select Column Required',
-                              contentPadding: EdgeInsets.only(left: 12,bottom: 10),
-
-                              border: InputBorder.none),
-                        ),
-                      ),
-                    ),
                     SizedBox(
-                      height: 34.h,
+                      height: dataTablet > 700?34.h:30.h,
                       child: ListView.builder(
                           itemCount: selectedContact
                               ? selectedColumnDataContract.length
@@ -1123,10 +1148,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                                     color: selectedContact
                                         ? (selectedDataContract
                                         .contains(dataC)
-                                        ? Color(0xffd1c6fe)
+                                        ? const Color(0xffd1c6fe)
                                         : Colors.white)
                                         : (selectedData.contains(data)
-                                        ? Color(0xffd1c6fe)
+                                        ? const Color(0xffd1c6fe)
                                         : Colors.white),
                                     child: Container(
                                       padding: const EdgeInsets.all(8),

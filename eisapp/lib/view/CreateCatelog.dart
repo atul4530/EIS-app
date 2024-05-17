@@ -172,7 +172,7 @@ class _CreateCatelogState extends State<CreateCatelog>
                                               BorderRadius.circular(50)),
                                       height: 30,
                                       padding:
-                                          EdgeInsets.symmetric(horizontal: 20),
+                                          const EdgeInsets.symmetric(horizontal: 20),
                                       child: DropdownButton<
                                           GetBarCodeCatalogNameList>(
                                         hint: Text(
@@ -188,8 +188,8 @@ class _CreateCatelogState extends State<CreateCatelog>
                                         underline: Container(),
                                         elevation: 0,
                                         icon: Container(
-                                            margin: EdgeInsets.only(left: 10),
-                                            child: Icon(
+                                            margin: const EdgeInsets.only(left: 10),
+                                            child: const Icon(
                                                 Icons.arrow_drop_down_sharp)),
                                         items:controller
                                             .getBarCodeCatelogNameList==null?[]: controller
@@ -284,7 +284,7 @@ class _CreateCatelogState extends State<CreateCatelog>
                                               hintText: "Search here",
                                               border: InputBorder.none,
                                               hintStyle: TextStyle(color: Colors.white.withOpacity(0.5),fontSize: userMobile(context) ? 16.sp : 20.sp),
-                                              contentPadding: EdgeInsets.only(bottom: 8)),
+                                              contentPadding: const EdgeInsets.only(bottom: 8)),
                                         ))
                                     : GestureDetector(
                                         onTap: () {
@@ -311,7 +311,7 @@ class _CreateCatelogState extends State<CreateCatelog>
                                           searchClick=false;
                                         });
                                       },
-                                      child: Icon(Icons.close,color: Colors.white,size: 18,)),
+                                      child: const Icon(Icons.close,color: Colors.white,size: 18,)),
                                     )
                                     : const SizedBox(
                                         width: 10,
@@ -572,7 +572,7 @@ class _CreateCatelogState extends State<CreateCatelog>
                         width: MediaQuery.of(context).size.width / 2.1,
                         alignment: Alignment.center,
                         padding: const EdgeInsets.all(3),
-                        decoration: BoxDecoration(color: Color(0xFFD1C6FE)),
+                        decoration: const BoxDecoration(color: Color(0xFFD1C6FE)),
                         child: Text(
                           getBarCodeCatalogList.contTypeNo!,
                           style: TextStyle(
@@ -696,7 +696,7 @@ class _CreateCatelogState extends State<CreateCatelog>
                         width: MediaQuery.of(context).size.width / 2.1,
                         alignment: Alignment.center,
                         padding: const EdgeInsets.all(3),
-                        decoration: BoxDecoration(color: Color(0xFFD1C6FE)),
+                        decoration: const BoxDecoration(color: Color(0xFFD1C6FE)),
                         child: Text(
                           getBarCodeCatalogList.contTypeNo!,
                           style: TextStyle(
@@ -822,7 +822,7 @@ class _CreateCatelogState extends State<CreateCatelog>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          margin: EdgeInsets.only(top: 3),
+          margin: const EdgeInsets.only(top: 3),
           child: Icon(
             Icons.circle_outlined,
             color: Colors.black,
@@ -982,21 +982,30 @@ class _CreateCatelogState extends State<CreateCatelog>
                                       catalogNameValidate?  Text("    Catalog Name is required",style: TextStyle(fontSize: 11.sp,fontWeight: FontWeight.w800,color: Colors.red),):Container()
                                     ],
                                   )),
-                              Container(
-                                height: 30.sp,
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 12),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Colors.black.withOpacity(0.5),
-                                        width: 0.5),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: TextField(
-                                  controller: catelogNameController,
-                                  decoration: const InputDecoration(
-                                      contentPadding: EdgeInsets.only(left: 12,bottom: 15),
-                                      border: InputBorder.none),
-                                ),
+                              Stack(
+                                alignment: Alignment.centerLeft,
+                                children: [
+                                  Container(
+                                    height: 30.sp,
+                                    margin:
+                                        const EdgeInsets.symmetric(horizontal: 12),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.black.withOpacity(0.5),
+                                            width: 0.5),
+                                        borderRadius: BorderRadius.circular(10)),
+                                    child: Container(),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 25),
+                                    child: TextField(
+                                      controller: catelogNameController,
+                                      decoration: const InputDecoration(
+
+                                          border: InputBorder.none),
+                                    ),
+                                  )
+                                ],
                               )
                             ],
                           ),
@@ -1077,52 +1086,68 @@ class _CreateCatelogState extends State<CreateCatelog>
                                         fontSize: 13.sp),
                                     textAlign: TextAlign.start,
                                   )),
+                              Stack(
+                                alignment: Alignment.centerLeft,
+                                children: [
+                                  Container(
+                                    height: 30.sp,
+                                    margin:
+                                        const EdgeInsets.symmetric(horizontal: 12),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.black.withOpacity(0.5),
+                                            width: 0.5),
+                                        borderRadius: BorderRadius.circular(10)),
+                                    child: Container(),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 25),
+                                    child: TextField(
+                                      controller: remarksController,
+                                      decoration: const InputDecoration(
+
+                                          border: InputBorder.none),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        selectedColumnValidate?  Text("     Select At-least 1 column",style: TextStyle(fontSize: 11.sp,fontWeight: FontWeight.w800,color: Colors.red),):Container(),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Stack(
+                            alignment: Alignment.centerLeft,
+                            children: [
                               Container(
                                 height: 30.sp,
                                 margin:
-                                    const EdgeInsets.symmetric(horizontal: 12),
+                                const EdgeInsets.symmetric(horizontal: 12),
                                 decoration: BoxDecoration(
                                     border: Border.all(
                                         color: Colors.black.withOpacity(0.5),
                                         width: 0.5),
                                     borderRadius: BorderRadius.circular(10)),
+                                child: Container(),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(left: 25),
                                 child: TextField(
-                                  controller: remarksController,
+                                  controller: columnController,
+                                  onChanged: (val){
+                                    setState((){});
+                                  },
                                   decoration: const InputDecoration(
-                                      contentPadding: EdgeInsets.only(left: 12,bottom: 15),
+                                      hintText: 'Select Column Required',
                                       border: InputBorder.none),
                                 ),
                               )
                             ],
                           ),
                         ),
-                        selectedColumnValidate?  Text("     Select atleast 11column",style: TextStyle(fontSize: 11.sp,fontWeight: FontWeight.w800,color: Colors.red),):Container(),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            height: 30.sp,
-                            margin:
-                            const EdgeInsets.symmetric(horizontal: 12),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.black.withOpacity(0.5),
-                                    width: 0.5),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: TextField(
-                              controller: columnController,
-                              onChanged: (val){
-                                setState((){});
-                              },
-                              decoration: const InputDecoration(
-                               hintText: 'Select Column Required',
-                                  contentPadding: EdgeInsets.only(left: 12,bottom: 10),
-
-                                  border: InputBorder.none),
-                            ),
-                          ),
-                        ),
                         SizedBox(
-                          height: 34.h,
+                          height: dataTablet > 700?34.h:30.h,
                           child: ListView.builder(
                               itemCount: selectedContact
                                   ? selectedColumnDataContract.length
@@ -1160,10 +1185,10 @@ class _CreateCatelogState extends State<CreateCatelog>
                                         color: selectedContact
                                             ? (selectedDataContract
                                             .contains(dataC)
-                                            ? Color(0xffd1c6fe)
+                                            ? const Color(0xffd1c6fe)
                                             : Colors.white)
                                             : (selectedData.contains(data)
-                                            ? Color(0xffd1c6fe)
+                                            ? const Color(0xffd1c6fe)
                                             : Colors.white),
                                         child: Container(
                                           padding: const EdgeInsets.all(8),
