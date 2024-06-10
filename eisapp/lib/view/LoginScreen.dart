@@ -151,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> with BackgroundDecoration {
 
   loginData(BuildContext context, String userName, passWord) async {
     showLoaderDialog(context);
-    var response = await ApiService.getData("smartservice/slogin/${userName}/$passWord");
+    var response = await ApiService.getData("smartservice/slogin/${userName}/$passWord",fromApproval: true);
     if(jsonDecode(response.body)["result"].toString()=="true") {
       await PreferenceHelper().addStringToSF("data", response.body);
       Navigator.pop(context);

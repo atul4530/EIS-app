@@ -35,7 +35,7 @@ class _SingleCatelogScreenState extends State<SingleCatelogScreen>
         jsonDecode(
             (await PreferenceHelper().getStringValuesSF("data")).toString()));
     var response = await ApiService.getData(
-        'rfid/TA/getBarCodeCatalogListById/{"catalogId":"${widget.catelog.value}","catalogDetId":"-1"}');
+        'rfid/TA/getBarCodeCatalogListById/{"catalogId":"${widget.catelog.value}","catalogDetId":"-1"}',fromApproval: true);
     print("Response  : ${response.body}");
     GetCatelogListModelById data =
         GetCatelogListModelById.fromJson(jsonDecode(response.body));

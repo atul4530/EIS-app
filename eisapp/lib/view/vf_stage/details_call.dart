@@ -17,7 +17,7 @@ Future<Response> details_call(String url) async {
           (await PreferenceHelper().getStringValuesSF("data")).toString()));
   print("-------------API Call :  $url${loginResponseModel.data!.first.empId}");
   var response = await ApiService.getData(
-      "$url${loginResponseModel.data!.first.empId}");
+      "$url${loginResponseModel.data!.first.empId}",fromApproval: true);
 
   return response;
 }

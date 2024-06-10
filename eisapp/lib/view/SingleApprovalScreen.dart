@@ -43,7 +43,7 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
         jsonDecode(
             (await PreferenceHelper().getStringValuesSF("data")).toString()));
     var response = await ApiService.getData(
-        "api/a/sql/bc_vf_stage_details/csc/${widget.result.vfStageId}?XuserId=${loginResponseModel.data!.first.empId!}");
+        "api/a/sql/bc_vf_stage_details/csc/${widget.result.vfStageId}?XuserId=${loginResponseModel.data!.first.empId!}",fromApproval: true);
     print("----Response  : ${response.body}");
     GetVfStageDetailsModel data =
     GetVfStageDetailsModel.fromJson(jsonDecode(response.body));
@@ -406,7 +406,7 @@ class _SingleApprovalScreenState extends State<SingleApprovalScreen> {
   approveCall(BuildContext context,String url) async {
     Navigator.pop(context);
     showLoaderDialog(context);
-    var response = await ApiService.getData(url);
+    var response = await ApiService.getData(url,fromApproval: true);
     print("Reponse : ${response.body}");
     Navigator.pop(context);
 

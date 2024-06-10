@@ -51,7 +51,7 @@ class _ApprovalScreenState extends State<ApprovalScreen>
     print("******************$is_approval_req");
     if (is_approval_req == "Y") {
       var response = await ApiService.getData(
-          "api/a/sql/get_all_bc_count/all/${loginResponseModel.data!.first.empId!}");
+          "api/a/sql/get_all_bc_count/all/${loginResponseModel.data!.first.empId!}",fromApproval: true);
       print("----Response  : ${response.body}");
       GetAllBcAccountModel data =
           GetAllBcAccountModel.fromJson(jsonDecode(response.body));

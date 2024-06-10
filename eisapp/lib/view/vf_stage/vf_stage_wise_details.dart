@@ -319,7 +319,7 @@ class _VfStageDetailsState extends State<VfStageDetails>
   approveCall(BuildContext context,String url) async {
     Navigator.pop(context);
     showLoaderDialog(context);
-    var response = await ApiService.getData(url);
+    var response = await ApiService.getData(url,fromApproval: true);
     print("Reponse : ${response.body}");
     Navigator.pop(context);
 
