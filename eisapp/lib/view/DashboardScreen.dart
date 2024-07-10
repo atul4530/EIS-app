@@ -137,11 +137,12 @@ class _DashboardScreenState extends State<DashboardScreen> with BackgroundDecora
       width: MediaQuery.of(context).size.width,
       decoration: bgDecoration(),
       child: SingleChildScrollView(
+        physics: userMobile(context)?BouncingScrollPhysics():NeverScrollableScrollPhysics(),
         child: Column(
           children: [
             Container(
               //color: Colors.black,
-              height: MediaQuery.of(context).size.height/4,
+              height: MediaQuery.of(context).size.height/5,
               child: Column(
                 children: [
                   Row(
@@ -153,7 +154,7 @@ class _DashboardScreenState extends State<DashboardScreen> with BackgroundDecora
                       logout_icon(context)
                     ],
                   ),
-                  SizedBox(height: 60,),
+                  SizedBox(height: 40,),
                   Column(
                     children: [
                       Text("Welcome",style: TextStyle(color: Colors.white,fontSize: useMobileLayout?16.sp:22.sp,fontWeight: FontWeight.w400),),
@@ -167,9 +168,9 @@ class _DashboardScreenState extends State<DashboardScreen> with BackgroundDecora
             Container(
 
               decoration: decorationCommon(),
-              height: MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/(userMobile(context)?2.9: 3.2),
+              height: MediaQuery.of(context).size.height-MediaQuery.of(context).size.height/(userMobile(context)?2.9: 5),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment:  userMobile(context)?MainAxisAlignment.spaceBetween: MainAxisAlignment.start,
                 children: [
                   Column(
                     children: [
@@ -202,7 +203,9 @@ class _DashboardScreenState extends State<DashboardScreen> with BackgroundDecora
                       ),
                     ],
                   ),
-                  Text(app_version,style: TextStyle(color:  Color(0xff7882A9),fontSize: userMobile(context)?14.sp:20.sp),)
+                 userMobile(context)?Container(): SizedBox(height: 30,),
+                  Text(app_version,style: TextStyle(color:  Color(0xff7882A9),fontSize: userMobile(context)?14.sp:20.sp),),
+
                 ],
               ),
             )
