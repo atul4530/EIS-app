@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
         builder: (context, orientation, screenType) {
         return  GetMaterialApp(
           home: const SplashScreen(),
+          debugShowCheckedModeBanner: false,
           theme: ThemeData(fontFamily: 'Mulish',primaryColor: Color(0xff5338B4)),
         );
       }

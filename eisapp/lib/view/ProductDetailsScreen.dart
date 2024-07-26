@@ -219,7 +219,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
               Container(
                 decoration: decorationCommon(),
                 height: MediaQuery.of(context).size.height -
-                    MediaQuery.of(context).size.height /(userMobile(context)?7.8: dataTablet>700?8.4: 7.3),
+                    MediaQuery.of(context).size.height /(userMobile(context)?7.8: dataTablet>700?7.2: 7.3),
                 width: MediaQuery.of(context).size.width,
                 child: dataLoading
                     ? loader_center(context)
