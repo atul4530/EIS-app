@@ -1,4 +1,4 @@
-package com.example.eisapp
+package com.kgk.eisprime
 
 import android.os.Bundle
 import android.os.PersistableBundle
